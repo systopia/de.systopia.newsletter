@@ -1,0 +1,318 @@
+<?php
+/*------------------------------------------------------------+
+| SYSTOPIA Advanced Newsletter Management                     |
+| Copyright (C) 2018 SYSTOPIA                                 |
+| Author: J. Schuppe (schuppe@systopia.de)                    |
++-------------------------------------------------------------+
+| This program is released as free software under the         |
+| Affero GPL license. You can redistribute it and/or          |
+| modify it under the terms of this license which you         |
+| can read by viewing the included agpl.txt or online         |
+| at www.gnu.org/licenses/agpl.html. Removal of this          |
+| copyright header is strictly prohibited without             |
+| written permission from the original author(s).             |
++-------------------------------------------------------------*/
+
+use CRM_Newsletter_ExtensionUtil as E;
+
+/**
+ * Form controller class
+ *
+ * @see https://wiki.civicrm.org/confluence/display/CRMDOC/QuickForm+Reference
+ */
+class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
+
+  /**
+   * @var CRM_Newsletter_Profile $profile
+   *
+   * The profile object the form is acting on.
+   */
+  protected $profile;
+
+  /**
+   * @var string
+   *
+   * The operation to perform within the form.
+   */
+  protected $_op;
+
+  /**
+   * Builds the form structure.
+   */
+  public function buildQuickForm() {
+    // "Create" is the default operation.
+    if (!$this->_op = CRM_Utils_Request::retrieve('op', 'String', $this)) {
+      $this->_op = 'create';
+    }
+
+    // Verify that a profile with the given name exists.
+    $profile_name = CRM_Utils_Request::retrieve('name', 'String', $this);
+    if (!$this->profile = CRM_Newsletter_Profile::getProfile($profile_name)) {
+      $profile_name = NULL;
+    }
+
+    switch ($this->_op) {
+      case 'delete':
+        if ($profile_name) {
+          CRM_Utils_System::setTitle(E::ts('Delete Advanced Newsletter Management profile <em>%1</em>', array(1 => $profile_name)));
+          $this->addButtons(array(
+            array(
+              'type' => 'submit',
+              'name' => ($profile_name == 'default' ? E::ts('Reset') : E::ts('Delete')),
+              'isDefault' => TRUE,
+            ),
+          ));
+        }
+        parent::buildQuickForm();
+        return;
+      case 'edit':
+        // When editing without a valid profile name, edit the default profile.
+        if (!$profile_name) {
+          $profile_name = 'default';
+          $this->profile = CRM_Newsletter_Profile::getProfile($profile_name);
+        }
+        CRM_Utils_System::setTitle(E::ts('Edit Advanced Newsletter Management profile <em>%1</em>', array(1 => $this->profile->getName())));
+        break;
+      case 'create':
+        // Load factory default profile values.
+        $this->profile = CRM_Newsletter_Profile::createDefaultProfile($profile_name);
+        CRM_Utils_System::setTitle(E::ts('New Advanced Newsletter Management profile'));
+        break;
+      default:
+        CRM_Core_Error::fatal('Invalid operation.');
+        break;
+    }
+
+    // Assign template variables.
+    $this->assign('op', $this->_op);
+    $this->assign('profile_name', $profile_name);
+
+    // Set redirect destination.
+    $this->controller->_destination = CRM_Utils_System::url('civicrm/admin/settings/newsletter/profiles', 'reset=1');
+
+    // Add form elements.
+    $is_default = ($profile_name == 'default');
+    $this->add(
+      ($is_default ? 'static' : 'text'),
+      'name',
+      E::ts('Profile name'),
+      array(),
+      !$is_default
+    );
+
+    $contact_fields = CRM_Newsletter_Profile::availableContactFields();
+    $contact_field_names = array();
+    foreach ($contact_fields as $contact_field_name => $contact_field_label) {
+      $this->add(
+        'checkbox',
+        'contact_field_' . $contact_field_name . '_active',
+        E::ts('Show contact field "%1"', array(
+          1 => E::ts($contact_field_label)
+        ))
+      );
+      $contact_field_names[$contact_field_name]['active'] = 'contact_field_' . $contact_field_name . '_active';
+
+      $this->add(
+        'text',
+        'contact_field_' . $contact_field_name . '_label',
+        E::ts('Field label')
+      );
+      $contact_field_names[$contact_field_name]['label'] = 'contact_field_' . $contact_field_name . '_label';
+
+      $this->add(
+        'text',
+        'contact_field_' . $contact_field_name . '_description',
+        E::ts('Field description')
+      );
+      $contact_field_names[$contact_field_name]['description'] = 'contact_field_' . $contact_field_name . '_description';
+    }
+    $this->assign('contact_field_names', $contact_field_names);
+
+    $this->add(
+      'select', // field type
+      'mailing_lists', // field name
+      E::ts('Available mailing lists'), // field label
+      $this->getGroups(), // list of options
+      FALSE, // is not required
+      array('class' => 'crm-select2 huge', 'multiple' => 'multiple')
+    );
+
+    $this->add(
+      'textarea',
+      'conditions_public',
+      E::ts('Terms and conditions for public form'),
+      array(),
+      FALSE
+    );
+
+    $this->add(
+      'textarea',
+      'conditions_preferences',
+      E::ts('Terms and conditions for preferences form'),
+      array(),
+      FALSE
+    );
+
+    $this->add(
+      'textarea',
+      'template_optin',
+      E::ts('Template for opt-in e-mail'),
+      array(),
+      FALSE
+    );
+
+    $this->add(
+      'textarea',
+      'template_info',
+      E::ts('Template for info e-mail'),
+      array(),
+      FALSE
+    );
+
+    $this->add(
+      'text',
+      'preferences_url',
+      E::ts('Preferences URL'),
+      array(),
+      TRUE
+    );
+
+    $this->addButtons(array(
+      array(
+        'type' => 'submit',
+        'name' => E::ts('Save'),
+        'isDefault' => TRUE,
+      ),
+    ));
+
+    // Export form elements.
+    parent::buildQuickForm();
+  }
+
+  /**
+   * @inheritdoc
+   */
+  public function addRules() {
+    $this->addFormRule(array('CRM_Newsletter_Form_Profile', 'validateProfileForm'));
+  }
+
+  /**
+   * Validates the profile form.
+   *
+   * @param array $values
+   *   The submitted form values, keyed by form element name.
+   *
+   * @return bool | array
+   *   TRUE when the form was successfully validated, or an array of error
+   *   messages, keyed by form element name.
+   */
+  public static function validateProfileForm($values) {
+    $errors = array();
+
+    // Restrict profile names to alphanumeric characters and the underscore.
+    if (isset($values['name']) && preg_match("/[^A-Za-z0-9\_]/", $values['name'])) {
+      $errors['name'] = E::ts('Only alphanumeric characters and the underscore (_) are allowed for profile names.');
+    }
+
+    // TODO: At least one relevant contact field is mandatory (first_name, last_name, email, display_name).
+
+    // TODO: At least one mailing list must be selected.
+
+    // TODO: Preferences URL must be a URL.
+
+    return empty($errors) ? TRUE : $errors;
+  }
+
+  /**
+   * Set the default values (i.e. the profile's current data) in the form.
+   */
+  public function setDefaultValues() {
+    $defaults = parent::setDefaultValues();
+    if (in_array($this->_op, array('create', 'edit'))) {
+      $defaults['name'] = $this->profile->getName();
+      foreach ($this->profile->getData() as $element_name => $value) {
+        if ($element_name == 'contact_fields') {
+          // Translate the array structure into individual fields.
+          foreach ($value as $contact_field => $values) {
+            $defaults['contact_field_' . $contact_field . '_active'] = $values['active'];
+            $defaults['contact_field_' . $contact_field . '_label'] = $values['label'];
+            $defaults['contact_field_' . $contact_field . '_description'] = $values['description'];
+          }
+        }
+        elseif ($element_name == 'mailing_lists') {
+          // Mailing lists are stored as ID => Group name, the form needs a sequential
+          // array of IDs.
+          $defaults[$element_name] = array_keys($value);
+        }
+        else {
+          $defaults[$element_name] = $value;
+        }
+      }
+    }
+    return $defaults;
+  }
+
+  /**
+   * Store the values submitted with the form in the profile.
+   */
+  public function postProcess() {
+    $values = $this->exportValues();
+    if (in_array($this->_op, array('create', 'edit'))) {
+      if (empty($values['name'])) {
+        $values['name'] = 'default';
+      }
+      $this->profile->setName($values['name']);
+      foreach ($this->profile->getData() as $element_name => $value) {
+        if ($element_name == 'contact_fields') {
+          foreach (CRM_Newsletter_Profile::availableContactFields() as $contact_field => $contact_field_label) {
+            if (!empty($values['contact_field_' . $contact_field . '_active'])) {
+              $values['contact_fields'][$contact_field]['active'] = $values['contact_field_' . $contact_field . '_active'];
+              $values['contact_fields'][$contact_field]['label'] = $values['contact_field_' . $contact_field . '_label'];
+              $values['contact_fields'][$contact_field]['description'] = $values['contact_field_' . $contact_field . '_description'];
+            }
+          }
+        }
+
+        if ($element_name == 'mailing_lists') {
+          // Store ID => Group name.
+          $values['mailing_lists'] = array_intersect_key(self::getGroups(), array_flip($value));
+        }
+
+        if (isset($values[$element_name])) {
+          $this->profile->setAttribute($element_name, $values[$element_name]);
+        }
+      }
+      $this->profile->saveProfile();
+    }
+    elseif ($this->_op == 'delete') {
+      $this->profile->deleteProfile();
+    }
+    parent::postProcess();
+  }
+
+  /**
+   * Retrieves active groups used as mailing lists within the system as options
+   * for select form elements.
+   */
+  public function getGroups() {
+    $groups = array();
+    $group_types = civicrm_api3('OptionValue', 'get', array(
+      'option_group_id' => 'group_type',
+      'name' => CRM_Newsletter_Profile::GROUP_TYPE_MAILING_LIST,
+    ));
+    if ($group_types['count'] > 0) {
+      $group_type = reset($group_types['values']);
+      $query = civicrm_api3('Group', 'get', array(
+        'is_active' => 1,
+        'group_type' => array('LIKE' => '%' . CRM_Utils_Array::implodePadded($group_type['value']) . '%'),
+        'option.limit'   => 0,
+        'return'         => 'id,name'
+      ));
+      foreach ($query['values'] as $group) {
+        $groups[$group['id']] = $group['name'];
+      }
+    }
+    return $groups;
+  }
+
+}

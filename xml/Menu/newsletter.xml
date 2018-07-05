@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<menu>
+  <item>
+    <path>civicrm/admin/settings/newsletter</path>
+    <page_callback>CRM_Newsletter_Page_Configuration</page_callback>
+    <title>Advanced Newsletter Management Configuration</title>
+    <!-- TODO: Use separate permission. -->
+    <access_arguments>administer CiviCRM</access_arguments>
+    <desc>Configure the Advanced Newsletter Management extension</desc>
+    <adminGroup>System Settings</adminGroup>
+    <icon>admin/option.png</icon>
+  </item>
+  <item>
+    <path>civicrm/admin/settings/newsletter/settings</path>
+    <page_callback>CRM_Newsletter_Form_Settings</page_callback>
+    <title>Advanced Newsletter Management Settings</title>
+    <!-- TODO: Use separate permission. -->
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/admin/settings/newsletter/profiles</path>
+    <page_callback>CRM_Newsletter_Page_Profiles</page_callback>
+    <title>Advanced Newsletter Management profile settings</title>
+    <!-- TODO: Use separate permission. -->
+    <access_arguments>administer CiviCRM</access_arguments>
+    <desc>Configure profiles for the Advanced Newsletter Management extension</desc>
+    <icon>admin/option.png</icon>
+  </item>
+  <item>
+    <path>civicrm/admin/settings/newsletter/profile</path>
+    <page_callback>CRM_Newsletter_Form_Profile</page_callback>
+    <title>Advanced Newsletter Management Profile</title>
+    <!-- TODO: Use separate permission. -->
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+</menu>

@@ -1,0 +1,50 @@
+<?php
+/*------------------------------------------------------------+
+| SYSTOPIA Advanced Newsletter Management                     |
+| Copyright (C) 2018 SYSTOPIA                                 |
+| Author: J. Schuppe (schuppe@systopia.de)                    |
++-------------------------------------------------------------+
+| This program is released as free software under the         |
+| Affero GPL license. You can redistribute it and/or          |
+| modify it under the terms of this license which you         |
+| can read by viewing the included agpl.txt or online         |
+| at www.gnu.org/licenses/agpl.html. Removal of this          |
+| copyright header is strictly prohibited without             |
+| written permission from the original author(s).             |
++-------------------------------------------------------------*/
+
+/**
+ * API callback for "get" call on "NewsletterProfile" entity.
+ *
+ * @param $params
+ *
+ * @return array
+ */
+function civicrm_api3_newsletter_profile_get($params) {
+  try {
+    $profile = CRM_Newsletter_Profile::getProfile($params['name']);
+
+    $return = array($profile->getName() => $profile->getData());
+
+    return civicrm_api3_create_success($return);
+  }
+  catch (\Exception $exception) {
+    return civicrm_api3_create_error($exception->getMessage());
+  }
+}
+
+/**
+ * API specification for "get" call on "NewsletterProfile" entity.
+ *
+ * @param $params
+ */
+function _civicrm_api3_newsletter_profile_get_spec(&$params) {
+  $params['name'] = array(
+    'name' => 'name',
+    'title' => 'Newsletter profile name',
+    'type' => CRM_Utils_Type::T_STRING,
+    'api.required' => 0,
+    'api.default' => 'default',
+    'description' => 'The Newsletter profile name. If omitted, the default profile will be returned.',
+  );
+}
