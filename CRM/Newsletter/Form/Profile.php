@@ -272,13 +272,48 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       $errors['name'] = E::ts('Only alphanumeric characters and the underscore (_) are allowed for profile names.');
     }
 
-    // TODO: At least one relevant contact field is mandatory (first_name, last_name, email, display_name).
+    // At least one contact field is mandatory.
+    $available_fields = array();
+    foreach (CRM_Newsletter_Profile::availableContactFields() as $available => $available_label) {
+      $available_fields[] = 'contact_field_' . $available . '_active';
+      if (!empty($values['contact_field_' . $available . '_active'])) {
+        $mandatory_missing = FALSE;
+        break;
+      }
+      else {
+        $mandatory_missing = TRUE;
+      }
+    }
+    if ($mandatory_missing) {
+      foreach ($available_fields as $available_field) {
+        $errors[$available_field] = E::ts('At least one contact field must be activated.');
+      }
+    }
 
-    // TODO: At least one mailing list must be selected.
+    // Each active contact field needs a label.
+    foreach (CRM_Newsletter_Profile::availableContactFields() as $available => $available_label) {
+      if (
+        !empty($values['contact_field_' . $available . '_active'])
+        && empty($values['contact_field_' . $available . '_label'])
+      ) {
+        $errors['contact_field_' . $available . '_label'] = E::ts('Each active field needs a label.');
+      }
+    }
 
-    // TODO: Preferences URL must be a URL.
+    // Preferences URL must be a valid URL.
+    if (filter_var($values['preferences_url'], FILTER_VALIDATE_URL) === FALSE) {
+      $errors['preferences_url'] = E::ts('Please enter a valid URL.');
+    }
 
-    // TODO: When conditions are set, a label must be set as well (for both).
+    // When terms and conditions are given, a label must be set as well.
+    foreach (array('public', 'preferences') as $conditions_type) {
+      if (
+        !empty($values['conditions_' . $conditions_type])
+        && empty($values['conditions_' . $conditions_type . '_label'])
+      ) {
+        $errors['conditions_' . $conditions_type . '_label'] = E::ts('Please enter a label for the terms and conditions.');
+      }
+    }
 
     return empty($errors) ? TRUE : $errors;
   }
