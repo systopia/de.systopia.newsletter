@@ -206,23 +206,31 @@ class CRM_Newsletter_Profile {
    *   A profile with the given name and default attribute values.
    */
   public static function createDefaultProfile($name = 'default') {
-    return new CRM_Newsletter_Profile($name, array(
+    $default_data = array(
       'form_title' => '',
-      'contact_fields' => array(), // TODO: A fixed set of common contact fields.
-      'mailing_lists' => array(), // TODO: All active mailing lists.
+      'contact_fields' => array(),
+      'mailing_lists' => self::getGroups(),
       'mailing_lists_label' => E::ts('Mailing lists'),
-      'mailing_lists_description' => E::ts('Select the mailing lists you would like to subscribe.'),
+      'mailing_lists_description' => '',
       'conditions_public' => '',
-      'conditions_public_label' => E::ts('Terms and conditions'),
-      'conditions_public_description' => E::ts('By submitting the form you accept the terms and conditions.'),
+      'conditions_public_label' => '',
+      'conditions_public_description' => '',
       'conditions_preferences' => '',
-      'conditions_preferences_label' => E::ts('Terms and conditions'),
-      'conditions_preferences_description' => E::ts('By submitting the form you accept the terms and conditions.'),
-      'template_optin' => '', // TODO: A default opt-in e-mail template with the link to the preferences page.
+      'conditions_preferences_label' => '',
+      'conditions_preferences_description' => '',
+      'template_optin' => '', // TODO: A default opt-in e-mail template with a token for the link to the preferences page.
       'template_info' => '', // TODO: A default info e-mail template.
-      'preferences_url' => '',
-      'submit_label' => E::ts('Submit'),
-    ));
+      'preferences_url' => CRM_Core_Config::singleton()->userFrameworkBaseURL,
+      'submit_label' => '',
+    );
+    foreach (self::availableContactFields() as $field_name => $field_label) {
+      $default_data['contact_fields'][$field_name] = array(
+        'active' => ($field_name == 'email' ? 1 : 0),
+        'label' => $field_label,
+        'description' => '',
+      );
+    }
+    return new CRM_Newsletter_Profile($name, $default_data);
   }
 
   /**
@@ -288,21 +296,27 @@ class CRM_Newsletter_Profile {
    */
   public static function getGroups() {
     $groups = array();
-    $group_types = civicrm_api3('OptionValue', 'get', array(
-      'option_group_id' => 'group_type',
-      'name' => CRM_Newsletter_Profile::GROUP_TYPE_MAILING_LIST,
-    ));
-    if ($group_types['count'] > 0) {
-      $group_type = reset($group_types['values']);
-      $query = civicrm_api3('Group', 'get', array(
-        'is_active' => 1,
-        'group_type' => array('LIKE' => '%' . CRM_Utils_Array::implodePadded($group_type['value']) . '%'),
-        'option.limit'   => 0,
-        'return'         => 'id,name'
+    try {
+      $group_types = civicrm_api3('OptionValue', 'get', array(
+        'option_group_id' => 'group_type',
+        'name' => CRM_Newsletter_Profile::GROUP_TYPE_MAILING_LIST,
       ));
-      foreach ($query['values'] as $group) {
-        $groups[$group['id']] = $group['name'];
+      if ($group_types['count'] > 0) {
+        $group_type = reset($group_types['values']);
+        $query = civicrm_api3('Group', 'get', array(
+          'is_active' => 1,
+          'group_type' => array('LIKE' => '%' . CRM_Utils_Array::implodePadded($group_type['value']) . '%'),
+          'option.limit'   => 0,
+          'return'         => 'id,name'
+        ));
+        foreach ($query['values'] as $group) {
+          $groups[$group['id']] = $group['name'];
+        }
       }
+    }
+    catch (CiviCRM_API3_Exception $exception) {
+      $error = CRM_Core_Error::createError($exception->getMessage(), 0);
+      CRM_Core_Error::displaySessionError($error);
     }
     return $groups;
   }
