@@ -13,6 +13,8 @@
 | written permission from the original author(s).             |
 +-------------------------------------------------------------*/
 
+use CRM_Newsletter_ExtensionUtil as E;
+
 /**
  * API callback for "get" call on "NewsletterProfile" entity.
  *
@@ -22,14 +24,16 @@
  */
 function civicrm_api3_newsletter_profile_get($params) {
   try {
-    $profile = CRM_Newsletter_Profile::getProfile($params['name']);
+    if (!$profile = CRM_Newsletter_Profile::getProfile($params['name'] ?: 'default')) {
+      throw new Exception(E::ts('Advanced Newsletter Management profile not found.'), 404);
+    }
 
     $return = array($profile->getName() => $profile->getData());
 
     return civicrm_api3_create_success($return);
   }
   catch (\Exception $exception) {
-    return civicrm_api3_create_error($exception->getMessage());
+    return civicrm_api3_create_error($exception->getMessage(), array('error_code' => $exception->getCode()));
   }
 }
 

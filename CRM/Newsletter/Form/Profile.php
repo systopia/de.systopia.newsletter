@@ -100,6 +100,22 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       !$is_default
     );
 
+    $this->add(
+      'text',
+      'form_title',
+      E::ts('Form title'),
+      array(),
+      FALSE
+    );
+
+    $this->add(
+      'text',
+      'submit_label',
+      E::ts('Submit button label'),
+      array(),
+      FALSE
+    );
+
     $contact_fields = CRM_Newsletter_Profile::availableContactFields();
     $contact_field_names = array();
     foreach ($contact_fields as $contact_field_name => $contact_field_label) {
@@ -129,14 +145,42 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
     $this->assign('contact_field_names', $contact_field_names);
 
     $this->add(
-      'select', // field type
-      'mailing_lists', // field name
-      E::ts('Available mailing lists'), // field label
-      $this->getGroups(), // list of options
-      FALSE, // is not required
+      'text',
+      'mailing_lists_label',
+      E::ts('Label for mailing lists selection'),
+      array(),
+      TRUE
+    );
+    $this->add(
+      'text',
+      'mailing_lists_description',
+      E::ts('Description for mailing lists selection'),
+      array(),
+      FALSE
+    );
+    $this->add(
+      'select',
+      'mailing_lists',
+      E::ts('Available mailing lists'),
+      CRM_Newsletter_Profile::getGroups(),
+      TRUE,
       array('class' => 'crm-select2 huge', 'multiple' => 'multiple')
     );
 
+    $this->add(
+      'text',
+      'conditions_public_label',
+      E::ts('Label for Terms and conditions for public form'),
+      array(),
+      FALSE
+    );
+    $this->add(
+      'text',
+      'conditions_public_description',
+      E::ts('Description for Terms and conditions for public form'),
+      array(),
+      FALSE
+    );
     $this->add(
       'textarea',
       'conditions_public',
@@ -145,6 +189,20 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       FALSE
     );
 
+    $this->add(
+      'text',
+      'conditions_preferences_label',
+      E::ts('Label for Terms and conditions for preferences form'),
+      array(),
+      FALSE
+    );
+    $this->add(
+      'text',
+      'conditions_preferences_description',
+      E::ts('Description for Terms and conditions for preferences form'),
+      array(),
+      FALSE
+    );
     $this->add(
       'textarea',
       'conditions_preferences',
@@ -158,7 +216,7 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       'template_optin',
       E::ts('Template for opt-in e-mail'),
       array(),
-      FALSE
+      TRUE
     );
 
     $this->add(
@@ -166,7 +224,7 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       'template_info',
       E::ts('Template for info e-mail'),
       array(),
-      FALSE
+      TRUE
     );
 
     $this->add(
@@ -219,6 +277,8 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
     // TODO: At least one mailing list must be selected.
 
     // TODO: Preferences URL must be a URL.
+
+    // TODO: When conditions are set, a label must be set as well (for both).
 
     return empty($errors) ? TRUE : $errors;
   }
@@ -275,7 +335,7 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
 
         if ($element_name == 'mailing_lists') {
           // Store ID => Group name.
-          $values['mailing_lists'] = array_intersect_key(self::getGroups(), array_flip($value));
+          $values['mailing_lists'] = array_intersect_key(CRM_Newsletter_Profile::getGroups(), array_flip($values['mailing_lists']));
         }
 
         if (isset($values[$element_name])) {
@@ -288,31 +348,6 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       $this->profile->deleteProfile();
     }
     parent::postProcess();
-  }
-
-  /**
-   * Retrieves active groups used as mailing lists within the system as options
-   * for select form elements.
-   */
-  public function getGroups() {
-    $groups = array();
-    $group_types = civicrm_api3('OptionValue', 'get', array(
-      'option_group_id' => 'group_type',
-      'name' => CRM_Newsletter_Profile::GROUP_TYPE_MAILING_LIST,
-    ));
-    if ($group_types['count'] > 0) {
-      $group_type = reset($group_types['values']);
-      $query = civicrm_api3('Group', 'get', array(
-        'is_active' => 1,
-        'group_type' => array('LIKE' => '%' . CRM_Utils_Array::implodePadded($group_type['value']) . '%'),
-        'option.limit'   => 0,
-        'return'         => 'id,name'
-      ));
-      foreach ($query['values'] as $group) {
-        $groups[$group['id']] = $group['name'];
-      }
-    }
-    return $groups;
   }
 
 }

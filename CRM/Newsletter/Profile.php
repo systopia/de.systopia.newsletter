@@ -163,13 +163,21 @@ class CRM_Newsletter_Profile {
    */
   public static function allowedAttributes() {
     return array(
+      'form_title',
       'contact_fields',
       'mailing_lists',
+      'mailing_lists_label',
+      'mailing_lists_description',
       'conditions_public',
+      'conditions_public_label',
+      'conditions_public_description',
       'conditions_preferences',
+      'conditions_preferences_label',
+      'conditions_preferences_description',
       'template_optin',
       'template_info',
       'preferences_url',
+      'submit_label',
     );
   }
 
@@ -199,13 +207,21 @@ class CRM_Newsletter_Profile {
    */
   public static function createDefaultProfile($name = 'default') {
     return new CRM_Newsletter_Profile($name, array(
+      'form_title' => '',
       'contact_fields' => array(), // TODO: A fixed set of common contact fields.
       'mailing_lists' => array(), // TODO: All active mailing lists.
+      'mailing_lists_label' => E::ts('Mailing lists'),
+      'mailing_lists_description' => E::ts('Select the mailing lists you would like to subscribe.'),
       'conditions_public' => '',
+      'conditions_public_label' => E::ts('Terms and conditions'),
+      'conditions_public_description' => E::ts('By submitting the form you accept the terms and conditions.'),
       'conditions_preferences' => '',
+      'conditions_preferences_label' => E::ts('Terms and conditions'),
+      'conditions_preferences_description' => E::ts('By submitting the form you accept the terms and conditions.'),
       'template_optin' => '', // TODO: A default opt-in e-mail template with the link to the preferences page.
       'template_info' => '', // TODO: A default info e-mail template.
       'preferences_url' => '',
+      'submit_label' => E::ts('Submit'),
     ));
   }
 
@@ -264,5 +280,30 @@ class CRM_Newsletter_Profile {
       $profile_data[$profile_name] = $profile->data;
     }
     CRM_Core_BAO_Setting::setItem((object) $profile_data, 'de.systopia.newsletter', 'newsletter_profiles');
+  }
+
+  /**
+   * Retrieves active groups used as mailing lists within the system as options
+   * for select form elements.
+   */
+  public static function getGroups() {
+    $groups = array();
+    $group_types = civicrm_api3('OptionValue', 'get', array(
+      'option_group_id' => 'group_type',
+      'name' => CRM_Newsletter_Profile::GROUP_TYPE_MAILING_LIST,
+    ));
+    if ($group_types['count'] > 0) {
+      $group_type = reset($group_types['values']);
+      $query = civicrm_api3('Group', 'get', array(
+        'is_active' => 1,
+        'group_type' => array('LIKE' => '%' . CRM_Utils_Array::implodePadded($group_type['value']) . '%'),
+        'option.limit'   => 0,
+        'return'         => 'id,name'
+      ));
+      foreach ($query['values'] as $group) {
+        $groups[$group['id']] = $group['name'];
+      }
+    }
+    return $groups;
   }
 }

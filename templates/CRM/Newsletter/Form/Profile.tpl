@@ -22,6 +22,16 @@
         <td class="content">{$form.name.html}</td>
       </tr>
 
+      <tr class="crm-section">
+        <td class="label">{$form.form_title.label}</td>
+        <td class="content">{$form.form_title.html}</td>
+      </tr>
+
+      <tr class="crm-section">
+        <td class="label">{$form.submit_label.label}</td>
+        <td class="content">{$form.submit_label.html}</td>
+      </tr>
+
       <tr class="form-section">
         <td><h2>{ts domain="de.systopia.newsletter"}Contact fields{/ts}</h2></td>
       </tr>
@@ -55,15 +65,39 @@
     <table class="form-layout-compressed">
 
       <tr class="crm-section">
+        <td class="label">{$form.mailing_lists_label.label}</td>
+        <td class="content">{$form.mailing_lists_label.html}</td>
+      </tr>
+      <tr class="crm-section">
+        <td class="label">{$form.mailing_lists_description.label}</td>
+        <td class="content">{$form.mailing_lists_description.html}</td>
+      </tr>
+      <tr class="crm-section">
         <td class="label">{$form.mailing_lists.label}</td>
         <td class="content">{$form.mailing_lists.html}</td>
       </tr>
 
       <tr class="crm-section">
+        <td class="label">{$form.conditions_public_label.label}</td>
+        <td class="content">{$form.conditions_public_label.html}</td>
+      </tr>
+      <tr class="crm-section">
+        <td class="label">{$form.conditions_public_description.label}</td>
+        <td class="content">{$form.conditions_public_description.html}</td>
+      </tr>
+      <tr class="crm-section">
         <td class="label">{$form.conditions_public.label}</td>
         <td class="content">{$form.conditions_public.html}</td>
       </tr>
 
+      <tr class="crm-section">
+        <td class="label">{$form.conditions_preferences_label.label}</td>
+        <td class="content">{$form.conditions_preferences_label.html}</td>
+      </tr>
+      <tr class="crm-section">
+        <td class="label">{$form.conditions_preferences_description.label}</td>
+        <td class="content">{$form.conditions_preferences_description.html}</td>
+      </tr>
       <tr class="crm-section">
         <td class="label">{$form.conditions_preferences.label}</td>
         <td class="content">{$form.conditions_preferences.html}</td>
