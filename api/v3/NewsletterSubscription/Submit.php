@@ -24,8 +24,6 @@ use CRM_Newsletter_ExtensionUtil as E;
  */
 function civicrm_api3_newsletter_subscription_submit($params) {
   try {
-    CRM_Utils_Type::validate($params['mailing_lists'], 'CommaSeparatedIntegers', FALSE);
-
     $profile = CRM_Newsletter_Profile::getProfile($params['profile']);
 
     // Get or create the contact.
@@ -55,7 +53,7 @@ function civicrm_api3_newsletter_subscription_submit($params) {
       'id' => $contact_id,
       'return' => 'group',
     ));
-    if ($current_groups['is_error']) {
+    if (!empty($current_groups['is_error'])) {
       throw new CiviCRM_API3_Exception(E::ts('Error retrieving current group membership.'), 'api_error');
     }
     $current_groups = explode(',', $current_groups['groups']);
