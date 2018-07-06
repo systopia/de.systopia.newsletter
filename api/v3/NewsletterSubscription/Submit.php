@@ -16,7 +16,7 @@
 use CRM_Newsletter_ExtensionUtil as E;
 
 /**
- * API callback for "get" call on "NewsletterProfile" entity.
+ * API callback for "submit" call on "NewsletterSubscription" entity.
  *
  * @param $params
  *
@@ -79,7 +79,7 @@ function civicrm_api3_newsletter_subscription_submit($params) {
 }
 
 /**
- * API specification for "get" call on "NewsletterProfile" entity.
+ * API specification for "submit" call on "NewsletterSubscription" entity.
  *
  * @param $params
  */
