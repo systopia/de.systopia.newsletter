@@ -130,7 +130,7 @@ function newsletter_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) {
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_permission
  */
-function aivlapi_civicrm_permission(&$permissions) {
+function newsletter_civicrm_permission(&$permissions) {
   $permissions['access Advanced Newsletter Management API'] = 'Advanced Newsletter Management: Access API';
 }
 
@@ -139,7 +139,7 @@ function aivlapi_civicrm_permission(&$permissions) {
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_alterAPIPermissions
  */
-function aivlapi_civicrm_alterAPIPermissions($entity, $action, &$params, &$permissions) {
+function newsletter_civicrm_alterAPIPermissions($entity, $action, &$params, &$permissions) {
   // Restrict API calls to the permission.
   $permissions['newsletter_profile']['get'] = array('access Advanced Newsletter Management API');
   $permissions['newsletter_subscription']['get']  = array('access Advanced Newsletter Management API');

@@ -60,6 +60,7 @@ function civicrm_api3_newsletter_subscription_submit($params) {
 
     // Add "pending" group membership for all new groups.
     $new_groups = array_diff($params['mailing_lists'], $current_groups);
+    $groups = array();
     foreach ($new_groups as $group_id) {
       $groups = civicrm_api3('GroupContact', 'create', array(
         'group_id' => $group_id,
