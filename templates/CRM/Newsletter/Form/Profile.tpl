@@ -104,10 +104,18 @@
       </tr>
 
       <tr class="crm-section">
+        <td class="label">{$form.template_optin_subject.label}</td>
+        <td class="content">{$form.template_optin_subject.html}</td>
+      </tr>
+      <tr class="crm-section">
         <td class="label">{$form.template_optin.label}</td>
         <td class="content">{$form.template_optin.html}</td>
       </tr>
 
+      <tr class="crm-section">
+        <td class="label">{$form.template_info_subject.label}</td>
+        <td class="content">{$form.template_info_subject.html}</td>
+      </tr>
       <tr class="crm-section">
         <td class="label">{$form.template_info.label}</td>
         <td class="content">{$form.template_info.html}</td>

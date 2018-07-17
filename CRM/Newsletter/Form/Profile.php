@@ -212,9 +212,25 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
     );
 
     $this->add(
+      'text',
+      'template_optin_subject',
+      E::ts('Subject for opt-in e-mail'),
+      array(),
+      TRUE
+    );
+
+    $this->add(
       'textarea',
       'template_optin',
       E::ts('Template for opt-in e-mail'),
+      array(),
+      TRUE
+    );
+
+    $this->add(
+      'text',
+      'template_info_subject',
+      E::ts('Subject for info e-mail'),
       array(),
       TRUE
     );

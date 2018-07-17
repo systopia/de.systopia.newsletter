@@ -174,7 +174,9 @@ class CRM_Newsletter_Profile {
       'conditions_preferences',
       'conditions_preferences_label',
       'conditions_preferences_description',
+      'template_optin_subject',
       'template_optin',
+      'template_info_subject',
       'template_info',
       'preferences_url',
       'submit_label',
@@ -218,7 +220,9 @@ class CRM_Newsletter_Profile {
       'conditions_preferences' => '',
       'conditions_preferences_label' => '',
       'conditions_preferences_description' => '',
+      'template_optin_subject' => E::ts('Your newsletter subscription'),
       'template_optin' => '', // TODO: A default opt-in e-mail template with a token for the link to the preferences page.
+      'template_info_subject' => E::ts('Your newsletter subscription preferences'),
       'template_info' => '', // TODO: A default info e-mail template.
       'preferences_url' => CRM_Core_Config::singleton()->userFrameworkBaseURL,
       'submit_label' => '',

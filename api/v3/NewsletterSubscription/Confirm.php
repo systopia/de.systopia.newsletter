@@ -54,7 +54,29 @@ function civicrm_api3_newsletter_subscription_confirm($params) {
       ));
     }
 
-    // TODO: Send an e-mail with the info template.
+    $mailing_lists = CRM_Newsletter_Utils::getSubscriptionStatus($contact_id);
+
+    // Send an e-mail with the info template.
+    $mail_params = array(
+      'from' => CRM_Newsletter_Utils::getFromEmailAddress(TRUE),
+      'toName' => $contact['display_name'],
+      'toEmail' => $contact['email'],
+      'cc' => '',
+      'bc' => '',
+      'subject' => $profile->getAttribute('template_info_subject'),
+      'text' => CRM_Core_Smarty::singleton()->fetchWith(
+        'string:' . $profile->getAttribute('template_info'),
+        array(
+          'contact' => $contact,
+          'mailing_lists' => $mailing_lists,
+          'preferences_url' => $profile->getAttribute('preferences_url'),
+        )),
+      'html' => '', // TODO: New profile attribute "template_optin_html".
+      'replyTo' => '', // TODO: Make configurable?
+    );
+    if (!CRM_Utils_Mail::send($mail_params)) {
+      // TODO: Mail not sent. Maybe do not cancel the whole API call?
+    }
 
     return civicrm_api3_create_success($group_contact_results);
   }
