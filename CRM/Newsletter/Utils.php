@@ -21,13 +21,19 @@ use CRM_Newsletter_ExtensionUtil as E;
 class CRM_Newsletter_Utils {
 
   /**
-   * TODO.
+   * Retrieves a contact using the Extended Contact Matcher (XCM) extension.
+   *
+   * @link https://github.com/systopia/de.systopia.xcm
    *
    * @param $contact_data
+   *   An associative array with contact data to find, create or update a
+   *   contact with, according to the XCM configuration.
    *
    * @return int
+   *   The CiviCRM ID of the contact found, created or updated by XCM.
    *
    * @throws Exception.
+   *   When no contact could be found or created.
    */
   public static function getContact($contact_data) {
     $result = civicrm_api3('Contact', 'getorcreate', $contact_data);
