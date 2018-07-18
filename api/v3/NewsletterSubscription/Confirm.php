@@ -36,6 +36,8 @@ function civicrm_api3_newsletter_subscription_confirm($params) {
       throw new CiviCRM_API3_Exception(E::ts('Invalid contact hash for given contact ID.'), 'api_error');
     }
 
+    $contact_id = $contact['id'];
+
     // Validate submitted group IDs.
     $disallowed_groups = array_diff(array_keys($params['mailing_lists']), array_keys($profile->getAttribute('mailing_lists')));
     if (!empty($disallowed_groups)) {
@@ -69,8 +71,13 @@ function civicrm_api3_newsletter_subscription_confirm($params) {
         array(
           'contact' => $contact,
           'mailing_lists' => $mailing_lists,
-          'preferences_url' => $profile->getAttribute('preferences_url'),
-        )),
+          'preferences_url' => str_replace(
+            '[CONTACT_HASH]',
+            $contact['hash'],
+            $profile->getAttribute('preferences_url')
+          ),
+        )
+      ),
       'html' => '', // TODO: New profile attribute "template_optin_html".
       'replyTo' => '', // TODO: Make configurable?
     );

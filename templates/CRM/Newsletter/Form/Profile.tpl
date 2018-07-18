@@ -123,7 +123,12 @@
 
       <tr class="crm-section">
         <td class="label">{$form.preferences_url.label}</td>
-        <td class="content">{$form.preferences_url.html}</td>
+        <td class="content">
+          {$form.preferences_url.html}
+          <div class="description">
+            {ts}A URL to the preferences form. Must include the token <code>[CONTACT_HASH]</code> which will be replaced with the actual contact hash for identifying the contact.{/ts}
+          </div>
+        </td>
       </tr>
 
     </table>
