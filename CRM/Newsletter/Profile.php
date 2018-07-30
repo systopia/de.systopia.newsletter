@@ -189,15 +189,74 @@ class CRM_Newsletter_Profile {
    * @return array
    *   An array with contact field names as keys and their translated labels as
    *   values.
+   *
+   * @throws \CiviCRM_API3_Exception
+   *   When retrieving field data failed.
    */
   public static function availableContactFields() {
-    return array(
-      'first_name' => E::ts('First name'),
-      'last_name' => E::ts('Last name'),
-      'email' => E::ts('E-mail address'),
-      'prefix_id' => E::ts('Prefix'),
-      'organization' => E::ts('Organization'),
+    $individual_prefix_values = civicrm_api3('OptionValue', 'get', array(
+      'return' => array("value", "label"),
+      'option_group_id' => "individual_prefix",
+    ));
+    array_walk($individual_prefix_values['values'], function(&$v, $k) {
+      $v = $v['label'];
+    });
+
+    $static = array(
+      'first_name' => array(
+        'label' => E::ts('First name'),
+        'type' => 'Text',
+      ),
+      'last_name' => array(
+        'label' => E::ts('Last name'),
+        'type' => 'Text',
+      ),
+      'email' => array(
+        'label' => E::ts('E-mail address'),
+        'type' => 'Text',
+      ),
+      'prefix_id' => array(
+        'label' => E::ts('Prefix'),
+        'type' => 'Select',
+        'options' => $individual_prefix_values['values'],
+      ),
     );
+
+    $dynamic = array();
+
+    // Add custom fields on contacts.
+    // Note: This adds all available custom fields for contact entities, however
+    // not all field types will work correctly, especially when they are special
+    // select widgets or non-text field types.
+    $contact_field_groups = civicrm_api3('CustomGroup', 'get', array(
+      'extends' => "contact",
+    ));
+    $contact_fields = civicrm_api3('CustomField', 'get', array(
+      'custom_group_id' => array(
+        'IN' => array_keys($contact_field_groups['values'])
+      ),
+    ));
+    foreach ($contact_fields['values'] as $contact_field) {
+      $dynamic[$contact_field['name']] = array(
+        'label' => $contact_field['label'],
+        'type' => $contact_field['html_type'],
+      );
+      if (in_array($contact_field['html_type'], array(
+        'Multi-Select',
+        'CheckBox',
+        'Select'
+      ))) {
+        $option_values = civicrm_api3('OptionValue', 'get', array(
+          'option_group_id' => $contact_field['option_group_id'],
+        ));
+        $dynamic[$contact_field['name']]['options'] = array();
+        foreach ($option_values['values'] as $option_value) {
+          $dynamic[$contact_field['name']]['options'][$option_value['value']] = $option_value['label'];
+        }
+      }
+    }
+
+    return $static + $dynamic;
   }
 
   /**
@@ -229,12 +288,13 @@ class CRM_Newsletter_Profile {
       'preferences_url' => CRM_Core_Config::singleton()->userFrameworkBaseURL,
       'submit_label' => '',
     );
-    foreach (self::availableContactFields() as $field_name => $field_label) {
+    foreach (self::availableContactFields() as $field_name => $field) {
       $default_data['contact_fields'][$field_name] = array(
         'active' => ($field_name == 'email' ? 1 : 0),
         'required' => ($field_name == 'email' ? 1 : 0),
-        'label' => $field_label,
+        'label' => $field['label'],
         'description' => '',
+        'type' => $field['type']
       );
     }
     return new CRM_Newsletter_Profile($name, $default_data);

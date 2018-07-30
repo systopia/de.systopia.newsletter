@@ -28,7 +28,18 @@ function civicrm_api3_newsletter_profile_get($params) {
       throw new Exception(E::ts('Advanced Newsletter Management profile not found.'), 404);
     }
 
-    $return = array($profile->getName() => $profile->getData());
+    $profile_name = $profile->getName();
+    $profile_data = $profile->getData();
+
+    // Add contact field type and options, if applicable.
+    $contact_fields = CRM_Newsletter_Profile::availableContactFields();
+    foreach ($profile_data['contact_fields'] as $field_name => &$field) {
+      $field['type'] = $contact_fields[$field_name]['type'];
+      if (!empty($contact_fields[$field_name]['options'])) {
+        $field['options'] = $contact_fields[$field_name]['options'];
+      }
+    }
+    $return = array($profile_name => $profile_data);
 
     return civicrm_api3_create_success($return);
   }

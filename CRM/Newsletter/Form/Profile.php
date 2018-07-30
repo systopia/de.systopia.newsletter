@@ -118,12 +118,12 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
 
     $contact_fields = CRM_Newsletter_Profile::availableContactFields();
     $contact_field_names = array();
-    foreach ($contact_fields as $contact_field_name => $contact_field_label) {
+    foreach ($contact_fields as $contact_field_name => $contact_field) {
       $this->add(
         'checkbox',
         'contact_field_' . $contact_field_name . '_active',
         E::ts('Show contact field "%1"', array(
-          1 => E::ts($contact_field_label)
+          1 => E::ts($contact_field['label'])
         ))
       );
       $contact_field_names[$contact_field_name]['active'] = 'contact_field_' . $contact_field_name . '_active';
@@ -132,7 +132,7 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
         'checkbox',
         'contact_field_' . $contact_field_name . '_required',
         E::ts('Contact field "%1" is required', array(
-          1 => E::ts($contact_field_label)
+          1 => E::ts($contact_field['label'])
         ))
       );
       $contact_field_names[$contact_field_name]['required'] = 'contact_field_' . $contact_field_name . '_required';
@@ -299,9 +299,9 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
 
     // At least one contact field is mandatory.
     $available_fields = array();
-    foreach (CRM_Newsletter_Profile::availableContactFields() as $available => $available_label) {
-      $available_fields[] = 'contact_field_' . $available . '_active';
-      if (!empty($values['contact_field_' . $available . '_active'])) {
+    foreach (CRM_Newsletter_Profile::availableContactFields() as $available_name => $available) {
+      $available_fields[] = 'contact_field_' . $available_name . '_active';
+      if (!empty($values['contact_field_' . $available_name . '_active'])) {
         $mandatory_missing = FALSE;
         break;
       }
@@ -316,12 +316,12 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
     }
 
     // Each active contact field needs a label.
-    foreach (CRM_Newsletter_Profile::availableContactFields() as $available => $available_label) {
+    foreach (CRM_Newsletter_Profile::availableContactFields() as $available_name => $available) {
       if (
-        !empty($values['contact_field_' . $available . '_active'])
-        && empty($values['contact_field_' . $available . '_label'])
+        !empty($values['contact_field_' . $available_name . '_active'])
+        && empty($values['contact_field_' . $available_name . '_label'])
       ) {
-        $errors['contact_field_' . $available . '_label'] = E::ts('Each active field needs a label.');
+        $errors['contact_field_' . $available_name . '_label'] = E::ts('Each active field needs a label.');
       }
     }
 
@@ -355,7 +355,9 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
           // Translate the array structure into individual fields.
           foreach ($value as $contact_field => $values) {
             $defaults['contact_field_' . $contact_field . '_active'] = $values['active'];
-            $defaults['contact_field_' . $contact_field . '_required'] = $values['required'];
+            if (!empty($values['required'])) {
+              $defaults['contact_field_' . $contact_field . '_required'] = $values['required'];
+            }
             $defaults['contact_field_' . $contact_field . '_label'] = $values['label'];
             $defaults['contact_field_' . $contact_field . '_description'] = $values['description'];
           }
@@ -385,12 +387,14 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       $this->profile->setName($values['name']);
       foreach ($this->profile->getData() as $element_name => $value) {
         if ($element_name == 'contact_fields') {
-          foreach (CRM_Newsletter_Profile::availableContactFields() as $contact_field => $contact_field_label) {
-            if (!empty($values['contact_field_' . $contact_field . '_active'])) {
-              $values['contact_fields'][$contact_field]['active'] = $values['contact_field_' . $contact_field . '_active'];
-              $values['contact_fields'][$contact_field]['required'] = $values['contact_field_' . $contact_field . '_required'];
-              $values['contact_fields'][$contact_field]['label'] = $values['contact_field_' . $contact_field . '_label'];
-              $values['contact_fields'][$contact_field]['description'] = $values['contact_field_' . $contact_field . '_description'];
+          foreach (CRM_Newsletter_Profile::availableContactFields() as $contact_field_name => $contact_field) {
+            if (!empty($values['contact_field_' . $contact_field_name . '_active'])) {
+              $values['contact_fields'][$contact_field_name]['active'] = $values['contact_field_' . $contact_field_name . '_active'];
+              if (!empty($values['contact_field_' . $contact_field_name . '_required'])) {
+                $values['contact_fields'][$contact_field_name]['required'] = $values['contact_field_' . $contact_field_name . '_required'];
+              }
+              $values['contact_fields'][$contact_field_name]['label'] = $values['contact_field_' . $contact_field_name . '_label'];
+              $values['contact_fields'][$contact_field_name]['description'] = $values['contact_field_' . $contact_field_name . '_description'];
             }
           }
         }
