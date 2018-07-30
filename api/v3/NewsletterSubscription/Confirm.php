@@ -43,12 +43,36 @@ function civicrm_api3_newsletter_subscription_confirm($params) {
 
     $contact_id = $contact['id'];
 
-    // Validate submitted group IDs.
-    $disallowed_groups = array_diff(array_keys($params['mailing_lists']), array_keys($profile->getAttribute('mailing_lists')));
-    if (!empty($disallowed_groups)) {
-      throw new CiviCRM_API3_Exception(E::ts('Disallowed group ID(s): %1', array(
-        1 => implode(', ', $disallowed_groups)
-      )), 'api_error');
+    if ($params['autoconfirm']) {
+      // Get all the contact's "Pending" group memberships.
+      $pending_group_contacts = civicrm_api3('GroupContact', 'get', array(
+        'contact_id' => $contact_id,
+        'status' => 'Pending',
+        'options.limit' => 0,
+        'return' => array('group_id'),
+      ));
+      foreach ($pending_group_contacts['values'] as $group) {
+        $params['mailing_lists'][$group['group_id']] = 'Added';
+      }
+    }
+    else {
+      if (empty($params['mailing_lists'])) {
+        throw new CiviCRM_API3_Exception(
+          E::ts('Mandatory key(s) missing from params array: mailing_lists'),
+          'mandatory_missing'
+        );
+      }
+
+      // Validate submitted group IDs.
+      $disallowed_groups = array_diff(
+        array_keys($params['mailing_lists']),
+        array_keys($profile->getAttribute('mailing_lists'))
+      );
+      if (!empty($disallowed_groups)) {
+        throw new CiviCRM_API3_Exception(E::ts('Disallowed group ID(s): %1', array(
+          1 => implode(', ', $disallowed_groups)
+        )), 'api_error');
+      }
     }
 
     // Add/remove group membership.
@@ -133,7 +157,15 @@ function _civicrm_api3_newsletter_subscription_confirm_spec(&$params) {
     'name' => 'mailing_lists',
     'title' => 'Mailing lists',
     'type' => CRM_utils_Type::T_ENUM,
-    'api.required' => 1,
+    'api.required' => 0,
     'description' => E::ts('An array of group IDs as keys and the corresponding group status for the given contact as values.'),
+  );
+
+  $params['autoconfirm'] = array(
+    'name' => 'autoconfirm',
+    'title' => 'Automatic confirmation',
+    'type' => CRM_Utils_Type::T_BOOLEAN,
+    'api.required' => 0,
+    'description' => E::ts('Whether to automatically set all "Pending" group memberships to "Added".'),
   );
 }
