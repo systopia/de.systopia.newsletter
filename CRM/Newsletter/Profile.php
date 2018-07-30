@@ -195,6 +195,8 @@ class CRM_Newsletter_Profile {
       'first_name' => E::ts('First name'),
       'last_name' => E::ts('Last name'),
       'email' => E::ts('E-mail address'),
+      'prefix_id' => E::ts('Prefix'),
+      'organization' => E::ts('Organization'),
     );
   }
 
