@@ -51,6 +51,7 @@ function civicrm_api3_newsletter_subscription_confirm($params) {
         'options.limit' => 0,
         'return' => array('group_id'),
       ));
+      $params['mailing_lists'] = array();
       foreach ($pending_group_contacts['values'] as $group) {
         $params['mailing_lists'][$group['group_id']] = 'Added';
       }
@@ -88,30 +89,32 @@ function civicrm_api3_newsletter_subscription_confirm($params) {
     $mailing_lists = CRM_Newsletter_Utils::getSubscriptionStatus($contact_id);
 
     // Send an e-mail with the info template.
-    $mail_params = array(
-      'from' => CRM_Newsletter_Utils::getFromEmailAddress(TRUE),
-      'toName' => $contact['display_name'],
-      'toEmail' => $contact['email'],
-      'cc' => '',
-      'bc' => '',
-      'subject' => $profile->getAttribute('template_info_subject'),
-      'text' => CRM_Core_Smarty::singleton()->fetchWith(
-        'string:' . $profile->getAttribute('template_info'),
-        array(
-          'contact' => $contact,
-          'mailing_lists' => $mailing_lists,
-          'preferences_url' => str_replace(
-            '[CONTACT_HASH]',
-            $contact['hash'],
-            $profile->getAttribute('preferences_url')
-          ),
-        )
-      ),
-      'html' => '', // TODO: New profile attribute "template_optin_html".
-      'replyTo' => '', // TODO: Make configurable?
-    );
-    if (!CRM_Utils_Mail::send($mail_params)) {
-      // TODO: Mail not sent. Maybe do not cancel the whole API call?
+    if (empty($params['autoconfirm']) || !empty($params['mailing_lists'])) {
+      $mail_params = array(
+        'from' => CRM_Newsletter_Utils::getFromEmailAddress(TRUE),
+        'toName' => $contact['display_name'],
+        'toEmail' => $contact['email'],
+        'cc' => '',
+        'bc' => '',
+        'subject' => $profile->getAttribute('template_info_subject'),
+        'text' => CRM_Core_Smarty::singleton()->fetchWith(
+          'string:' . $profile->getAttribute('template_info'),
+          array(
+            'contact' => $contact,
+            'mailing_lists' => $mailing_lists,
+            'preferences_url' => str_replace(
+              '[CONTACT_HASH]',
+              $contact['hash'],
+              $profile->getAttribute('preferences_url')
+            ),
+          )
+        ),
+        'html' => '', // TODO: New profile attribute "template_optin_html".
+        'replyTo' => '', // TODO: Make configurable?
+      );
+      if (!CRM_Utils_Mail::send($mail_params)) {
+        // TODO: Mail not sent. Maybe do not cancel the whole API call?
+      }
     }
 
     return civicrm_api3_create_success($group_contact_results);
