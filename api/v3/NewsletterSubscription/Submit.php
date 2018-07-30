@@ -26,8 +26,16 @@ function civicrm_api3_newsletter_subscription_submit($params) {
   try {
     $profile = CRM_Newsletter_Profile::getProfile($params['profile']);
 
-    // Get or create the contact.
-    $missing_contact_fields = array_diff_key($profile->getAttribute('contact_fields'), $params);
+    // Check for missing mandatory contact fields.
+    $missing_contact_fields = array_diff_key(
+      array_filter(
+        $profile->getAttribute('contact_fields'),
+        function ($contact_field) {
+          return !empty($contact_field['required']);
+        }
+      ),
+      $params
+    );
     if (!empty($missing_contact_fields)) {
       throw new CiviCRM_API3_Exception(
         E::ts('Missing mandatory fields %1', array(
@@ -37,6 +45,7 @@ function civicrm_api3_newsletter_subscription_submit($params) {
       );
     }
 
+    // Get or create the contact.
     $contact_data = array_intersect_key($params, $profile->getAttribute('contact_fields'));
     $contact_id = CRM_Newsletter_Utils::getContact($contact_data);
 

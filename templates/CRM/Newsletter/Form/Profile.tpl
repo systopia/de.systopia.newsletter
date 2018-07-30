@@ -38,12 +38,23 @@
 
       {foreach from=$contact_field_names item=contact_field}
         {assign var=field_name_active value=$contact_field.active}
+        {assign var=field_name_required value=$contact_field.required}
         {assign var=field_name_label value=$contact_field.label}
         {assign var=field_name_description value=$contact_field.description}
 
         <tr class="crm-section">
-          <td class="label">{$form.$field_name_active.label}</td>
-          <td class="content">{$form.$field_name_active.html}</td>
+          <td>
+            <table class="form-layout">
+              <tr class="crm-section">
+                <td class="label">{$form.$field_name_active.label}</td>
+                <td class="content">{$form.$field_name_active.html}</td>
+              </tr>
+              <tr class="crm-section">
+                <td class="label">{$form.$field_name_required.label}</td>
+                <td class="content">{$form.$field_name_required.html}</td>
+              </tr>
+            </table>
+          </td>
 
           <td>
             <table class="form-layout">

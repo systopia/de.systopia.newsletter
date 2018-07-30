@@ -129,6 +129,15 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       $contact_field_names[$contact_field_name]['active'] = 'contact_field_' . $contact_field_name . '_active';
 
       $this->add(
+        'checkbox',
+        'contact_field_' . $contact_field_name . '_required',
+        E::ts('Contact field "%1" is required', array(
+          1 => E::ts($contact_field_label)
+        ))
+      );
+      $contact_field_names[$contact_field_name]['required'] = 'contact_field_' . $contact_field_name . '_required';
+
+      $this->add(
         'text',
         'contact_field_' . $contact_field_name . '_label',
         E::ts('Field label')
@@ -346,6 +355,7 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
           // Translate the array structure into individual fields.
           foreach ($value as $contact_field => $values) {
             $defaults['contact_field_' . $contact_field . '_active'] = $values['active'];
+            $defaults['contact_field_' . $contact_field . '_required'] = $values['required'];
             $defaults['contact_field_' . $contact_field . '_label'] = $values['label'];
             $defaults['contact_field_' . $contact_field . '_description'] = $values['description'];
           }
@@ -378,6 +388,7 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
           foreach (CRM_Newsletter_Profile::availableContactFields() as $contact_field => $contact_field_label) {
             if (!empty($values['contact_field_' . $contact_field . '_active'])) {
               $values['contact_fields'][$contact_field]['active'] = $values['contact_field_' . $contact_field . '_active'];
+              $values['contact_fields'][$contact_field]['required'] = $values['contact_field_' . $contact_field . '_required'];
               $values['contact_fields'][$contact_field]['label'] = $values['contact_field_' . $contact_field . '_label'];
               $values['contact_fields'][$contact_field]['description'] = $values['contact_field_' . $contact_field . '_description'];
             }

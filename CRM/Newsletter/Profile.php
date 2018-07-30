@@ -230,6 +230,7 @@ class CRM_Newsletter_Profile {
     foreach (self::availableContactFields() as $field_name => $field_label) {
       $default_data['contact_fields'][$field_name] = array(
         'active' => ($field_name == 'email' ? 1 : 0),
+        'required' => ($field_name == 'email' ? 1 : 0),
         'label' => $field_label,
         'description' => '',
       );
