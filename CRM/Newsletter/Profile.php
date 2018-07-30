@@ -198,9 +198,10 @@ class CRM_Newsletter_Profile {
       'return' => array("value", "label"),
       'option_group_id' => "individual_prefix",
     ));
-    array_walk($individual_prefix_values['values'], function(&$v, $k) {
-      $v = $v['label'];
-    });
+    $individual_prefix_options = array();
+    foreach ($individual_prefix_values['values'] as $individual_prefix_value) {
+      $individual_prefix_options[$individual_prefix_value['value']] = $individual_prefix_value['label'];
+    }
 
     $static = array(
       'first_name' => array(
@@ -218,7 +219,7 @@ class CRM_Newsletter_Profile {
       'prefix_id' => array(
         'label' => E::ts('Prefix'),
         'type' => 'Select',
-        'options' => $individual_prefix_values['values'],
+        'options' => $individual_prefix_options,
       ),
     );
 
@@ -237,7 +238,7 @@ class CRM_Newsletter_Profile {
       ),
     ));
     foreach ($contact_fields['values'] as $contact_field) {
-      $dynamic[$contact_field['name']] = array(
+      $dynamic['custom_' . $contact_field['id']] = array(
         'label' => $contact_field['label'],
         'type' => $contact_field['html_type'],
       );
@@ -249,9 +250,9 @@ class CRM_Newsletter_Profile {
         $option_values = civicrm_api3('OptionValue', 'get', array(
           'option_group_id' => $contact_field['option_group_id'],
         ));
-        $dynamic[$contact_field['name']]['options'] = array();
+        $dynamic['custom_' . $contact_field['id']]['options'] = array();
         foreach ($option_values['values'] as $option_value) {
-          $dynamic[$contact_field['name']]['options'][$option_value['value']] = $option_value['label'];
+          $dynamic['custom_' . $contact_field['id']]['options'][$option_value['value']] = $option_value['label'];
         }
       }
     }
@@ -294,7 +295,6 @@ class CRM_Newsletter_Profile {
         'required' => ($field_name == 'email' ? 1 : 0),
         'label' => $field['label'],
         'description' => '',
-        'type' => $field['type']
       );
     }
     return new CRM_Newsletter_Profile($name, $default_data);
