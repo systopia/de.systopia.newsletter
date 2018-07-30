@@ -24,7 +24,12 @@ use CRM_Newsletter_ExtensionUtil as E;
  */
 function civicrm_api3_newsletter_subscription_request($params) {
   try {
-    $profile = CRM_Newsletter_Profile::getProfile($params['profile']);
+    if (!$profile = CRM_Newsletter_Profile::getProfile($params['profile'])) {
+      throw new CiviCRM_API3_Exception(
+        E::ts('No profile found with the given name.'),
+        'api_error'
+      );
+    }
 
     $contact_fields = array_intersect_key($params, $profile->getAttribute('contact_fields'));
     foreach ($contact_fields as $field_name => $field_value) {

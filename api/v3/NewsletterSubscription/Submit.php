@@ -24,7 +24,12 @@ use CRM_Newsletter_ExtensionUtil as E;
  */
 function civicrm_api3_newsletter_subscription_submit($params) {
   try {
-    $profile = CRM_Newsletter_Profile::getProfile($params['profile']);
+    if (!$profile = CRM_Newsletter_Profile::getProfile($params['profile'])) {
+      throw new CiviCRM_API3_Exception(
+        E::ts('No profile found with the given name.'),
+        'api_error'
+      );
+    }
 
     // Check for missing mandatory contact fields.
     $missing_contact_fields = array_diff_key(

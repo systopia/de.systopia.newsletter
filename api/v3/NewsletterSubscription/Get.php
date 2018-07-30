@@ -28,7 +28,12 @@ function civicrm_api3_newsletter_subscription_get($params) {
       throw new CiviCRM_API3_Exception(E::ts('Either the contact ID or the contact hash is required.'), 'mandatory_missing');
     }
 
-    $profile = CRM_Newsletter_Profile::getProfile($params['profile']);
+    if (!$profile = CRM_Newsletter_Profile::getProfile($params['profile'])) {
+      throw new CiviCRM_API3_Exception(
+        E::ts('No profile found with the given name.'),
+        'api_error'
+      );
+    }
 
     // Retrieve contact data.
     $contact_params = array(
