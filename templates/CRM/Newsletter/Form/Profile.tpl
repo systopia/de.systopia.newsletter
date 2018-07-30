@@ -15,134 +15,180 @@
 <div class="crm-block crm-form-block">
 
   {if $op == 'create' or $op == 'edit'}
-    <table class="form-layout-compressed">
-
-      <tr class="crm-section">
-        <td class="label">{$form.name.label}</td>
-        <td class="content">{$form.name.html}</td>
-      </tr>
-
-      <tr class="crm-section">
-        <td class="label">{$form.form_title.label}</td>
-        <td class="content">{$form.form_title.html}</td>
-      </tr>
-
-      <tr class="crm-section">
-        <td class="label">{$form.submit_label.label}</td>
-        <td class="content">{$form.submit_label.html}</td>
-      </tr>
-
-      <tr class="form-section">
-        <td><h2>{ts domain="de.systopia.newsletter"}Contact fields{/ts}</h2></td>
-      </tr>
-
-      {foreach from=$contact_field_names item=contact_field}
-        {assign var=field_name_active value=$contact_field.active}
-        {assign var=field_name_required value=$contact_field.required}
-        {assign var=field_name_label value=$contact_field.label}
-        {assign var=field_name_description value=$contact_field.description}
+    <fieldset>
+      <legend>{ts}General settings{/ts}</legend>
+      <table class="form-layout-compressed">
 
         <tr class="crm-section">
-          <td>
-            <table class="form-layout">
-              <tr class="crm-section">
-                <td class="label">{$form.$field_name_active.label}</td>
-                <td class="content">{$form.$field_name_active.html}</td>
-              </tr>
-              <tr class="crm-section">
-                <td class="label">{$form.$field_name_required.label}</td>
-                <td class="content">{$form.$field_name_required.html}</td>
-              </tr>
-            </table>
-          </td>
+          <td class="label">{$form.name.label}</td>
+          <td class="content">{$form.name.html}</td>
+        </tr>
 
+        <tr class="crm-section">
+          <td class="label">{$form.form_title.label}</td>
+          <td class="content">{$form.form_title.html}</td>
+        </tr>
+
+        <tr class="crm-section">
+          <td class="label">{$form.submit_label.label}</td>
+          <td class="content">{$form.submit_label.html}</td>
+        </tr>
+
+        <tr class="crm-section">
+          <td class="label">{$form.preferences_url.label}</td>
+          <td class="content">
+            {$form.preferences_url.html}
+            <div class="description">
+              {ts}A URL to the preferences form. Must include the token <code>[CONTACT_HASH]</code> which will be replaced with the actual contact hash for identifying the contact.{/ts}
+            </div>
+          </td>
+        </tr>
+
+      </table>
+    </fieldset>
+
+    <fieldset>
+      <legend>{ts}Mailing lists{/ts}</legend>
+      <table class="form-layout-compressed">
+
+        <tr class="crm-section">
+          <td class="label">{$form.mailing_lists_label.label}</td>
+          <td class="content">{$form.mailing_lists_label.html}</td>
+        </tr>
+        <tr class="crm-section">
+          <td class="label">{$form.mailing_lists_description.label}</td>
+          <td class="content">{$form.mailing_lists_description.html}</td>
+        </tr>
+        <tr class="crm-section">
+          <td class="label">{$form.mailing_lists.label}</td>
+          <td class="content">{$form.mailing_lists.html}</td>
+        </tr>
+
+      </table>
+    </fieldset>
+
+    <fieldset>
+      <legend>{ts domain="de.systopia.newsletter"}Contact fields{/ts}</legend>
+
+      <table class="form-layout">
+
+        {foreach from=$contact_field_names item=contact_field}
+          {assign var=field_name_active value=$contact_field.active}
+          {assign var=field_name_required value=$contact_field.required}
+          {assign var=field_name_label value=$contact_field.label}
+          {assign var=field_name_description value=$contact_field.description}
+
+          <tr class="crm-section {cycle values="odd,even"}">
+            <td>
+              <table class="form-layout-compressed">
+                <tr class="crm-section">
+                  <td class="label">{$form.$field_name_active.label}</td>
+                  <td class="content">{$form.$field_name_active.html}</td>
+                </tr>
+                <tr class="crm-section">
+                  <td class="label">{$form.$field_name_required.label}</td>
+                  <td class="content">{$form.$field_name_required.html}</td>
+                </tr>
+              </table>
+            </td>
+
+            <td>
+              <table class="form-layout-compressed">
+                <tr class="crm-section">
+                  <td class="label">{$form.$field_name_label.label}</td>
+                  <td class="content">{$form.$field_name_label.html}</td>
+                </tr>
+                <tr class="crm-section">
+                  <td class="label">{$form.$field_name_description.label}</td>
+                  <td class="content">{$form.$field_name_description.html}</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        {/foreach}
+
+      </table>
+    </fieldset>
+
+    <fieldset>
+      <legend>{ts}Terms and conditions{/ts}</legend>
+      <table>
+
+        <tr class="crm-section {cycle values="odd,even"}">
           <td>
-            <table class="form-layout">
+            <table class="form-layout-compressed">
               <tr class="crm-section">
-                <td class="label">{$form.$field_name_label.label}</td>
-                <td class="content">{$form.$field_name_label.html}</td>
+                <td class="label">{$form.conditions_public_label.label}</td>
+                <td class="content">{$form.conditions_public_label.html}</td>
               </tr>
               <tr class="crm-section">
-                <td class="label">{$form.$field_name_description.label}</td>
-                <td class="content">{$form.$field_name_description.html}</td>
+                <td class="label">{$form.conditions_public_description.label}</td>
+                <td class="content">{$form.conditions_public_description.html}</td>
+              </tr>
+              <tr class="crm-section">
+                <td class="label">{$form.conditions_public.label}</td>
+                <td class="content">{$form.conditions_public.html}</td>
               </tr>
             </table>
           </td>
         </tr>
-      {/foreach}
 
-    </table>
+        <tr class="crm-section {cycle values="odd,even"}">
+          <td>
+            <table class="form-layout-compressed">
+              <tr class="crm-section">
+                <td class="label">{$form.conditions_preferences_label.label}</td>
+                <td class="content">{$form.conditions_preferences_label.html}</td>
+              </tr>
+              <tr class="crm-section">
+                <td class="label">{$form.conditions_preferences_description.label}</td>
+                <td class="content">{$form.conditions_preferences_description.html}</td>
+              </tr>
+              <tr class="crm-section">
+                <td class="label">{$form.conditions_preferences.label}</td>
+                <td class="content">{$form.conditions_preferences.html}</td>
+              </tr>
+            </table>
+          </td>
+        </tr>
 
-    <table class="form-layout-compressed">
+      </table>
+    </fieldset>
 
-      <tr class="crm-section">
-        <td class="label">{$form.mailing_lists_label.label}</td>
-        <td class="content">{$form.mailing_lists_label.html}</td>
-      </tr>
-      <tr class="crm-section">
-        <td class="label">{$form.mailing_lists_description.label}</td>
-        <td class="content">{$form.mailing_lists_description.html}</td>
-      </tr>
-      <tr class="crm-section">
-        <td class="label">{$form.mailing_lists.label}</td>
-        <td class="content">{$form.mailing_lists.html}</td>
-      </tr>
-
-      <tr class="crm-section">
-        <td class="label">{$form.conditions_public_label.label}</td>
-        <td class="content">{$form.conditions_public_label.html}</td>
-      </tr>
-      <tr class="crm-section">
-        <td class="label">{$form.conditions_public_description.label}</td>
-        <td class="content">{$form.conditions_public_description.html}</td>
-      </tr>
-      <tr class="crm-section">
-        <td class="label">{$form.conditions_public.label}</td>
-        <td class="content">{$form.conditions_public.html}</td>
-      </tr>
-
-      <tr class="crm-section">
-        <td class="label">{$form.conditions_preferences_label.label}</td>
-        <td class="content">{$form.conditions_preferences_label.html}</td>
-      </tr>
-      <tr class="crm-section">
-        <td class="label">{$form.conditions_preferences_description.label}</td>
-        <td class="content">{$form.conditions_preferences_description.html}</td>
-      </tr>
-      <tr class="crm-section">
-        <td class="label">{$form.conditions_preferences.label}</td>
-        <td class="content">{$form.conditions_preferences.html}</td>
-      </tr>
-
-      <tr class="crm-section">
-        <td class="label">{$form.template_optin_subject.label}</td>
-        <td class="content">{$form.template_optin_subject.html}</td>
-      </tr>
-      <tr class="crm-section">
-        <td class="label">{$form.template_optin.label}</td>
-        <td class="content">{$form.template_optin.html}</td>
-      </tr>
-
-      <tr class="crm-section">
-        <td class="label">{$form.template_info_subject.label}</td>
-        <td class="content">{$form.template_info_subject.html}</td>
-      </tr>
-      <tr class="crm-section">
-        <td class="label">{$form.template_info.label}</td>
-        <td class="content">{$form.template_info.html}</td>
-      </tr>
-
-      <tr class="crm-section">
-        <td class="label">{$form.preferences_url.label}</td>
-        <td class="content">
-          {$form.preferences_url.html}
-          <div class="description">
-            {ts}A URL to the preferences form. Must include the token <code>[CONTACT_HASH]</code> which will be replaced with the actual contact hash for identifying the contact.{/ts}
-          </div>
+    <fieldset>
+      <legend>{ts}E-mail templates{/ts}</legend>
+    </fieldset>
+    <table>
+      <tr class="crm-section  {cycle values="odd,even"}">
+        <td>
+          <table class="form-layout-compressed">
+            <tr class="crm-section">
+              <td class="label">{$form.template_optin_subject.label}</td>
+              <td class="content">{$form.template_optin_subject.html}</td>
+            </tr>
+            <tr class="crm-section">
+              <td class="label">{$form.template_optin.label}</td>
+              <td class="content">{$form.template_optin.html}</td>
+            </tr>
+          </table>
         </td>
       </tr>
-
+      <tr class="crm-section  {cycle values="odd,even"}">
+        <td>
+          <table class="form-layout-compressed">
+            <tr class="crm-section">
+              <td class="label">{$form.template_info_subject.label}</td>
+              <td class="content">{$form.template_info_subject.html}</td>
+            </tr>
+            <tr class="crm-section">
+              <td class="label">{$form.template_info.label}</td>
+              <td class="content">{$form.template_info.html}</td>
+            </tr>
+          </table>
+        </td>
+      </tr>
     </table>
+
   {elseif $op == 'delete'}
     {if $profile_name}
       {if $profile_name == 'default'}
