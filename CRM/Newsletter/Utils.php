@@ -97,4 +97,45 @@ class CRM_Newsletter_Utils {
     return $mailing_lists;
   }
 
+  /**
+   * Builds a tree array for given groups to include their parents.
+   *
+   * @param $groups
+   *
+   * @return array
+   *
+   * @throws \CiviCRM_API3_Exception
+   */
+  public static function buildGroupTree($groups, $all_groups = NULL) {
+    if (!$all_groups) {
+      $all_groups = $groups;
+    }
+    $group_tree = array();
+    foreach ($groups as $group_id => $group_label) {
+      $group_tree_item = array(
+        'label' => $group_label,
+      );
+      $group = civicrm_api3('Group', 'getsingle', array(
+        'id' => $group_id,
+        'return' => array('children', 'description'),
+      ));
+      $group_tree_item['description'] = !empty($group['description']) ? $group['description'] : '';
+      if (!empty($group['children'])) {
+        foreach (explode(',', $group['children']) as $child_group_id) {
+          if (array_key_exists($child_group_id, $all_groups)) {
+            if (!array_key_exists('children', $group_tree_item)) {
+              $group_tree_item['children'] = array();
+            }
+            $group_tree_item['children'] += self::buildGroupTree(array($child_group_id => $all_groups[$child_group_id]), $all_groups);
+            if (array_key_exists($child_group_id, $group_tree)) {
+              unset($group_tree[$child_group_id]);
+            }
+          }
+        }
+      }
+      $group_tree[$group_id] = $group_tree_item;
+    }
+    return $group_tree;
+  }
+
 }

@@ -39,8 +39,12 @@ function civicrm_api3_newsletter_profile_get($params) {
         $field['options'] = $contact_fields[$field_name]['options'];
       }
     }
-    $return = array($profile_name => $profile_data);
 
+    // Build group tree.
+    $group_tree = CRM_Newsletter_Utils::buildGroupTree($profile_data['mailing_lists']);
+    $profile_data['mailing_lists_tree'] = $group_tree;
+
+    $return = array($profile_name => $profile_data);
     return civicrm_api3_create_success($return);
   }
   catch (\Exception $exception) {
