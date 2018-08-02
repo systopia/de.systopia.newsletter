@@ -149,27 +149,37 @@ function newsletter_civicrm_alterAPIPermissions($entity, $action, &$params, &$pe
 }
 
 /**
- * Implements hook_civicrm_preProcess().
+ * Implements hook_civicrm_tokens().
  *
- * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_preProcess
- *
-function newsletter_civicrm_preProcess($formName, &$form) {
-
-} // */
+ * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_tokens
+ */
+function newsletter_civicrm_tokens(&$tokens) {
+  foreach (CRM_Newsletter_Profile::getProfiles() as $profile_name => $profile) {
+    $tokens['newsletter']['newsletter.preferences_url_' . $profile_name] = E::ts(
+      'Preferences URL for profile %1',
+      array(
+        1 => $profile->getName(),
+      )
+    );
+  }
+}
 
 /**
- * Implements hook_civicrm_navigationMenu().
+ * Implements hook_civicrm_tokenValues().
  *
- * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_navigationMenu
- *
-function newsletter_civicrm_navigationMenu(&$menu) {
-  _newsletter_civix_insert_navigation_menu($menu, NULL, array(
-    'label' => E::ts('The Page'),
-    'name' => 'the_page',
-    'url' => 'civicrm/the-page',
-    'permission' => 'access CiviReport,access CiviContribute',
-    'operator' => 'OR',
-    'separator' => 0,
-  ));
-  _newsletter_civix_navigationMenu($menu);
-} // */
+ * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_tokenValues
+ */
+function newsletter_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = array(), $context = null) {
+  if (array_key_exists('newsletter', $tokens)) {
+    foreach (CRM_Newsletter_Profile::getProfiles() as $profile_name => $profile) {
+      foreach ($cids as $cid) {
+        $contact = civicrm_api3('Contact', 'getsingle', array('id' => $cid, 'return' => array('hash')));
+        $values[$cid]['newsletter.preferences_url_' . $profile_name] = str_replace(
+          '[CONTACT_HASH]',
+          $contact['hash'],
+          $profile->getAttribute('preferences_url')
+        );
+      }
+    }
+  }
+}
