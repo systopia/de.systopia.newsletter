@@ -25,7 +25,6 @@
       <thead>
       <tr>
         <th>{ts domain="de.systopia.newsletter"}Profile name{/ts}</th>
-        <th>{ts domain="de.systopia.newsletter"}Properties{/ts}</th>
         <th>{ts domain="de.systopia.newsletter"}Operations{/ts}</th>
       </tr>
       </thead>
