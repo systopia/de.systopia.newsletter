@@ -46,10 +46,15 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
     }
 
     // Verify that a profile with the given name exists.
-    $profile_name = CRM_Utils_Request::retrieve('name', 'String', $this);
+    // The parameter name must not be present as a POST value within the form,
+    // because the URL query parameter would be overwritten with it.
+    $profile_name = CRM_Utils_Request::retrieve('pname', 'String', $this);
     if (!$this->profile = CRM_Newsletter_Profile::getProfile($profile_name)) {
       $profile_name = NULL;
     }
+
+    // Set redirect destination.
+    $this->controller->_destination = CRM_Utils_System::url('civicrm/admin/settings/newsletter/profiles', 'reset=1');
 
     switch ($this->_op) {
       case 'delete':
@@ -86,9 +91,6 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
     // Assign template variables.
     $this->assign('op', $this->_op);
     $this->assign('profile_name', $profile_name);
-
-    // Set redirect destination.
-    $this->controller->_destination = CRM_Utils_System::url('civicrm/admin/settings/newsletter/profiles', 'reset=1');
 
     // Add form elements.
     $is_default = ($profile_name == 'default');
@@ -276,7 +278,9 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
    * @inheritdoc
    */
   public function addRules() {
-    $this->addFormRule(array('CRM_Newsletter_Form_Profile', 'validateProfileForm'));
+    if (in_array($this->_op, array('create', 'edit'))) {
+      $this->addFormRule(array('CRM_Newsletter_Form_Profile', 'validateProfileForm'));
+    }
   }
 
   /**
@@ -384,8 +388,12 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       if (empty($values['name'])) {
         $values['name'] = 'default';
       }
+      // Delete a renamed profile.
+      if ($this->profile->getName() != $values['name']) {
+        $this->profile->deleteProfile();
+      }
       $this->profile->setName($values['name']);
-      foreach ($this->profile->getData() as $element_name => $value) {
+      foreach (CRM_Newsletter_Profile::allowedAttributes() as $element_name) {
         if ($element_name == 'contact_fields') {
           foreach (CRM_Newsletter_Profile::availableContactFields() as $contact_field_name => $contact_field) {
             if (!empty($values['contact_field_' . $contact_field_name . '_active'])) {

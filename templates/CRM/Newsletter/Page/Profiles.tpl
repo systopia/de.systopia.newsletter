@@ -34,11 +34,11 @@
         <tr>
           <td>{$profile.name}</td>
           <td>
-            <a href="{crmURL p="civicrm/admin/settings/newsletter/profile" q="op=edit&name=$profile_name"}" title="{ts domain="de.systopia.newsletter" 1=$profile.name}Edit profile %1{/ts}" class="action-item crm-hover-button">{ts domain="de.systopia.newsletter"}Edit{/ts}</a>
+            <a href="{crmURL p="civicrm/admin/settings/newsletter/profile" q="op=edit&pname=$profile_name"}" title="{ts domain="de.systopia.newsletter" 1=$profile.name}Edit profile %1{/ts}" class="action-item crm-hover-button">{ts domain="de.systopia.newsletter"}Edit{/ts}</a>
             {if $profile_name == 'default'}
-              <a href="{crmURL p="civicrm/admin/settings/newsletter/profile" q="op=delete&name=$profile_name"}" title="{ts domain="de.systopia.newsletter" 1=$profile.name}Reset profile %1{/ts}" class="action-item crm-hover-button">{ts domain="de.systopia.newsletter"}Reset{/ts}</a>
+              <a href="{crmURL p="civicrm/admin/settings/newsletter/profile" q="op=delete&pname=$profile_name"}" title="{ts domain="de.systopia.newsletter" 1=$profile.name}Reset profile %1{/ts}" class="action-item crm-hover-button">{ts domain="de.systopia.newsletter"}Reset{/ts}</a>
             {else}
-              <a href="{crmURL p="civicrm/admin/settings/newsletter/profile" q="op=delete&name=$profile_name"}" title="{ts domain="de.systopia.newsletter" 1=$profile.name}Delete profile %1{/ts}" class="action-item crm-hover-button">{ts domain="de.systopia.newsletter"}Delete{/ts}</a>
+              <a href="{crmURL p="civicrm/admin/settings/newsletter/profile" q="op=delete&pname=$profile_name"}" title="{ts domain="de.systopia.newsletter" 1=$profile.name}Delete profile %1{/ts}" class="action-item crm-hover-button">{ts domain="de.systopia.newsletter"}Delete{/ts}</a>
             {/if}
 
           </td>
