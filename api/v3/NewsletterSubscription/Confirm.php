@@ -90,6 +90,17 @@ function civicrm_api3_newsletter_subscription_confirm($params) {
 
     // Send an e-mail with the info template.
     if (empty($params['autoconfirm']) || !empty($params['mailing_lists'])) {
+      $preferences_url = $profile->getAttribute('preferences_url');
+      $preferences_url = str_replace(
+        '[CONTACT_HASH]',
+        $contact['hash'],
+        $preferences_url
+      );
+      $preferences_url = str_replace(
+        '[PROFILE]',
+        $profile->getName(),
+        $preferences_url
+      );
       $mail_params = array(
         'from' => CRM_Newsletter_Utils::getFromEmailAddress(TRUE),
         'toName' => $contact['display_name'],
@@ -102,11 +113,7 @@ function civicrm_api3_newsletter_subscription_confirm($params) {
           array(
             'contact' => $contact,
             'mailing_lists' => $mailing_lists,
-            'preferences_url' => str_replace(
-              '[CONTACT_HASH]',
-              $contact['hash'],
-              $profile->getAttribute('preferences_url')
-            ),
+            'preferences_url' => $preferences_url,
           )
         ),
         'html' => '', // TODO: New profile attribute "template_optin_html".

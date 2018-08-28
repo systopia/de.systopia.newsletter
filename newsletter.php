@@ -174,11 +174,18 @@ function newsletter_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = 
     foreach (CRM_Newsletter_Profile::getProfiles() as $profile_name => $profile) {
       foreach ($cids as $cid) {
         $contact = civicrm_api3('Contact', 'getsingle', array('id' => $cid, 'return' => array('hash')));
-        $values[$cid]['newsletter.preferences_url_' . $profile_name] = str_replace(
+        $preferences_url = $profile->getAttribute('preferences_url');
+        $preferences_url = str_replace(
           '[CONTACT_HASH]',
           $contact['hash'],
-          $profile->getAttribute('preferences_url')
+          $preferences_url
         );
+        $preferences_url = str_replace(
+          '[PROFILE]',
+          $profile_name,
+          $preferences_url
+        );
+        $values[$cid]['newsletter.preferences_url_' . $profile_name] = $preferences_url;
       }
     }
   }

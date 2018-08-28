@@ -39,7 +39,7 @@
           <td class="content">
             {$form.preferences_url.html}
             <div class="description">
-              {ts}A URL to the preferences form. Must include the token <code>[CONTACT_HASH]</code> which will be replaced with the actual contact hash for identifying the contact.{/ts}
+              {ts}A URL to the preferences form. Must include the tokens <code>[PROFILE]</code> and <code>[CONTACT_HASH]</code> which will be replaced with the actual contact hash for identifying the contact.{/ts}
             </div>
           </td>
         </tr>
@@ -168,7 +168,12 @@
             </tr>
             <tr class="crm-section">
               <td class="label">{$form.template_optin.label}</td>
-              <td class="content">{$form.template_optin.html}</td>
+              <td class="content">
+                {$form.template_optin.html}
+                <div class="description">
+                  {ts}To include the preferences URL, use the variable <code>{literal}{$preferences_url}{/literal}</code>{/ts}
+                </div>
+              </td>
             </tr>
           </table>
         </td>
@@ -182,7 +187,12 @@
             </tr>
             <tr class="crm-section">
               <td class="label">{$form.template_info.label}</td>
-              <td class="content">{$form.template_info.html}</td>
+              <td class="content">
+                {$form.template_info.html}
+                <div class="description">
+                  {ts}To include the preferences URL, use the variable <code>{literal}{$preferences_url}{/literal}</code>{/ts}
+                </div>
+              </td>
             </tr>
           </table>
         </td>
