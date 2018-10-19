@@ -10,6 +10,29 @@ use CRM_Newsletter_ExtensionUtil as E;
  */
 function newsletter_civicrm_config(&$config) {
   _newsletter_civix_civicrm_config($config);
+}
+
+/**
+ * Implements hook_civicrm_container().
+ * @param $container
+ *
+ * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_container
+ */
+function newsletter_civicrm_container($container) {
+  //  we can only register for flexmailer events if it is installed
+  if(function_exists("flexmailer_civicrm_config")) {
+    $container->addResource(new \Symfony\Component\Config\Resource\FileResource(__FILE__));
+    $container->findDefinition('dispatcher')->addMethodCall('addListener',
+      array(\Civi\FlexMailer\Validator::EVENT_CHECK_SENDABLE, '_newsletter_check_sendable', 100)
+    );
+  }
+}
+
+/**
+ * Internal function for FlexMailer  Event callback
+ * @param \Civi\FlexMailer\Event\CheckSendableEvent $e
+ */
+function _newsletter_check_sendable(\Civi\FlexMailer\Event\CheckSendableEvent $e){
   CRM_Newsletter_RegisterTokenFlexmailer::register_tokens();
 }
 

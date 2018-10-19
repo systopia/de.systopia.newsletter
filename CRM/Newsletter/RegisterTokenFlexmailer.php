@@ -16,17 +16,15 @@
 use CRM_Newsletter_ExtensionUtil as E;
 
 /**
- * Class CRM_Newsletter_Utils
+ * Class CRM_Newsletter_RegisterTokenFlexmailer
  */
 class CRM_Newsletter_RegisterTokenFlexmailer {
 
   /**
-   * Registers the profile links with org.civicrm.flexmailer, as a valid unsubscribe required Token
-   * see https://docs.civicrm.org/flexmailer/en/latest/develop/
+   * Register Tokens with Flexmailer on \Civi\FlexMailer\Event\CheckSendableEvent
    */
   public static function register_tokens() {
     $additional_profiles = [];
-    // get all newsletter Profiles and generate appropriate array for Require Tokens
     foreach (CRM_Newsletter_Profile::getProfiles() as $profile_name => $profile) {
       $profile_name = 'newsletter.preferences_url_' . $profile_name;
       $additional_profiles[$profile_name] = ts("Newsletter Profile Link from de.systopia.newsletter for {$profile_name}");
