@@ -10,6 +10,7 @@ use CRM_Newsletter_ExtensionUtil as E;
  */
 function newsletter_civicrm_config(&$config) {
   _newsletter_civix_civicrm_config($config);
+  CRM_Newsletter_RegisterTokenFlexmailer::register_tokens();
 }
 
 /**
