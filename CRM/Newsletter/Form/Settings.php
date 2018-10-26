@@ -115,7 +115,7 @@ class CRM_Newsletter_Form_Settings extends CRM_Core_Form {
     if (empty($this->_settings)) {
       $settings = civicrm_api3('setting', 'getfields', array('filters' => $this->_settingFilter));
     }
-    return $settings;
+    return $settings['values'];
   }
   /**
    * Get the settings we are going to allow to be set on this form.
