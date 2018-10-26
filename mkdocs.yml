@@ -1,0 +1,21 @@
+site_name: Advanced Newsletter Management
+repo_url: https://github.com/systopia/de.systopia.newsletter
+theme: material
+
+pages:
+- 'Overview': index.md
+- 'Configuration': configuration.md
+- 'Usage': usage.md
+
+markdown_extensions:
+- attr_list
+- admonition
+- def_list
+- codehilite
+- toc:
+    permalink: true
+- pymdownx.superfences
+- pymdownx.inlinehilite
+- pymdownx.tilde
+- pymdownx.betterem
+- pymdownx.mark
