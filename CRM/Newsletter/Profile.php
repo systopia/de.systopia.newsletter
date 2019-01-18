@@ -374,10 +374,10 @@ class CRM_Newsletter_Profile {
           'is_active' => 1,
           'group_type' => array('LIKE' => '%' . CRM_Utils_Array::implodePadded($group_type['value']) . '%'),
           'option.limit'   => 0,
-          'return'         => 'id,name'
+          'return'         => 'id,title'
         ));
         foreach ($query['values'] as $group) {
-          $groups[$group['id']] = $group['name'];
+          $groups[$group['id']] = $group['title'];
         }
       }
     }

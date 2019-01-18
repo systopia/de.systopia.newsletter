@@ -111,15 +111,16 @@ class CRM_Newsletter_Utils {
       $all_groups = $groups;
     }
     $group_tree = array();
-    foreach ($groups as $group_id => $group_label) {
+    foreach ($groups as $group_id => $group_title) {
       $group_tree_item = array(
-        'label' => $group_label,
+        'title' => $group_title,
       );
       $group = civicrm_api3('Group', 'getsingle', array(
         'id' => $group_id,
-        'return' => array('children', 'description'),
+        'return' => array('children', 'description', 'name'),
       ));
       $group_tree_item['description'] = !empty($group['description']) ? $group['description'] : '';
+      $group_tree_item['name'] = !empty($group['name']) ? $group['name'] : '';
       if (!empty($group['children'])) {
         foreach (explode(',', $group['children']) as $child_group_id) {
           if (array_key_exists($child_group_id, $all_groups)) {
