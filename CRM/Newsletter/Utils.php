@@ -106,36 +106,57 @@ class CRM_Newsletter_Utils {
    *
    * @throws \CiviCRM_API3_Exception
    */
-  public static function buildGroupTree($groups, $all_groups = NULL) {
-    if (!$all_groups) {
-      $all_groups = $groups;
-    }
+  public static function buildGroupTree($groups) {
     $group_tree = array();
+    $group_tree_items = array();
+
     foreach ($groups as $group_id => $group_title) {
-      $group_tree_item = array(
-        'title' => $group_title,
-      );
+      // Retrieve group information.
       $group = civicrm_api3('Group', 'getsingle', array(
         'id' => $group_id,
-        'return' => array('children', 'description', 'name'),
+        'return' => array('children', 'description', 'name', 'parents'),
       ));
-      $group_tree_item['description'] = !empty($group['description']) ? $group['description'] : '';
-      $group_tree_item['name'] = !empty($group['name']) ? $group['name'] : '';
+
+      // Compose the group item.
+      $group_tree_item = array(
+        'title' => $group_title,
+        'description' => !empty($group['description']) ? $group['description'] : '',
+        'name' => !empty($group['name']) ? $group['name'] : '',
+      );
+      // Add children.
       if (!empty($group['children'])) {
-        foreach (explode(',', $group['children']) as $child_group_id) {
-          if (array_key_exists($child_group_id, $all_groups)) {
-            if (!array_key_exists('children', $group_tree_item)) {
-              $group_tree_item['children'] = array();
-            }
-            $group_tree_item['children'] += self::buildGroupTree(array($child_group_id => $all_groups[$child_group_id]), $all_groups);
-            if (array_key_exists($child_group_id, $group_tree)) {
-              unset($group_tree[$child_group_id]);
-            }
+        $group_tree_item['children_ids'] = $group['children'];
+      }
+      // Add first parent.
+      if (!empty($group['parents'])) {
+        foreach (explode(',', $group['parents']) as $parent_group_id) {
+          if (array_key_exists($parent_group_id, $groups)) {
+            $group_tree_item['parent'] = $parent_group_id;
+            break;
           }
         }
       }
-      $group_tree[$group_id] = $group_tree_item;
+
+      // Add to the tree and mark processed.
+      $group_tree_items[$group_id] = $group_tree_item;
     }
+
+    // Re-arrange groups into their parents, using references for altering
+    // already-processed items.
+    foreach ($group_tree_items as $group_id => &$group_tree_item) {
+      if (!empty($group_tree_item['children_ids'])) {
+        foreach (explode(',', $group_tree_item['children_ids']) as $child_group_id) {
+          if (array_key_exists($child_group_id, $group_tree_items)) {
+            $group_tree_item['children'][$child_group_id] = &$group_tree_items[$child_group_id];
+          }
+        }
+      }
+
+      if (empty($group_tree_item['parent'])) {
+        $group_tree[$group_id] = &$group_tree_item;
+      }
+    }
+
     return $group_tree;
   }
 
