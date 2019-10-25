@@ -176,8 +176,10 @@ class CRM_Newsletter_Profile {
       'conditions_preferences_description',
       'template_optin_subject',
       'template_optin',
+      'template_optin_html',
       'template_info_subject',
       'template_info',
+      'template_info_html',
       'preferences_url',
       'submit_label',
     );

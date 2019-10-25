@@ -175,6 +175,15 @@
                 </div>
               </td>
             </tr>
+            <tr class="crm-section">
+              <td class="label">{$form.template_optin_html.label}</td>
+              <td class="content">
+                {$form.template_optin_html.html}
+                <div class="description">
+                  {ts}To include the preferences URL, use the variable <code>{literal}{$preferences_url}{/literal}</code>{/ts}
+                </div>
+              </td>
+            </tr>
           </table>
         </td>
       </tr>
@@ -189,6 +198,15 @@
               <td class="label">{$form.template_info.label}</td>
               <td class="content">
                 {$form.template_info.html}
+                <div class="description">
+                  {ts}To include the preferences URL, use the variable <code>{literal}{$preferences_url}{/literal}</code>{/ts}
+                </div>
+              </td>
+            </tr>
+            <tr class="crm-section">
+              <td class="label">{$form.template_info_html.label}</td>
+              <td class="content">
+                {$form.template_info_html.html}
                 <div class="description">
                   {ts}To include the preferences URL, use the variable <code>{literal}{$preferences_url}{/literal}</code>{/ts}
                 </div>
