@@ -232,31 +232,32 @@ class CRM_Newsletter_Profile {
     $contact_field_groups = civicrm_api3('CustomGroup', 'get', array(
       'extends' => "contact",
     ));
-    $contact_fields = civicrm_api3('CustomField', 'get', array(
-      'custom_group_id' => array(
-        'IN' => array_keys($contact_field_groups['values'])
-      ),
-    ));
-    foreach ($contact_fields['values'] as $contact_field) {
-      $dynamic['custom_' . $contact_field['id']] = array(
-        'label' => $contact_field['label'],
-        'type' => $contact_field['html_type'],
-      );
-      if (in_array($contact_field['html_type'], array(
-        'Multi-Select',
-        'CheckBox',
-        'Select'
-      ))) {
-        $option_values = civicrm_api3('OptionValue', 'get', array(
-          'option_group_id' => $contact_field['option_group_id'],
-        ));
-        $dynamic['custom_' . $contact_field['id']]['options'] = array();
-        foreach ($option_values['values'] as $option_value) {
-          $dynamic['custom_' . $contact_field['id']]['options'][$option_value['value']] = $option_value['label'];
+    if (!empty($contact_field_groups['values'])) {
+      $contact_fields = civicrm_api3('CustomField', 'get', array(
+        'custom_group_id' => array(
+          'IN' => array_keys($contact_field_groups['values'])
+        ),
+      ));
+      foreach ($contact_fields['values'] as $contact_field) {
+        $dynamic['custom_' . $contact_field['id']] = array(
+          'label' => $contact_field['label'],
+          'type' => $contact_field['html_type'],
+        );
+        if (in_array($contact_field['html_type'], array(
+          'Multi-Select',
+          'CheckBox',
+          'Select'
+        ))) {
+          $option_values = civicrm_api3('OptionValue', 'get', array(
+            'option_group_id' => $contact_field['option_group_id'],
+          ));
+          $dynamic['custom_' . $contact_field['id']]['options'] = array();
+          foreach ($option_values['values'] as $option_value) {
+            $dynamic['custom_' . $contact_field['id']]['options'][$option_value['value']] = $option_value['label'];
+          }
         }
       }
     }
-
     return $static + $dynamic;
   }
 
