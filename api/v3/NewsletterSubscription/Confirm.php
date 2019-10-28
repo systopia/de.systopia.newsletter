@@ -116,7 +116,14 @@ function civicrm_api3_newsletter_subscription_confirm($params) {
             'preferences_url' => $preferences_url,
           )
         ),
-        'html' => '', // TODO: New profile attribute "template_optin_html".
+        'html' => CRM_Core_Smarty::singleton()->fetchWith(
+          'string:' . $profile->getAttribute('template_info_html'),
+          array(
+            'contact' => $contact,
+            'mailing_lists' => $mailing_lists,
+            'preferences_url' => $preferences_url,
+          )
+        ),
         'replyTo' => '', // TODO: Make configurable?
       );
       if (!CRM_Utils_Mail::send($mail_params)) {

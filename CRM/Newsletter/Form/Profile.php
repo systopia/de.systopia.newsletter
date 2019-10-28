@@ -239,6 +239,14 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
     );
 
     $this->add(
+      'wysiwyg',
+      'template_optin_html',
+      E::ts('Template for opt-in e-mail (HTML)'),
+      array(),
+      TRUE
+    );
+
+    $this->add(
       'text',
       'template_info_subject',
       E::ts('Subject for info e-mail'),
@@ -250,6 +258,14 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       'textarea',
       'template_info',
       E::ts('Template for info e-mail'),
+      array(),
+      TRUE
+    );
+
+    $this->add(
+      'wysiwyg',
+      'template_info_html',
+      E::ts('Template for info e-mail (HTML)'),
       array(),
       TRUE
     );
