@@ -16,9 +16,9 @@
     <url desc="Support">https://github.com/systopia/de.systopia.newsletter/issues</url>
     <url desc="Licensing">http://www.gnu.org/licenses/agpl-3.0.html</url>
   </urls>
-  <releaseDate>2019-10-28</releaseDate>
+  <releaseDate></releaseDate>
   <version>0.9-dev</version>
-  <develStage>beta</develStage>
+  <develStage>dev</develStage>
   <compatibility>
     <ver>4.7</ver>
   </compatibility>
