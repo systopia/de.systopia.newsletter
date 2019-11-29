@@ -332,7 +332,7 @@ class CRM_Newsletter_Profile {
   public static function getProfiles() {
     if (self::$_profiles === NULL) {
       self::$_profiles = array();
-      if ($profiles_data = CRM_Core_BAO_Setting::getItem('de.systopia.newsletter', 'newsletter_profiles')) {
+      if ($profiles_data = Civi::settings()->get('newsletter_profiles')) {
         foreach ($profiles_data as $profile_name => $profile_data) {
           self::$_profiles[$profile_name] = new CRM_Newsletter_Profile($profile_name, $profile_data);
         }
@@ -357,7 +357,7 @@ class CRM_Newsletter_Profile {
     foreach (self::$_profiles as $profile_name => $profile) {
       $profile_data[$profile_name] = $profile->data;
     }
-    CRM_Core_BAO_Setting::setItem($profile_data, 'de.systopia.newsletter', 'newsletter_profiles');
+    civi::settings()->set('newsletter_profiles', $profile_data);
   }
 
   /**
