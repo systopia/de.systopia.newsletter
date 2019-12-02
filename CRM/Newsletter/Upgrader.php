@@ -1,0 +1,32 @@
+<?php
+use CRM_Newsletter_ExtensionUtil as E;
+
+/**
+ * Collection of upgrade steps.
+ */
+class CRM_Newsletter_Upgrader extends CRM_Newsletter_Upgrader_Base {
+
+  // By convention, functions that look like "function upgrade_NNNN()" are
+  // upgrade tasks. They are executed in order (like Drupal's hook_update_N).
+
+  /**
+   * Convert serialized settings from objects to arrays.
+   *
+   * @link https://civicrm.org/advisory/civi-sa-2019-21-poi-saved-search-and-report-instance-apis
+   */
+  public function upgrade_5009() {
+    // Do not use CRM_Core_BAO::getItem() or Civi::settings()->get().
+    // Extract and unserialize directly from the database.
+    $newsletter_profiles_query = CRM_Core_DAO::executeQuery("
+        SELECT `value`
+          FROM `civicrm_setting`
+        WHERE `name` = 'newsletter_profiles';");
+    if ($newsletter_profiles_query->fetch()) {
+      $profiles = unserialize($newsletter_profiles_query->value);
+      Civi::settings()->set('newsletter_profiles', (array) $profiles);
+    }
+
+    return TRUE;
+  }
+
+}
