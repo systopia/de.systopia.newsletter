@@ -181,6 +181,7 @@ class CRM_Newsletter_Profile {
       'template_info',
       'template_info_html',
       'preferences_url',
+      'request_link_url',
       'submit_label',
     );
   }
@@ -290,6 +291,7 @@ class CRM_Newsletter_Profile {
       'template_info_subject' => E::ts('Your newsletter subscription preferences'),
       'template_info' => '', // TODO: A default info e-mail template.
       'preferences_url' => CRM_Core_Config::singleton()->userFrameworkBaseURL,
+      'request_link_url' => CRM_Core_Config::singleton()->userFrameworkBaseURL,
       'submit_label' => '',
     );
     foreach (self::availableContactFields() as $field_name => $field) {

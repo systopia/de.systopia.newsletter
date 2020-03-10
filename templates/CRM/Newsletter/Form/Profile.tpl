@@ -44,6 +44,16 @@
           </td>
         </tr>
 
+        <tr class="crm-section">
+          <td class="label">{$form.request_link_url.label}</td>
+          <td class="content">
+              {$form.request_link_url.html}
+            <div class="description">
+                {ts}A URL to the Request link form. Must include the token <code>[PROFILE]</code> and may include the token <code>[CONTACT_HASH]</code> which will be replaced with the actual contact hash for identifying the contact.{/ts}
+            </div>
+          </td>
+        </tr>
+
       </table>
     </fieldset>
 
