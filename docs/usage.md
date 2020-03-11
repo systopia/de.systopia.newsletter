@@ -70,7 +70,11 @@ any contact.
 
 When generating this form, the system issues a request to the API action
 `NewsletterProfile.Get` and provides the user with all contact fields defined
-within the profile, but no mailing list options.
+within the profile, but no mailing list options. Instead of presenting a form
+for the user to input their contact data again, a link may be provided to
+request the API to re-send the confirmation e-mail (containing a link to the
+preferences page) by providing the contact hash and the contact ID (which is to
+be retrieved using the contact hash).
 
 The form input is sent in to the `NewsletterSubscription.Request` API action,
 which will generate and send the information e-mail to the contact as in the

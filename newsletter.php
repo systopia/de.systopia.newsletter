@@ -185,6 +185,12 @@ function newsletter_civicrm_tokens(&$tokens) {
         1 => $profile->getName(),
       )
     );
+    $tokens['newsletter']['newsletter.request_link_url_' . $profile_name] = E::ts(
+      'Request link URL for profile %1',
+      array(
+        1 => $profile->getName(),
+      )
+    );
   }
 }
 
@@ -210,6 +216,19 @@ function newsletter_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = 
           $preferences_url
         );
         $values[$cid]['newsletter.preferences_url_' . $profile_name] = $preferences_url;
+
+        $request_link_url = $profile->getAttribute('request_link_url');
+        $request_link_url = str_replace(
+          '[CONTACT_HASH]',
+          $contact['hash'],
+          $request_link_url
+        );
+        $request_link_url = str_replace(
+          '[PROFILE]',
+          $profile_name,
+          $request_link_url
+        );
+        $values[$cid]['newsletter.request_link_url_' . $profile_name] = $request_link_url;
       }
     }
   }

@@ -278,6 +278,14 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       TRUE
     );
 
+    $this->add(
+      'text',
+      'request_link_url',
+      E::ts('Request link URL'),
+      array(),
+      TRUE
+    );
+
     $this->addButtons(array(
       array(
         'type' => 'submit',
@@ -348,6 +356,9 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
     // Preferences URL must be a valid URL.
     if (filter_var($values['preferences_url'], FILTER_VALIDATE_URL) === FALSE) {
       $errors['preferences_url'] = E::ts('Please enter a valid URL.');
+    }
+    if (filter_var($values['request_link_url'], FILTER_VALIDATE_URL) === FALSE) {
+      $errors['request_link_url'] = E::ts('Please enter a valid URL.');
     }
 
     // When terms and conditions are given, a label must be set as well.

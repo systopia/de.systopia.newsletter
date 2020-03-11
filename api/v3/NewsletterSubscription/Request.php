@@ -31,27 +31,44 @@ function civicrm_api3_newsletter_subscription_request($params) {
       );
     }
 
-    $contact_fields = array_intersect_key($params, $profile->getAttribute('contact_fields'));
-    foreach ($contact_fields as $field_name => $field_value) {
-      if (!$field_value) {
-        unset($params[$field_name]);
+    // If a contact hash is given, do not require contact fields.
+    if (!empty($params['contact_hash'])) {
+      // Validate contact ID and hash. This throws exceptions for invalid hashes.
+      $contact = civicrm_api3('Contact', 'getsingle', array(
+        'hash' => $params['contact_hash'],
+      ));
+      // Validate contact hash against given contact ID (in case a hash for an
+      // existing contact was given but does not match the given contact ID).
+      if ($contact['id'] != $params['contact_id']) {
+        throw new CiviCRM_API3_Exception(E::ts('Invalid contact hash for given contact ID.'), 'api_error');
       }
+
+      $contact_id = $contact['id'];
+    }
+    else {
+      $contact_fields = array_intersect_key($params, $profile->getAttribute('contact_fields'));
+      foreach ($contact_fields as $field_name => $field_value) {
+        if (!$field_value) {
+          unset($params[$field_name]);
+        }
+      }
+
+      // Check for missing mandatory contact fields.
+      $missing_contact_fields = array_diff_key(
+        array_filter(
+          $profile->getAttribute('contact_fields'),
+          function ($contact_field) {
+            return !empty($contact_field['required']);
+          }
+        ),
+        $params
+      );
+
+      // Get or create the contact.
+      $contact_data = array_intersect_key($params, $profile->getAttribute('contact_fields'));
+      $contact_id = CRM_Newsletter_Utils::getContact($contact_data);
     }
 
-    // Check for missing mandatory contact fields.
-    $missing_contact_fields = array_diff_key(
-      array_filter(
-        $profile->getAttribute('contact_fields'),
-        function ($contact_field) {
-          return !empty($contact_field['required']);
-        }
-      ),
-      $params
-    );
-
-    // Get or create the contact.
-    $contact_data = array_intersect_key($params, $profile->getAttribute('contact_fields'));
-    $contact_id = CRM_Newsletter_Utils::getContact($contact_data);
     $contact = civicrm_api3('Contact', 'getsingle', array(
       'id' => $contact_id,
     ));
@@ -124,6 +141,20 @@ function _civicrm_api3_newsletter_subscription_request_spec(&$params) {
     'api.required' => 0,
     'api.default' => 'default',
     'description' => 'The Newsletter profile name. If omitted, the default profile will be used.',
+  );
+  $params['contact_hash'] = array(
+    'name' => 'contact_hash',
+    'title' => 'Contact hash',
+    'type' => CRM_Utils_Type::T_STRING,
+    'api.required' => 0,
+    'description' => 'The CiviCRM hash of the contact to request a link for.',
+  );
+  $params['contact_id'] = array(
+    'name' => 'contact_id',
+    'title' => 'Contact ID',
+    'type' => CRM_Utils_Type::T_STRING,
+    'api.required' => 0,
+    'description' => 'The CiviCRM ID of the contact to request a link for.',
   );
 
   foreach (CRM_Newsletter_Profile::availableContactFields() as $field_name => $field_label) {
