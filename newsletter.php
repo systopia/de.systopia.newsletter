@@ -200,7 +200,7 @@ function newsletter_civicrm_tokens(&$tokens) {
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_tokenValues
  */
 function newsletter_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = array(), $context = null) {
-  if (array_key_exists('newsletter', $tokens)) {
+  if (is_array($cids) && array_key_exists('newsletter', $tokens)) {
     foreach (CRM_Newsletter_Profile::getProfiles() as $profile_name => $profile) {
       foreach ($cids as $cid) {
         $contact = civicrm_api3('Contact', 'getsingle', array('id' => $cid, 'return' => array('hash')));
