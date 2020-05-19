@@ -55,6 +55,10 @@ function civicrm_api3_newsletter_subscription_submit($params) {
     $contact_id = CRM_Newsletter_Utils::getContact($contact_data);
 
     // Validate submitted group IDs.
+    if (!is_array($params['mailing_lists'])) {
+      $params['mailing_lists'] = explode(',', $params['mailing_lists']);
+    }
+
     $disallowed_groups = array_diff(
       $params['mailing_lists'],
       array_keys($profile->getAttribute('mailing_lists'))
