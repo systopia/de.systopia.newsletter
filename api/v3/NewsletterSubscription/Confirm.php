@@ -65,6 +65,10 @@ function civicrm_api3_newsletter_subscription_confirm($params) {
       }
 
       // Validate submitted group IDs.
+      if (!is_array($params['mailing_lists'])) {
+        $params['mailing_lists'] = explode(',', $params['mailing_lists']);
+      }
+
       $disallowed_groups = array_diff(
         array_keys($params['mailing_lists']),
         array_keys($profile->getAttribute('mailing_lists'))
