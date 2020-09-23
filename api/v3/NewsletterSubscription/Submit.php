@@ -79,17 +79,6 @@ function civicrm_api3_newsletter_subscription_submit($params) {
     }
     $current_groups = explode(',', $current_groups['groups']);
 
-    // Add "pending" group membership for all new groups.
-    $new_groups = array_diff($params['mailing_lists'], $current_groups);
-    $group_contact_results = array();
-    foreach ($new_groups as $group_id) {
-      $group_contact_results[$group_id] = civicrm_api3('GroupContact', 'create', array(
-        'group_id' => $group_id,
-        'contact_id' => $contact_id,
-        'status' => 'Pending',
-      ));
-    }
-
     $contact = civicrm_api3('Contact', 'getsingle', array(
       'id' => $contact_id,
     ));
@@ -112,34 +101,28 @@ function civicrm_api3_newsletter_subscription_submit($params) {
       $profile->getName(),
       $preferences_url
     );
-    $mail_params = array(
-      'from' => CRM_Newsletter_Utils::getFromEmailAddress(TRUE),
-      'toName' => $contact['display_name'],
-      'toEmail' => $contact['email'],
-      'cc' => '',
-      'bc' => '',
-      'subject' => $profile->getAttribute('template_optin_subject'),
-      'text' => CRM_Core_Smarty::singleton()->fetchWith(
-        'string:' . $profile->getAttribute('template_optin'),
-        array(
-          'contact' => $contact,
-          'mailing_lists' => $mailing_lists,
-          'preferences_url' => $preferences_url,
-        )
-      ),
-      'html' => CRM_Core_Smarty::singleton()->fetchWith(
-        'string:' . $profile->getAttribute('template_optin_html'),
-        array(
-          'contact' => $contact,
-          'mailing_lists' => $mailing_lists,
-          'preferences_url' => $preferences_url,
-        )
-      ),
-      'replyTo' => '', // TODO: Make configurable?
-    );
-    if (!CRM_Utils_Mail::send($mail_params)) {
-      // TODO: Mail not sent. Maybe do not cancel the whole API call?
+
+    // check if we have an unsubscribe_all parameter. If so, remove from all groups and end call here
+    if (isset($params['unsubscribe_all']) && $params['unsubscribe_all'] == TRUE) {
+      CRM_Newsletter_Utils::unsubscribe_all($current_groups, $contact_id);
+      // send confirmation mail
+      CRM_Newsletter_Utils::send_configured_mail($contact, $profile, $mailing_lists, $preferences_url, 'unsubscribe');
+      return "Unsubscribed Contact {$contact_id} from all group memberships and send confirmation mail";
     }
+
+    // Add "pending" group membership for all new groups.
+    $new_groups = array_diff($params['mailing_lists'], $current_groups);
+    $group_contact_results = array();
+    foreach ($new_groups as $group_id) {
+      $group_contact_results[$group_id] = civicrm_api3('GroupContact', 'create', array(
+        'group_id' => $group_id,
+        'contact_id' => $contact_id,
+        'status' => 'Pending',
+      ));
+    }
+
+    // send confirmation mail
+    CRM_Newsletter_Utils::send_configured_mail($contact, $profile, $mailing_lists, $preferences_url, 'submit');
 
     return $group_contact_results;
   }

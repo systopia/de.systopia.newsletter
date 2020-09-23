@@ -160,4 +160,90 @@ class CRM_Newsletter_Utils {
     return $group_tree;
   }
 
+  /**
+   * unsubscribes given contact from all group_ids in $groups
+   *
+   * @param $groups
+   *    All current groups the contact shall be unsubscribed from
+   * @param $contact_id
+   *    Contact Id for unsubscription
+   *
+   * @return array
+   *    Returns array with unsubscribed_ids
+   *
+   * @throws CiviCRM_API3_Exception
+   */
+  public static function unsubscribe_all($groups, $contact_id) {
+    $unsubscribe_results = [];
+    foreach ($groups as $group_id) {
+      $unsubscribe_results[$group_id] = civicrm_api3('GroupContact', 'create', array(
+        'group_id' => $group_id,
+        'contact_id' => $contact_id,
+        'status' => 'Removed',
+      ));
+    }
+    return $unsubscribe_results;
+  }
+
+  /**
+   * Sends a configured mail from the profile for the given type
+   *
+   * @param $contact
+   *    Complete array with contact info from Contact.get
+   * @param $profile
+   *    Profile object with current configuration
+   * @param $mailing_lists
+   *    Currently configured mailinglist (groups) for that profile
+   * @param $preferences_url
+   *    URL for Updating the subscriptions for this contact
+   * @param $type
+   *    Type of Mail to be created (submit|unsubscribe). Information is taken from $profile
+   *
+   * @throws Exception
+   */
+  public static function send_configured_mail($contact, $profile, $mailing_lists, $preferences_url, $type) {
+    switch ($type) {
+      case 'unsubscribe':
+        $subject = $profile->getAttribute('template_unsubscribe_all_subject');
+        $text_content = $profile->getAttribute('template_unsubscribe_all');
+        $html_content = $profile->getAttribute('template_unsubscribe_all_html');
+        break;
+      case 'submit':
+      default:
+        $subject = $profile->getAttribute('template_optin_subject');
+        $text_content = $profile->getAttribute('template_optin');
+        $html_content = $profile->getAttribute('template_optin_html');
+    }
+
+    $mail_params = array(
+      'from' => CRM_Newsletter_Utils::getFromEmailAddress(TRUE),
+      'toName' => $contact['display_name'],
+      'toEmail' => $contact['email'],
+      'cc' => '',
+      'bc' => '',
+      'subject' => $subject,
+      'text' => CRM_Core_Smarty::singleton()->fetchWith(
+        'string:' . $text_content,
+        array(
+          'contact' => $contact,
+          'mailing_lists' => $mailing_lists,
+          'preferences_url' => $preferences_url,
+        )
+      ),
+      'html' => CRM_Core_Smarty::singleton()->fetchWith(
+        'string:' . $html_content,
+        array(
+          'contact' => $contact,
+          'mailing_lists' => $mailing_lists,
+          'preferences_url' => $preferences_url,
+        )
+      ),
+      'replyTo' => '', // TODO: Make configurable?
+    );
+    if (!CRM_Utils_Mail::send($mail_params)) {
+      // TODO: Mail not sent. Maybe do not cancel the whole API call?
+      Civi::log()->error("[de.systopia.newsletter] Error sending configured mail");
+    }
+  }
+
 }
