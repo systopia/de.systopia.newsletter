@@ -74,6 +74,15 @@
           <td class="content">{$form.mailing_lists.html}</td>
         </tr>
 
+        <tr class="crm-section">
+          <td class="label">{$form.mailing_lists_unsubscribe_all.label}</td>
+          <td class="content">{$form.mailing_lists_unsubscribe_all.html}</td>
+        </tr>
+
+        <tr class="crm-section">
+          <td class="label">{$form.mailing_lists_unsubscribe_all_submit_label.label}</td>
+          <td class="content">{$form.mailing_lists_unsubscribe_all_submit_label.html}</td>
+        </tr>
       </table>
     </fieldset>
 
@@ -217,6 +226,34 @@
               <td class="label">{$form.template_info_html.label}</td>
               <td class="content">
                 {$form.template_info_html.html}
+                <div class="description">
+                  {ts}To include the preferences URL, use the variable <code>{literal}{$preferences_url}{/literal}</code>{/ts}
+                </div>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <tr class="crm-section  {cycle values="odd,even"}">
+        <td>
+          <table class="form-layout-compressed">
+            <tr class="crm-section">
+              <td class="label">{$form.template_unsubscribe_all_subject.label}</td>
+              <td class="content">{$form.template_unsubscribe_all_subject.html}</td>
+            </tr>
+            <tr class="crm-section">
+              <td class="label">{$form.template_unsubscribe_all.label}</td>
+              <td class="content">
+                {$form.template_unsubscribe_all.html}
+                <div class="description">
+                  {ts}To include the preferences URL, use the variable <code>{literal}{$preferences_url}{/literal}</code>{/ts}
+                </div>
+              </td>
+            </tr>
+            <tr class="crm-section">
+              <td class="label">{$form.template_unsubscribe_all_html.label}</td>
+              <td class="content">
+                {$form.template_unsubscribe_all_html.html}
                 <div class="description">
                   {ts}To include the preferences URL, use the variable <code>{literal}{$preferences_url}{/literal}</code>{/ts}
                 </div>

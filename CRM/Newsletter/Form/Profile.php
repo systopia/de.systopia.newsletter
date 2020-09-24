@@ -179,6 +179,20 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
     );
 
     $this->add(
+      'checkbox',
+      'mailing_lists_unsubscribe_all',
+      E::ts('Provide an unsubscribe to all Mailingslists button')
+    );
+
+    $this->add(
+      'text',
+      'mailing_lists_unsubscribe_all_submit_label',
+      E::ts('Unsubscribe All Submit button label'),
+      array(),
+      FALSE
+    );
+
+    $this->add(
       'text',
       'conditions_public_label',
       E::ts('Label for Terms and conditions for public form'),
@@ -266,6 +280,30 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       'wysiwyg',
       'template_info_html',
       E::ts('Template for info e-mail (HTML)'),
+      array(),
+      TRUE
+    );
+
+    $this->add(
+      'text',
+      'template_unsubscribe_all_subject',
+      E::ts('Subject for unsubscribe all e-mail'),
+      array(),
+      TRUE
+    );
+
+    $this->add(
+      'textarea',
+      'template_unsubscribe_all',
+      E::ts('Template for unsubscribe all e-mail'),
+      array(),
+      TRUE
+    );
+
+    $this->add(
+      'wysiwyg',
+      'template_unsubscribe_all_html',
+      E::ts('Template for unsubscribe all e-mail (HTML)'),
       array(),
       TRUE
     );
@@ -371,6 +409,8 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       }
     }
 
+    // TODO: verify if unsubscribe all is activated, a seperate Email template has to be available
+
     return empty($errors) ? TRUE : $errors;
   }
 
@@ -443,7 +483,7 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
           $this->profile->setAttribute($element_name, $values[$element_name]);
         }
       }
-      $this->profile->saveProfile();
+        $this->profile->saveProfile();
     }
     elseif ($this->_op == 'delete') {
       $this->profile->deleteProfile();

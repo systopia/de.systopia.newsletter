@@ -91,6 +91,7 @@ class CRM_Newsletter_Utils {
       $mailing_lists[$group_id] = array(
         'title' => $group['title'],
         'status' => E::ts($group_status),
+        'status_raw' => $group_status,
       );
     }
 
@@ -158,6 +159,111 @@ class CRM_Newsletter_Utils {
     }
 
     return $group_tree;
+  }
+
+  /**
+   * unsubscribes given contact from all group_ids in $groups
+   *
+   * @param $groups
+   *    All current groups the contact shall be unsubscribed from
+   * @param $contact_id
+   *    Contact Id for unsubscription
+   *
+   * @return array
+   *    Returns array with unsubscribed_ids
+   *
+   * @throws CiviCRM_API3_Exception
+   */
+  public static function unsubscribe_all($groups, $contact_id) {
+    $unsubscribe_results = [];
+    foreach ($groups as $group_id) {
+      $unsubscribe_results[$group_id] = civicrm_api3('GroupContact', 'create', array(
+        'group_id' => $group_id,
+        'contact_id' => $contact_id,
+        'status' => 'Removed',
+      ));
+    }
+    return $unsubscribe_results;
+  }
+
+  /**
+   * Sends a configured e-mail from the profile for the given type.
+   *
+   * @param $contact
+   *   Complete array with contact info from Contact.get.
+   * @param $profile
+   *   Profile object with current configuration.
+   * @param $type
+   *   Type of Mail to be created (optin|info|unsubscribe).
+   *
+   * @throws \Exception
+   */
+  public static function send_configured_mail($contact, $profile, $type) {
+    // Prepare token (Smarty variables) values.
+    switch ($type) {
+      case 'unsubscribe_all':
+        $subject = $profile->getAttribute('template_unsubscribe_all_subject');
+        $text_content = $profile->getAttribute('template_unsubscribe_all');
+        $html_content = $profile->getAttribute('template_unsubscribe_all_html');
+        break;
+      case 'info':
+        $subject = $profile->getAttribute('template_info_subject');
+        $text_content = $profile->getAttribute('template_info');
+        $html_content = $profile->getAttribute('template_info_html');
+      case 'optin':
+      default:
+        $subject = $profile->getAttribute('template_optin_subject');
+        $text_content = $profile->getAttribute('template_optin');
+        $html_content = $profile->getAttribute('template_optin_html');
+    }
+
+    // Get subscription status.
+    $mailing_lists = CRM_Newsletter_Utils::getSubscriptionStatus($contact['id']);
+
+    // Construct preferences URL.
+    $preferences_url = $profile->getAttribute('preferences_url');
+    $preferences_url = str_replace(
+      '[CONTACT_HASH]',
+      $contact['hash'],
+      $preferences_url
+    );
+    $preferences_url = str_replace(
+      '[PROFILE]',
+      $profile->getName(),
+      $preferences_url
+    );
+
+    // Construct e-mail parameters.
+    $mail_params = array(
+      'from' => CRM_Newsletter_Utils::getFromEmailAddress(TRUE),
+      'toName' => $contact['display_name'],
+      'toEmail' => $contact['email'],
+      'cc' => '',
+      'bc' => '',
+      'subject' => $subject,
+      'text' => CRM_Core_Smarty::singleton()->fetchWith(
+        'string:' . $text_content,
+        array(
+          'contact' => $contact,
+          'mailing_lists' => $mailing_lists,
+          'preferences_url' => $preferences_url,
+        )
+      ),
+      'html' => CRM_Core_Smarty::singleton()->fetchWith(
+        'string:' . $html_content,
+        array(
+          'contact' => $contact,
+          'mailing_lists' => $mailing_lists,
+          'preferences_url' => $preferences_url,
+        )
+      ),
+      'replyTo' => '', // TODO: Make configurable?
+    );
+    // Send the e-mail.
+    if (!CRM_Utils_Mail::send($mail_params)) {
+      // TODO: Mail not sent. Maybe do not cancel the whole API call?
+      Civi::log()->error(E::LONG_NAME . ': Error sending configured e-mail.');
+    }
   }
 
 }

@@ -43,41 +43,57 @@ function civicrm_api3_newsletter_subscription_confirm($params) {
 
     $contact_id = $contact['id'];
 
-    if ($params['autoconfirm']) {
-      // Get all the contact's "Pending" group memberships.
-      $pending_group_contacts = civicrm_api3('GroupContact', 'get', array(
-        'contact_id' => $contact_id,
-        'status' => 'Pending',
-        'options.limit' => 0,
-        'return' => array('group_id'),
-      ));
-      $params['mailing_lists'] = array();
-      foreach ($pending_group_contacts['values'] as $group) {
-        $params['mailing_lists'][$group['group_id']] = 'Added';
+    $allowed_mailing_lists = array_keys($profile->getAttribute('mailing_lists'));
+    $current_mailing_lists = array();
+    foreach (CRM_Newsletter_Utils::getSubscriptionStatus($contact_id) as $group_id => $group_info) {
+      $current_mailing_lists[$group_id] = $group_info['status_raw'];
+    }
+
+    if (($params['unsubscribe_all'])) {
+      // Mark all subscriptions for being removed.
+      $params['mailing_lists'] = array_fill_keys(
+        array_keys($current_mailing_lists),
+      'Removed'
+      );
+
+      $email_template = 'unsubscribe_all';
+    }
+    elseif ($params['autoconfirm']) {
+      // Mark all pending subscriptions for being added.
+      $params['mailing_lists'] = array_fill_keys(
+        array_keys(array_filter($current_mailing_lists, function($status) {
+          return $status == 'Pending';
+        })),
+        'Added'
+      );
+
+      if (!empty($params['mailing_lists'])) {
+        $email_template = 'info';
       }
     }
     else {
+      // Validate submitted group IDs.
       if (empty($params['mailing_lists'])) {
         throw new CiviCRM_API3_Exception(
           E::ts('Mandatory key(s) missing from params array: mailing_lists'),
           'mandatory_missing'
         );
       }
-
-      // Validate submitted group IDs.
-      if (!is_array($params['mailing_lists'])) {
-        $params['mailing_lists'] = explode(',', $params['mailing_lists']);
-      }
-
+      // TODO: This will not work, as we're expecting an array with status.
+//      if (!is_array($params['mailing_lists'])) {
+//        $params['mailing_lists'] = explode(',', $params['mailing_lists']);
+//      }
       $disallowed_groups = array_diff(
         array_keys($params['mailing_lists']),
-        array_keys($profile->getAttribute('mailing_lists'))
+        $allowed_mailing_lists
       );
       if (!empty($disallowed_groups)) {
         throw new CiviCRM_API3_Exception(E::ts('Disallowed group ID(s): %1', array(
           1 => implode(', ', $disallowed_groups)
         )), 'api_error');
       }
+
+      $email_template = 'info';
     }
 
     // Add/remove group membership.
@@ -90,49 +106,13 @@ function civicrm_api3_newsletter_subscription_confirm($params) {
       ));
     }
 
-    $mailing_lists = CRM_Newsletter_Utils::getSubscriptionStatus($contact_id);
-
     // Send an e-mail with the info template.
-    if (empty($params['autoconfirm']) || !empty($params['mailing_lists'])) {
-      $preferences_url = $profile->getAttribute('preferences_url');
-      $preferences_url = str_replace(
-        '[CONTACT_HASH]',
-        $contact['hash'],
-        $preferences_url
+    if (!empty($email_template)) {
+      CRM_Newsletter_Utils::send_configured_mail(
+        $contact,
+        $profile,
+        $email_template
       );
-      $preferences_url = str_replace(
-        '[PROFILE]',
-        $profile->getName(),
-        $preferences_url
-      );
-      $mail_params = array(
-        'from' => CRM_Newsletter_Utils::getFromEmailAddress(TRUE),
-        'toName' => $contact['display_name'],
-        'toEmail' => $contact['email'],
-        'cc' => '',
-        'bc' => '',
-        'subject' => $profile->getAttribute('template_info_subject'),
-        'text' => CRM_Core_Smarty::singleton()->fetchWith(
-          'string:' . $profile->getAttribute('template_info'),
-          array(
-            'contact' => $contact,
-            'mailing_lists' => $mailing_lists,
-            'preferences_url' => $preferences_url,
-          )
-        ),
-        'html' => CRM_Core_Smarty::singleton()->fetchWith(
-          'string:' . $profile->getAttribute('template_info_html'),
-          array(
-            'contact' => $contact,
-            'mailing_lists' => $mailing_lists,
-            'preferences_url' => $preferences_url,
-          )
-        ),
-        'replyTo' => '', // TODO: Make configurable?
-      );
-      if (!CRM_Utils_Mail::send($mail_params)) {
-        // TODO: Mail not sent. Maybe do not cancel the whole API call?
-      }
     }
 
     return civicrm_api3_create_success($group_contact_results);
@@ -188,5 +168,14 @@ function _civicrm_api3_newsletter_subscription_confirm_spec(&$params) {
     'type' => CRM_Utils_Type::T_BOOLEAN,
     'api.required' => 0,
     'description' => E::ts('Whether to automatically set all "Pending" group memberships to "Added".'),
+  );
+
+  $params['unsubscribe_all'] = array(
+    'name' => 'unsubscribe_all',
+    'title' => 'Unsubscribe all',
+    'type' => CRM_Utils_Type::T_BOOLEAN,
+    'api.required' => 0,
+    'api.default' => FALSE,
+    'description' => E::ts('Whether to unsubscribe from all group memberships.'),
   );
 }
