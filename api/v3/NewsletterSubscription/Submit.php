@@ -53,12 +53,19 @@ function civicrm_api3_newsletter_subscription_submit($params) {
     // Get or create the contact.
     $contact_data = array_intersect_key($params, $profile->getAttribute('contact_fields'));
     $contact_id = CRM_Newsletter_Utils::getContact($contact_data);
+    $contact = civicrm_api3('Contact', 'getsingle', array(
+      'id' => $contact_id,
+    ));
+    $contact_hash = civicrm_api3('Contact', 'getsingle', array(
+      'id' => $contact_id,
+      'return' => array('hash')
+    ));
+    $contact['hash'] = $contact_hash['hash'];
 
     // Validate submitted group IDs.
     if (!is_array($params['mailing_lists'])) {
       $params['mailing_lists'] = explode(',', $params['mailing_lists']);
     }
-
     $disallowed_groups = array_diff(
       $params['mailing_lists'],
       array_keys($profile->getAttribute('mailing_lists'))
@@ -70,48 +77,13 @@ function civicrm_api3_newsletter_subscription_submit($params) {
     }
 
     // Get current group memberships for submitted group IDs.
-    $current_groups = civicrm_api3('Contact', 'getsingle', array(
-      'id' => $contact_id,
-      'return' => 'group',
-    ));
-    if (!empty($current_groups['is_error'])) {
-      throw new CiviCRM_API3_Exception(E::ts('Error retrieving current group membership.'), 'api_error');
-    }
-    $current_groups = explode(',', $current_groups['groups']);
-
-    $contact = civicrm_api3('Contact', 'getsingle', array(
-      'id' => $contact_id,
-    ));
-    $contact_hash = civicrm_api3('Contact', 'getsingle', array(
-      'id' => $contact_id,
-      'return' => array('hash')
-    ));
-    $contact['hash'] = $contact_hash['hash'];
-    $mailing_lists = CRM_Newsletter_Utils::getSubscriptionStatus($contact_id);
-
-    // Send an e-mail with the opt-in template.
-    $preferences_url = $profile->getAttribute('preferences_url');
-    $preferences_url = str_replace(
-      '[CONTACT_HASH]',
-      $contact['hash'],
-      $preferences_url
-    );
-    $preferences_url = str_replace(
-      '[PROFILE]',
-      $profile->getName(),
-      $preferences_url
-    );
-
-    // check if we have an unsubscribe_all parameter. If so, remove from all groups and end call here
-    if (isset($params['unsubscribe_all']) && $params['unsubscribe_all'] == TRUE) {
-      CRM_Newsletter_Utils::unsubscribe_all($current_groups, $contact_id);
-      // send confirmation mail
-      CRM_Newsletter_Utils::send_configured_mail($contact, $profile, $mailing_lists, $preferences_url, 'unsubscribe');
-      return "Unsubscribed Contact {$contact_id} from all group memberships and send confirmation mail";
+    $current_mailing_lists = array();
+    foreach (CRM_Newsletter_Utils::getSubscriptionStatus($contact_id) as $group_id => $group_info) {
+      $current_mailing_lists[$group_id] = $group_info['status_raw'];
     }
 
     // Add "pending" group membership for all new groups.
-    $new_groups = array_diff($params['mailing_lists'], $current_groups);
+    $new_groups = array_diff($params['mailing_lists'], array_keys($current_mailing_lists));
     $group_contact_results = array();
     foreach ($new_groups as $group_id) {
       $group_contact_results[$group_id] = civicrm_api3('GroupContact', 'create', array(
@@ -121,8 +93,12 @@ function civicrm_api3_newsletter_subscription_submit($params) {
       ));
     }
 
-    // send confirmation mail
-    CRM_Newsletter_Utils::send_configured_mail($contact, $profile, $mailing_lists, $preferences_url, 'submit');
+    // Send an e-mail with the opt-in template.
+    CRM_Newsletter_Utils::send_configured_mail(
+      $contact,
+      $profile,
+      'optin'
+    );
 
     return $group_contact_results;
   }
@@ -150,7 +126,7 @@ function _civicrm_api3_newsletter_subscription_submit_spec(&$params) {
   foreach (CRM_Newsletter_Profile::availableContactFields() as $field_name => $field_label) {
     $params[$field_name] = array(
       'name' => $field_name,
-      'title' => $field_label,
+      'title' => $field_label['label'],
       'type' => CRM_Utils_Type::T_STRING,
       'api.required' => 0,
     );

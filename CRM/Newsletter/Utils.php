@@ -91,6 +91,7 @@ class CRM_Newsletter_Utils {
       $mailing_lists[$group_id] = array(
         'title' => $group['title'],
         'status' => E::ts($group_status),
+        'status_raw' => $group_status,
       );
     }
 
@@ -186,35 +187,53 @@ class CRM_Newsletter_Utils {
   }
 
   /**
-   * Sends a configured mail from the profile for the given type
+   * Sends a configured e-mail from the profile for the given type.
    *
    * @param $contact
-   *    Complete array with contact info from Contact.get
+   *   Complete array with contact info from Contact.get.
    * @param $profile
-   *    Profile object with current configuration
-   * @param $mailing_lists
-   *    Currently configured mailinglist (groups) for that profile
-   * @param $preferences_url
-   *    URL for Updating the subscriptions for this contact
+   *   Profile object with current configuration.
    * @param $type
-   *    Type of Mail to be created (submit|unsubscribe). Information is taken from $profile
+   *   Type of Mail to be created (optin|info|unsubscribe).
    *
-   * @throws Exception
+   * @throws \Exception
    */
-  public static function send_configured_mail($contact, $profile, $mailing_lists, $preferences_url, $type) {
+  public static function send_configured_mail($contact, $profile, $type) {
+    // Prepare token (Smarty variables) values.
     switch ($type) {
-      case 'unsubscribe':
+      case 'unsubscribe_all':
         $subject = $profile->getAttribute('template_unsubscribe_all_subject');
         $text_content = $profile->getAttribute('template_unsubscribe_all');
         $html_content = $profile->getAttribute('template_unsubscribe_all_html');
         break;
-      case 'submit':
+      case 'info':
+        $subject = $profile->getAttribute('template_info_subject');
+        $text_content = $profile->getAttribute('template_info');
+        $html_content = $profile->getAttribute('template_info_html');
+      case 'optin':
       default:
         $subject = $profile->getAttribute('template_optin_subject');
         $text_content = $profile->getAttribute('template_optin');
         $html_content = $profile->getAttribute('template_optin_html');
     }
 
+    // Get subscription status.
+    $mailing_lists = CRM_Newsletter_Utils::getSubscriptionStatus($contact['id']);
+
+    // Construct preferences URL.
+    $preferences_url = $profile->getAttribute('preferences_url');
+    $preferences_url = str_replace(
+      '[CONTACT_HASH]',
+      $contact['hash'],
+      $preferences_url
+    );
+    $preferences_url = str_replace(
+      '[PROFILE]',
+      $profile->getName(),
+      $preferences_url
+    );
+
+    // Construct e-mail parameters.
     $mail_params = array(
       'from' => CRM_Newsletter_Utils::getFromEmailAddress(TRUE),
       'toName' => $contact['display_name'],
@@ -240,9 +259,10 @@ class CRM_Newsletter_Utils {
       ),
       'replyTo' => '', // TODO: Make configurable?
     );
+    // Send the e-mail.
     if (!CRM_Utils_Mail::send($mail_params)) {
       // TODO: Mail not sent. Maybe do not cancel the whole API call?
-      Civi::log()->error("[de.systopia.newsletter] Error sending configured mail");
+      Civi::log()->error(E::LONG_NAME . ': Error sending configured e-mail.');
     }
   }
 
