@@ -415,7 +415,12 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       }
     }
 
-    // TODO: verify if unsubscribe all is activated, a seperate Email template has to be available
+    // If mailing_lists_unsubscribe_all_profiles is activated, mailing_lists_unsubscribe_all must be activated as well,
+    // otherwise this wont have any effect
+    if (isset($values['mailing_lists_unsubscribe_all_profiles']) && $values['mailing_lists_unsubscribe_all_profiles'] &&
+      (!isset($values['mailing_lists_unsubscribe_all']) || !$values['mailing_lists_unsubscribe_all'])) {
+      $errors['mailing_lists_unsubscribe_all'] = E::ts('Please activate this if you chose to unsubscribe from all profiles.');
+    }
 
     return empty($errors) ? TRUE : $errors;
   }
