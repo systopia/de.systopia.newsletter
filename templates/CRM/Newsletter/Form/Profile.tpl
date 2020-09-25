@@ -80,6 +80,11 @@
         </tr>
 
         <tr class="crm-section">
+          <td class="label">{$form.mailing_lists_unsubscribe_all_profiles.label}</td>
+          <td class="content">{$form.mailing_lists_unsubscribe_all_profiles.html}</td>
+        </tr>
+
+        <tr class="crm-section">
           <td class="label">{$form.mailing_lists_unsubscribe_all_submit_label.label}</td>
           <td class="content">{$form.mailing_lists_unsubscribe_all_submit_label.html}</td>
         </tr>

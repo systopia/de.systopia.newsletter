@@ -185,6 +185,12 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
     );
 
     $this->add(
+      'checkbox',
+      'mailing_lists_unsubscribe_all_profiles',
+      E::ts('Activate this if you want to unsubscribe from all groups in all profiles')
+    );
+
+    $this->add(
       'text',
       'mailing_lists_unsubscribe_all_submit_label',
       E::ts('Unsubscribe All Submit button label'),
