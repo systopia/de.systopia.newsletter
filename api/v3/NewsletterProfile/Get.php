@@ -28,6 +28,9 @@ function civicrm_api3_newsletter_profile_get($params) {
       throw new Exception(E::ts('Advanced Newsletter Management profile not found.'), 404);
     }
 
+    // these fields are for back end configuration only, and wont be exposed to the frontend
+    $blacklisted_options = ['mailing_lists_unsubscribe_all_profiles'];
+
     $profile_name = $profile->getName();
     $profile_data = $profile->getData();
 
@@ -37,6 +40,13 @@ function civicrm_api3_newsletter_profile_get($params) {
       $field['type'] = $contact_fields[$field_name]['type'];
       if (!empty($contact_fields[$field_name]['options'])) {
         $field['options'] = $contact_fields[$field_name]['options'];
+      }
+    }
+
+    // filter blacklisted parameters
+    foreach ($blacklisted_options as $option) {
+      if (isset($profile_data[$option])) {
+        unset($profile_data[$option]);
       }
     }
 
