@@ -481,6 +481,9 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
 
         if (isset($values[$element_name])) {
           $this->profile->setAttribute($element_name, $values[$element_name]);
+        } else {
+          // unset value!
+          $this->profile->setAttribute($element_name, '');
         }
       }
         $this->profile->saveProfile();
