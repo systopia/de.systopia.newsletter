@@ -78,7 +78,7 @@ function civicrm_api3_newsletter_subscription_submit($params) {
 
     // Get current group memberships for submitted group IDs.
     $current_mailing_lists = array();
-    foreach (CRM_Newsletter_Utils::getSubscriptionStatus($contact_id, $profile['name']) as $group_id => $group_info) {
+    foreach (CRM_Newsletter_Utils::getSubscriptionStatus($contact_id, $profile->getName()) as $group_id => $group_info) {
       $current_mailing_lists[$group_id] = $group_info['status_raw'];
     }
 
