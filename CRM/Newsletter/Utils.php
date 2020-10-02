@@ -221,7 +221,7 @@ class CRM_Newsletter_Utils {
     }
 
     // Get subscription status.
-    $mailing_lists = CRM_Newsletter_Utils::getSubscriptionStatus($contact['id'], $profile['name']);
+    $mailing_lists = CRM_Newsletter_Utils::getSubscriptionStatus($contact['id'], $profile->getName());
 
     // Construct preferences URL.
     $preferences_url = $profile->getAttribute('preferences_url');
