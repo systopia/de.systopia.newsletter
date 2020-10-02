@@ -77,7 +77,7 @@ function civicrm_api3_newsletter_subscription_request($params) {
       'return' => array('hash')
     ));
     $contact['hash'] = $contact_hash['hash'];
-    $mailing_lists = CRM_Newsletter_Utils::getSubscriptionStatus($contact_id);
+    $mailing_lists = CRM_Newsletter_Utils::getSubscriptionStatus($contact_id, $profile['name']);
 
     // Send an e-mail with the opt-in template.
     $preferences_url = $profile->getAttribute('preferences_url');

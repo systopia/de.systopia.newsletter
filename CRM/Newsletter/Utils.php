@@ -70,18 +70,21 @@ class CRM_Newsletter_Utils {
    * @param $contact_id
    *   The CiviCRM ID of the contact to receive group subscription statuses for.
    *
+   * @param string $profile_name
+   *   The profile name to get subscriptions for. if not provided, default profile is used.
+   *
    * @return array
    *   An associative array with group IDs as keys and an associative array as
    *   values as following:
    *   - title: The translated group title
    *   - status: The translated subscription status for the given contact
    *
-   * @throws CiviCRM_API3_Exception
-   *   When an API call failed.
+   * @throws CiviCRM_API3_Exception When an API call failed.
    */
-  public static function getSubscriptionStatus($contact_id) {
+  public static function getSubscriptionStatus($contact_id, $profile_name = 'default') {
     $subscription = civicrm_api3('NewsletterSubscription', 'get', array(
       'contact_id' => $contact_id,
+      'profile'    => $profile_name,
     ));
     $mailing_lists = array();
     foreach (reset($subscription['values'])['subscription_status'] as $group_id => $group_status) {
@@ -218,7 +221,7 @@ class CRM_Newsletter_Utils {
     }
 
     // Get subscription status.
-    $mailing_lists = CRM_Newsletter_Utils::getSubscriptionStatus($contact['id']);
+    $mailing_lists = CRM_Newsletter_Utils::getSubscriptionStatus($contact['id'], $profile['name']);
 
     // Construct preferences URL.
     $preferences_url = $profile->getAttribute('preferences_url');
