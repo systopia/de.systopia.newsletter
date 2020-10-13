@@ -49,6 +49,7 @@ function civicrm_api3_newsletter_subscription_confirm($params) {
       $current_mailing_lists[$group_id] = $group_info['status_raw'];
     }
 
+    $unsubscribe_from_all_profiles = FALSE;
     if (($params['unsubscribe_all'])) {
       // Mark all subscriptions for being removed.
       $params['mailing_lists'] = array_fill_keys(
@@ -56,6 +57,7 @@ function civicrm_api3_newsletter_subscription_confirm($params) {
       'Removed'
       );
 
+      $unsubscribe_from_all_profiles = $profile->getAttribute('mailing_lists_unsubscribe_all_profiles');
       $email_template = 'unsubscribe_all';
     }
     elseif ($params['autoconfirm']) {
@@ -96,15 +98,7 @@ function civicrm_api3_newsletter_subscription_confirm($params) {
       $email_template = 'info';
     }
 
-    // Add/remove group membership.
-    $group_contact_results = array();
-    foreach ($params['mailing_lists'] as $group_id => $group_status) {
-      $group_contact_results[$group_id] = civicrm_api3('GroupContact', 'create', array(
-        'group_id' => $group_id,
-        'contact_id' => $params['contact_id'],
-        'status' => $group_status,
-      ));
-    }
+    $group_contact_results = CRM_Newsletter_Utils::update_group_subscription($params['mailing_lists'], $contact_id, $unsubscribe_from_all_profiles);
 
     // Send an e-mail with the info template.
     if (!empty($email_template)) {

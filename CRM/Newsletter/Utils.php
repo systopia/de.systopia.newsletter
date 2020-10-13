@@ -269,4 +269,46 @@ class CRM_Newsletter_Utils {
     }
   }
 
+  /**
+   * Update Group subscription for all groups in $mailinglists for given contact_id.
+   * Special case for when unsubscribe shall be done for all groups in all profiles
+   *
+   * @param $mailinglists
+   *    Array with group_id => groups_status
+   * @param $contact_id
+   *    Contact Id for user
+   * @param $unsubscribe_from_all_profiles
+   *    If true, all groups from all profiles are checked and unsubscribed for this contact
+   *
+   * @return array
+   *    results from unsubscribe keyed by group_id
+   *
+   * @throws CiviCRM_API3_Exception
+   */
+  public static function update_group_subscription($mailinglists, $contact_id, $unsubscribe_from_all_profiles) {
+
+    // check if unsubscribe shall be done for **all** groups in all profiles
+    if($unsubscribe_from_all_profiles) {
+      // get all groups from all profiles and set group status to removed for that id
+      $profiles = CRM_Newsletter_Profile::getProfiles();
+      foreach ($profiles as $profile) {
+        $groups = $profile->getAttribute('mailing_lists');
+        foreach ($groups as $group_id => $group_name) {
+          $mailinglists[$group_id] = 'Removed';
+        }
+      }
+    }
+
+    // Add/remove group membership.
+    $group_contact_results = array();
+    foreach ($mailinglists as $group_id => $group_status) {
+      $group_contact_results[$group_id] = civicrm_api3('GroupContact', 'create', array(
+        'group_id' => $group_id,
+        'contact_id' => $contact_id,
+        'status' => $group_status,
+      ));
+    }
+    return $group_contact_results;
+  }
+
 }

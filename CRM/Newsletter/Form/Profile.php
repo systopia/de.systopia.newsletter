@@ -185,6 +185,12 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
     );
 
     $this->add(
+      'checkbox',
+      'mailing_lists_unsubscribe_all_profiles',
+      E::ts('Activate this if you want to unsubscribe from all groups in all profiles')
+    );
+
+    $this->add(
       'text',
       'mailing_lists_unsubscribe_all_submit_label',
       E::ts('Unsubscribe All Submit button label'),
@@ -409,7 +415,12 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       }
     }
 
-    // TODO: verify if unsubscribe all is activated, a seperate Email template has to be available
+    // If mailing_lists_unsubscribe_all_profiles is activated, mailing_lists_unsubscribe_all must be activated as well,
+    // otherwise this wont have any effect
+    if (isset($values['mailing_lists_unsubscribe_all_profiles']) && $values['mailing_lists_unsubscribe_all_profiles'] &&
+      (!isset($values['mailing_lists_unsubscribe_all']) || !$values['mailing_lists_unsubscribe_all'])) {
+      $errors['mailing_lists_unsubscribe_all'] = E::ts('Please activate this if you chose to unsubscribe from all profiles.');
+    }
 
     return empty($errors) ? TRUE : $errors;
   }
@@ -481,6 +492,9 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
 
         if (isset($values[$element_name])) {
           $this->profile->setAttribute($element_name, $values[$element_name]);
+        } else {
+          // unset value!
+          $this->profile->setAttribute($element_name, '');
         }
       }
         $this->profile->saveProfile();
