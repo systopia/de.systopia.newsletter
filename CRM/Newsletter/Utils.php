@@ -292,10 +292,11 @@ class CRM_Newsletter_Utils {
       // get all groups from all profiles and set group status to removed for that id
       $profiles = CRM_Newsletter_Profile::getProfiles();
       foreach ($profiles as $profile) {
-        $groups = $profile->getAttribute('mailing_lists');
-        foreach ($groups as $group_id => $group_name) {
-          $mailinglists[$group_id] = 'Removed';
+        $current_profile_groups = CRM_Newsletter_Utils::getSubscriptionStatus($contact_id, $profile->getName());
+        foreach (CRM_Newsletter_Utils::getSubscriptionStatus($contact_id, $profile->getName()) as $group_id => $group_info) {
+          $current_profile_groups[$group_id] = 'Removed';
         }
+        $mailinglists = $mailinglists + $current_profile_groups;
       }
     }
 
