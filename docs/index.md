@@ -23,11 +23,11 @@ Finally the extension will provide custom token that can be used in mailings to
 direct users to your subscription management pages.
 
 ## Features
-- *Define subscription/preference pages for mailing lists in CiviCRM
-- *Display those pages on any external system
-- *Define custom email-templates for your subscription/preference pages (instead
+- Define subscription/preference pages for mailing lists in CiviCRM
+- Display those pages on any external system
+- Define custom email-templates for your subscription/preference pages (instead
   of CiviCRM's default workflow emails)
-- *Use a link to a subscription preference page in your mailings instead of an
+- Use a link to a subscription preference page in your mailings instead of an
   unsubscribe or opt out link
 
 ## Requirements
