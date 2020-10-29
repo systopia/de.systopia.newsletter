@@ -1,13 +1,34 @@
 # Usage
 
-Using this extension with a user interface is dependent on how you implement
-the forms which the extension provides configuration for. This guide is
-therefore somewhat generic in explaining the general workflow of subscriptions.
+Using this extension is dependent on how you implement the forms in your
+external system. This guide is therefore somewhat generic in explaining the
+general workflow of subscriptions.
+
+In order to allow users to manage their preferences instead of simply
+unsubscribing, you should not use CiviCRM default tokens when sending a mailing
+but the custom token provided by the extension that links users to their
+personal preferences page. The token for the default profile is
+`{newsletter.preferences_url_default}` but you will be able to choose the token
+for the profile you would like to link to from CiviCRM's token menu.  
+
+![Token Menu](img/token_menu.png?raw=true "Token Menu")
+
 
 ## Workflow
 
 This extension assumes a form-based flow of users subscribing to mailing lists,
 confirming their subscription and possibly changing them at a later stage.
+
+- The user first subscribes to one or more mailing lists. They will be matched
+  with existing contacts and receive a confirmation/doupble opt-in email with a
+  link to their confirmation/preferences page.
+- After following the link and confirming and/or changing their preferences,
+  they will be added to/removed from groups according to their choices. An
+  information email will be sent to them automatically.
+- In order to change their preferences, the user needs to use a personalized
+  link. That link can be included in CiviCRM mailings via the tokens provided by
+  the extension or by your external system. The link needs to contain the
+  contact's hash and the identifier for the profile being used.
 
 ### Subscription stage
 

@@ -1,24 +1,26 @@
 # Configuration
 
-The Advanced Newsletter Management extension allows multiple configuration sets
-be created to provide different mailing list environments that can be made use
-of with different forms on the external system (e.g. with the
-[Advanced Newsletter Management](https://github.com/systopia/civicrm_newsletter)
-Drupal module).
-
 Find the extension configuration form on CiviCRM's *Administration Console*
 within the *System settings* section (civicrm/admin/settings/newsletter). This
-page offers you to *Configure profiles* along with a
-*Configure extension settings* button, does not yet have any function.
+page offers you to *Configure profiles*.
+
+!!!tip
+    Also make sure that you intstall and configure the CiviCRM Extension 
+    "Extended Contact Matcher" (de.systopia.xcm) to define yor cotact matching 
+    behaviour. Please refer to the extension's
+    [documentation](https://docs.civicrm.org/xcm/en/latest/).
 
 ## Profiles
 
-There will always be a *default* profile with some more or less meaningful
-factory defaults. You should always at least configure this default profile or
-create a new one.
-
 Profiles define properties of newsletter subscription and accompanying
-preferences forms for users to manage their subscriptions.
+preferences forms for users to manage their subscriptions. There will always be
+a *default* profile - at the very least you should configure this default
+profile or create a new one. 
+
+![Profile Configuration](img/profile_configuration.png?raw=true "Profile Configuration")
+
+Each profile will provide unique tokens that you can use within CiviCRM Mailings
+in order to navigate your recipients to the correct personal preference page.
 
 ### General settings
 
@@ -31,6 +33,8 @@ preferences forms for users to manage their subscriptions.
   `[CONTACT_HASH]`. The URL will be used for links in e-mails generated and sent
   by the extension to inform users about their subscription and how to manage
   them.
+- *Unsubscribe to all Mailingslists button*: If you choose to provide that
+  button, contacts can unsubcribe from all mailing lists in your system.
 
 ### Mailing lists
 
@@ -70,7 +74,8 @@ For each field, define:
 
 Since newsletter subscriptions involves collecting personal data, the
 subscription form should include privacy regulations (or any other kind of terms
-and regulations you like).
+and regulations you like). The information will usually be displayed on your
+forms.
 
 You can configure different terms and conditions for
 
