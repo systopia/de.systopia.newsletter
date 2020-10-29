@@ -32,10 +32,10 @@ direct users to your subscription management pages.
 
 ## Requirements
 
-- *PHP v7.0+
-- *CiviCRM 5.3
-- *Dependency on CiviCRM Extension "Extended Contact Matcher" (de.systopia.xcm)
-- *A system that will serve as your public system such as an external website
+- PHP v7.0+
+- CiviCRM 5.3
+- Dependency on CiviCRM Extension "Extended Contact Matcher" (de.systopia.xcm)
+- A system that will serve as your public system such as an external website
 
 ## Limits
 
