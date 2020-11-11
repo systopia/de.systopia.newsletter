@@ -23,47 +23,28 @@ use CRM_Newsletter_ExtensionUtil as E;
  * @return array
  */
 function civicrm_api3_newsletter_profile_get($params) {
-  try {
-    if (!$profile = CRM_Newsletter_Profile::getProfile($params['name'] ?: 'default')) {
-      throw new Exception(E::ts('Advanced Newsletter Management profile not found.'), 404);
-    }
-
-    // these fields are for back end configuration only, and wont be exposed to the frontend
-    $blacklisted_options = ['mailing_lists_unsubscribe_all_profiles'];
-
-    $profile_name = $profile->getName();
-    $profile_data = $profile->getData();
-
-    // Add contact field type and options, if applicable.
-    $contact_fields = CRM_Newsletter_Profile::availableContactFields();
-    foreach ($profile_data['contact_fields'] as $field_name => &$field) {
-      $field['type'] = $contact_fields[$field_name]['type'];
-      if (!empty($contact_fields[$field_name]['options'])) {
-        $field['options'] = $contact_fields[$field_name]['options'];
-      }
-    }
-
-    // filter blacklisted parameters
-    foreach ($blacklisted_options as $option) {
-      if (isset($profile_data[$option])) {
-        unset($profile_data[$option]);
-      }
-    }
-
-    // Build group tree.
-    $group_tree = CRM_Newsletter_Utils::buildGroupTree($profile_data['mailing_lists']);
-    $profile_data['mailing_lists_tree'] = $group_tree;
-
-    $return = array($profile_name => $profile_data);
-    return civicrm_api3_create_success($return);
+  if (isset($params['name'])) {
+    return civicrm_api3('NewsletterProfile', 'getsingle', $params);
   }
-  catch (\Exception $exception) {
-    return civicrm_api3_create_error($exception->getMessage(), array('error_code' => $exception->getCode()));
+
+  $result = [];
+
+  foreach (CRM_Newsletter_Profile::getProfiles() as $profile_name => $profile) {
+    $profile_result = civicrm_api3(
+      'NewsletterProfile',
+      'getsingle',
+      ['name' => $profile_name]
+    );
+    if (!$profile_result['is_error']) {
+      $result[$profile_name] = $profile_result['values'][$profile_name];
+    }
   }
+
+  return civicrm_api3_create_success($result);
 }
 
 /**
- * API specification for "get" call on "NewsletterProfile" entity.
+ * API specification for "getsingle" call on "NewsletterProfile" entity.
  *
  * @param $params
  */
@@ -73,7 +54,6 @@ function _civicrm_api3_newsletter_profile_get_spec(&$params) {
     'title' => 'Newsletter profile name',
     'type' => CRM_Utils_Type::T_STRING,
     'api.required' => 0,
-    'api.default' => 'default',
     'description' => 'The Newsletter profile name. If omitted, the default profile will be returned.',
   );
 }
