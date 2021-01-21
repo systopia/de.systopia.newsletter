@@ -213,11 +213,13 @@ class CRM_Newsletter_Utils {
         $subject = $profile->getAttribute('template_info_subject');
         $text_content = $profile->getAttribute('template_info');
         $html_content = $profile->getAttribute('template_info_html');
+        break;
       case 'optin':
       default:
         $subject = $profile->getAttribute('template_optin_subject');
         $text_content = $profile->getAttribute('template_optin');
         $html_content = $profile->getAttribute('template_optin_html');
+        break;
     }
 
     // Get subscription status.
