@@ -104,3 +104,11 @@ for the following data:
 - the contact
 - the available mailing lists (with subscription status)
 - the preferences URL for the contact
+
+The mailing lists variable is an array of group subscription information for the
+contact, keyed by group ID. Each group's subscription information is also an
+array, containing the group title (`title`), the translated subscription status
+(`status`) and the untranslated subscription status (`status_raw`). So you may
+iterate through the `$mailing_lists` variable in your e-mail templates and
+output the contact's subscription status and even display them differently
+depending on the raw status, which will not change with localization.
