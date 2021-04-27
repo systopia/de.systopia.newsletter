@@ -5,8 +5,8 @@ within the *System settings* section (civicrm/admin/settings/newsletter). This
 page offers you to *Configure profiles*.
 
 !!!tip
-    Also make sure that you intstall and configure the CiviCRM Extension 
-    "Extended Contact Matcher" (de.systopia.xcm) to define yor cotact matching 
+    Also make sure that you install and configure the CiviCRM Extension 
+    "Extended Contact Matcher" (de.systopia.xcm) to define yor contact matching 
     behaviour. Please refer to the extension's
     [documentation](https://docs.civicrm.org/xcm/en/latest/).
 

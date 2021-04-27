@@ -19,7 +19,7 @@ present them to your contacts. The extension's API also has built in logic and
 actions to receive and update mailing preferences submitted from your external
 forms. 
 
-Finally the extension will provide custom token that can be used in mailings to
+Finally, the extension will provide custom token that can be used in mailings to
 direct users to your subscription management pages.
 
 ## Features
@@ -44,10 +44,10 @@ as a frontend for your forms. In case you would like to build your forms based
 on Drupal you will most likely want to have a look at and/or use the Drupal
 module
 [CiviCRM Advanced Newsletter Management](https://github.com/systopia/civicrm_newsletter)
-which includes a lot of pre-built features. Otherwise you would have to build
+which includes a lot of pre-built features. Otherwise, you would have to build
 your own endpoint in the system of your choice.
 
-It would also be possible to implement CiviCRM-native forms for this extension
+It would also be possible to implement CiviCRM-native forms for this extension,
 so you do not have to use an additional system for the forms. If you are
 interested in this feature and can provide some funding, please create an issue
-and/or contac us (https://www.systopia.de).
+and/or contact us (https://www.systopia.de).
