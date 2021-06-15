@@ -52,7 +52,8 @@ function civicrm_api3_newsletter_subscription_submit($params) {
 
     // Get or create the contact.
     $contact_data = array_intersect_key($params, $profile->getAttribute('contact_fields'));
-    $contact_id = CRM_Newsletter_Utils::getContact($contact_data);
+    $contact_result = CRM_Newsletter_Utils::getContact($contact_data);
+    $contact_id = $contact_result['contact_id'];
     $contact = civicrm_api3('Contact', 'getsingle', array(
       'id' => $contact_id,
     ));
@@ -91,6 +92,26 @@ function civicrm_api3_newsletter_subscription_submit($params) {
         'contact_id' => $contact_id,
         'status' => 'Pending',
       ));
+    }
+
+    // Add GDPRX record for newly created contacts.
+    if (
+      CRM_Newsletter_Utils::gdprx_installed()
+      && $profile->getAttribute('gdprx_new_contact')
+      && $contact_result['was_created']
+    ) {
+      civicrm_api3(
+        'ConsentRecord',
+        'create',
+        [
+          'contact_id' => $contact_id,
+          'category' => $profile->getAttribute('gdprx_new_contact_category'),
+          'source' => $profile->getAttribute('gdprx_new_contact_source'),
+          'type' => $profile->getAttribute('gdprx_new_contact_type'),
+          'note' => $profile->getAttribute('gdprx_new_contact_note'),
+          'terms' => $profile->getAttribute('conditions_public'),
+        ]
+      );
     }
 
     // Send an e-mail with the opt-in template.

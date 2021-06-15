@@ -191,6 +191,16 @@ class CRM_Newsletter_Profile {
       'preferences_url',
       'request_link_url',
       'submit_label',
+      'gdprx_new_contact',
+      'gdprx_new_contact_category',
+      'gdprx_new_contact_source',
+      'gdprx_new_contact_type',
+      'gdprx_new_contact_note',
+      'gdprx_unsubscribe_all',
+      'gdprx_unsubscribe_all_category',
+      'gdprx_unsubscribe_all_source',
+      'gdprx_unsubscribe_all_type',
+      'gdprx_unsubscribe_all_note',
     );
   }
 
