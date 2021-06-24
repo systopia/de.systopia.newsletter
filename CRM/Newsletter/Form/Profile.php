@@ -345,6 +345,80 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       TRUE
     );
 
+    $gdprx_installed = CRM_Newsletter_Utils::gdprx_installed();
+    $this->assign('gdprx_installed', $gdprx_installed);
+    if ($gdprx_installed) {
+      $this->add(
+        'checkbox',
+        'gdprx_new_contact',
+        E::ts('Create GDPR record for new contacts')
+      );
+      $this->add(
+        'select',
+        'gdprx_new_contact_category',
+        E::ts('Category'),
+        CRM_Gdprx_Consent::getCategoryList(),
+        TRUE,
+        ['class' => 'crm-select2 huge']
+      );
+      $this->add(
+        'select',
+        'gdprx_new_contact_source',
+        E::ts('Source'),
+        CRM_Gdprx_Consent::getSourceList(),
+        TRUE,
+        ['class' => 'crm-select2 huge']
+      );
+      $this->add(
+        'select',
+        'gdprx_new_contact_type',
+        E::ts('Type'),
+        CRM_Gdprx_Consent::getTypeList(),
+        FALSE,
+        ['class' => 'crm-select2 huge']
+      );
+        $this->add(
+          'textarea',
+          'gdprx_new_contact_note',
+          E::ts('Note')
+        );
+
+      $this->add(
+        'checkbox',
+        'gdprx_unsubscribe_all',
+        E::ts('Create GDPR record when unsubscribing')
+      );
+      $this->add(
+        'select',
+        'gdprx_unsubscribe_all_category',
+        E::ts('Category'),
+        CRM_Gdprx_Consent::getCategoryList(),
+        TRUE,
+        ['class' => 'crm-select2 huge']
+      );
+      $this->add(
+        'select',
+        'gdprx_unsubscribe_all_source',
+        E::ts('Source'),
+        CRM_Gdprx_Consent::getSourceList(),
+        TRUE,
+        ['class' => 'crm-select2 huge']
+      );
+      $this->add(
+        'select',
+        'gdprx_unsubscribe_all_type',
+        E::ts('Type'),
+        CRM_Gdprx_Consent::getTypeList(),
+        FALSE,
+        ['class' => 'crm-select2 huge']
+      );
+      $this->add(
+        'textarea',
+        'gdprx_unsubscribe_all_note',
+        E::ts('Note')
+      );
+    }
+
     $this->addButtons(array(
       array(
         'type' => 'submit',

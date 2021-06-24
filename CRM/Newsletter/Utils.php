@@ -36,9 +36,9 @@ class CRM_Newsletter_Utils {
    *   When no contact could be found or created.
    */
   public static function getContact($contact_data) {
-    $result = civicrm_api3('Contact', 'getorcreate', $contact_data);
+    $result = civicrm_api3('Contact', 'createifnotexists', $contact_data);
     if ($result['count'] == 1) {
-      return reset($result['values'])['contact_id'];
+      return reset($result['values']);
     }
     else {
       throw new Exception(E::ts('Could not get or create a contact for the given contact data.'));
@@ -312,6 +312,11 @@ class CRM_Newsletter_Utils {
       ));
     }
     return $group_contact_results;
+  }
+
+  public static function gdprx_installed() {
+    $manager = CRM_Extension_System::singleton()->getManager();
+    return ($manager->getStatus('de.systopia.gdprx') === CRM_Extension_Manager::STATUS_INSTALLED);
   }
 
 }

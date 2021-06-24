@@ -278,6 +278,86 @@
       </table>
       
     </fieldset>
+    {if $gdprx_installed}
+      <fieldset>
+
+        <legend>
+            {ts}GDPR Records{/ts}
+          <div class="description">{ts}Create GDPR records using the de.systopia.gdprx extension.{/ts}</div>
+        </legend>
+
+        <table>
+
+          <tr class="crm-section {cycle values="odd,even"}">
+            <td>
+              <table class="form-layout-compressed">
+
+                <tr class="crm-section">
+                  <td class="label">{$form.gdprx_new_contact.label}</td>
+                  <td class="content">{$form.gdprx_new_contact.html}</td>
+                </tr>
+
+                <tr class="crm-section">
+                  <td class="label">{$form.gdprx_new_contact_category.label}</td>
+                  <td class="content">{$form.gdprx_new_contact_category.html}</td>
+                </tr>
+
+                <tr class="crm-section">
+                  <td class="label">{$form.gdprx_new_contact_source.label}</td>
+                  <td class="content">{$form.gdprx_new_contact_source.html}</td>
+                </tr>
+
+                <tr class="crm-section">
+                  <td class="label">{$form.gdprx_new_contact_type.label}</td>
+                  <td class="content">{$form.gdprx_new_contact_type.html}</td>
+                </tr>
+
+                <tr class="crm-section">
+                  <td class="label">{$form.gdprx_new_contact_note.label}</td>
+                  <td class="content">{$form.gdprx_new_contact_note.html}</td>
+                </tr>
+
+              </table>
+            </td>
+          </tr>
+
+          <tr class="crm-section {cycle values="odd,even"}">
+            <td>
+              <table class="form-layout-compressed">
+                
+                <tr class="crm-section">
+                  <td class="label">{$form.gdprx_unsubscribe_all.label}</td>
+                  <td class="content">{$form.gdprx_unsubscribe_all.html}</td>
+                </tr>
+
+                <tr class="crm-section">
+                  <td class="label">{$form.gdprx_unsubscribe_all_category.label}</td>
+                  <td class="content">{$form.gdprx_unsubscribe_all_category.html}</td>
+                </tr>
+
+                <tr class="crm-section">
+                  <td class="label">{$form.gdprx_unsubscribe_all_source.label}</td>
+                  <td class="content">{$form.gdprx_unsubscribe_all_source.html}</td>
+                </tr>
+
+                <tr class="crm-section">
+                  <td class="label">{$form.gdprx_unsubscribe_all_type.label}</td>
+                  <td class="content">{$form.gdprx_unsubscribe_all_type.html}</td>
+                </tr>
+
+                <tr class="crm-section">
+                  <td class="label">{$form.gdprx_unsubscribe_all_note.label}</td>
+                  <td class="content">{$form.gdprx_unsubscribe_all_note.html}</td>
+                </tr>
+                
+              </table>
+            </td>
+          </tr>
+
+        </table>
+
+      </fieldset>
+    {/if}
 
   {elseif $op == 'delete'}
     {if $profile_name}

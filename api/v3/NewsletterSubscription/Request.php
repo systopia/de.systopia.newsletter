@@ -66,7 +66,8 @@ function civicrm_api3_newsletter_subscription_request($params) {
 
       // Get or create the contact.
       $contact_data = array_intersect_key($params, $profile->getAttribute('contact_fields'));
-      $contact_id = CRM_Newsletter_Utils::getContact($contact_data);
+      $contact_result = CRM_Newsletter_Utils::getContact($contact_data);
+      $contact_id = $contact_result['contact_id'];
     }
 
     $contact = civicrm_api3('Contact', 'getsingle', array(

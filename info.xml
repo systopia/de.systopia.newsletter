@@ -22,10 +22,13 @@
   <compatibility>
     <ver>4.7</ver>
   </compatibility>
+  <requires>
+    <ext>de.systopia.xcm</ext>
+  </requires>
   <comments>
     This extension is supposed to work with the civicrm_newsletter Drupal module
     for external newsletter management on a Drupal website, but may be used
-    without it.
+    without it. It depends on the de.systopia.xcm extension version 1.9+.
   </comments>
   <civix>
     <namespace>CRM/Newsletter</namespace>

@@ -59,6 +59,24 @@ function civicrm_api3_newsletter_subscription_confirm($params) {
 
       $unsubscribe_from_all_profiles = $profile->getAttribute('mailing_lists_unsubscribe_all_profiles');
       $email_template = 'unsubscribe_all';
+
+      if (
+        CRM_Newsletter_Utils::gdprx_installed()
+        && $profile->getAttribute('gdprx_unsubscribe_all')
+      ) {
+        civicrm_api3(
+          'ConsentRecord',
+          'create',
+          [
+            'contact_id' => $contact_id,
+            'category' => $profile->getAttribute('gdprx_unsubscribe_all_category'),
+            'source' => $profile->getAttribute('gdprx_unsubscribe_all_source'),
+            'type' => $profile->getAttribute('gdprx_unsubscribe_all_type'),
+            'note' => $profile->getAttribute('gdprx_unsubscribe_all_note'),
+            'terms' => $profile->getAttribute('conditions_preferences'),
+          ]
+        );
+      }
     }
     elseif ($params['autoconfirm']) {
       // Mark all pending subscriptions for being added.

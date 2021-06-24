@@ -12,6 +12,18 @@ Instead of creating external forms and custom API actions for each project, this
 extension offers configurable newsletter form profiles, along with API actions
 to use as an endpoint for external forms.
 
-This extension is supposed to work with the civicrm_newsletter Drupal module
-for external newsletter management on a Drupal website, but may be used without
-it.
+Note that the extension requires the
+[Extended Contact Manager (XCM)](https://github.com/systopia/de.systopia.xcm)
+extension in version `1.9` or later!
+
+The extension supports for the
+[GDPR Compliance](https://github.com/systopia/de.systopia.gdprx) extension, i.e.
+providing the option of adding GDPR consent records for newly created contacts
+during newsletter subscription, and for the unsubscribe from all mailing lists
+event, both with all consent record attributes (such as category, source, etc.)
+being configurable.
+
+This extension is supposed to work with the
+[civicrm_newsletter](https://github.com/systopia/civicrm_newsletter) Drupal
+module for external newsletter management on a Drupal website, but may be used
+without it, i.e. anything that implements the extension's API.
