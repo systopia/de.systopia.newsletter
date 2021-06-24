@@ -25,6 +25,11 @@
         </tr>
 
         <tr class="crm-section">
+          <td class="label">{$form.xcm_profile.label}</td>
+          <td class="content">{$form.xcm_profile.html}</td>
+        </tr>
+
+        <tr class="crm-section">
           <td class="label">{$form.form_title.label}</td>
           <td class="content">{$form.form_title.html}</td>
         </tr>

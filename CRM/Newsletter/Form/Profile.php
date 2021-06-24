@@ -37,6 +37,14 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
   protected $_op;
 
   /**
+   * @var array
+   *
+   * A static cache of retrieved location types found within
+   * static::getXCMProfiles().
+   */
+  protected static $_xcm_profiles = NULL;
+
+  /**
    * Builds the form structure.
    */
   public function buildQuickForm() {
@@ -100,6 +108,14 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       E::ts('Profile name'),
       array(),
       !$is_default
+    );
+
+    $this->add(
+      'select',
+      'xcm_profile',
+      E::ts('Contact Matcher (XCM) Profile'),
+      static::getXCMProfiles(),
+      TRUE
     );
 
     $this->add(
@@ -592,6 +608,26 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       $this->profile->deleteProfile();
     }
     parent::postProcess();
+  }
+
+  /**
+   * Retrieves XCM profiles (if supported). 'default' profile is always available
+   *
+   * @return array
+   */
+  public static function getXCMProfiles() {
+    if (!isset(static::$_xcm_profiles)) {
+      static::$_xcm_profiles = array(
+        '' => E::ts("&lt;default profile&gt;"),
+      );
+      if (method_exists('CRM_Xcm_Configuration', 'getProfileList')) {
+        $profiles = CRM_Xcm_Configuration::getProfileList();
+        foreach ($profiles as $profile_key => $profile_name) {
+          static::$_xcm_profiles[$profile_key] = $profile_name;
+        }
+      }
+    }
+    return static::$_xcm_profiles;
   }
 
 }
