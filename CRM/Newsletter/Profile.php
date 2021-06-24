@@ -163,6 +163,7 @@ class CRM_Newsletter_Profile {
    */
   public static function allowedAttributes() {
     return array(
+      'xcm_profile',
       'form_title',
       'contact_fields',
       'mailing_lists',
@@ -293,6 +294,7 @@ class CRM_Newsletter_Profile {
    */
   public static function createDefaultProfile($name = 'default') {
     $default_data = array(
+      'xcm_profile' => '',
       'form_title' => '',
       'contact_fields' => array(),
       'mailing_lists' => self::getGroups(),

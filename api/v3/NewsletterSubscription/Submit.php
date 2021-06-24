@@ -52,6 +52,11 @@ function civicrm_api3_newsletter_subscription_submit($params) {
 
     // Get or create the contact.
     $contact_data = array_intersect_key($params, $profile->getAttribute('contact_fields'));
+    // add xcm profile
+    $xcm_profile = $profile->getAttribute('xcm_profile');
+    if (!empty($xcm_profile)) {
+      $contact_data['xcm_profile'] = $xcm_profile;
+    }
     $contact_result = CRM_Newsletter_Utils::getContact($contact_data);
     $contact_id = $contact_result['contact_id'];
     $contact = civicrm_api3('Contact', 'getsingle', array(
