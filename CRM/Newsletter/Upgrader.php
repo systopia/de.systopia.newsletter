@@ -29,4 +29,18 @@ class CRM_Newsletter_Upgrader extends CRM_Newsletter_Upgrader_Base {
     return TRUE;
   }
 
+  /**
+   * Add default value for new opt-in URL profile property.
+   */
+  public function upgrade_5100() {
+    foreach (CRM_Newsletter_Profile::getProfiles() as $profile_name => $profile) {
+      if (empty($profile->getAttribute('optin_url'))) {
+        $profile->setAttribute('optin_url', $profile->getAttribute('preferences_url'));
+        $profile->saveProfile();
+      }
+    }
+
+    return TRUE;
+  }
+
 }

@@ -179,6 +179,12 @@ function newsletter_civicrm_alterAPIPermissions($entity, $action, &$params, &$pe
  */
 function newsletter_civicrm_tokens(&$tokens) {
   foreach (CRM_Newsletter_Profile::getProfiles() as $profile_name => $profile) {
+    $tokens['newsletter']['newsletter.optin_url_' . $profile_name] = E::ts(
+      'Opt-in URL for profile %1',
+      array(
+        1 => $profile->getName(),
+      )
+    );
     $tokens['newsletter']['newsletter.preferences_url_' . $profile_name] = E::ts(
       'Preferences URL for profile %1',
       array(
@@ -204,6 +210,20 @@ function newsletter_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = 
     foreach (CRM_Newsletter_Profile::getProfiles() as $profile_name => $profile) {
       foreach ($cids as $cid) {
         $contact = civicrm_api3('Contact', 'getsingle', array('id' => $cid, 'return' => array('hash')));
+
+        $optin_url = $profile->getAttribute('optin_url');
+        $optin_url = str_replace(
+          '[CONTACT_HASH]',
+          $contact['hash'],
+          $optin_url
+        );
+        $optin_url = str_replace(
+          '[PROFILE]',
+          $profile_name,
+          $optin_url
+        );
+        $values[$cid]['newsletter.optin_url_' . $profile_name] = $optin_url;
+
         $preferences_url = $profile->getAttribute('preferences_url');
         $preferences_url = str_replace(
           '[CONTACT_HASH]',

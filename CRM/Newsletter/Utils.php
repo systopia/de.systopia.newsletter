@@ -225,6 +225,19 @@ class CRM_Newsletter_Utils {
     // Get subscription status.
     $mailing_lists = CRM_Newsletter_Utils::getSubscriptionStatus($contact['id'], $profile->getName());
 
+    // Construct opt-in URL.
+    $optin_url = $profile->getAttribute('optin_url');
+    $optin_url = str_replace(
+      '[CONTACT_HASH]',
+      $contact['hash'],
+      $optin_url
+    );
+    $optin_url = str_replace(
+      '[PROFILE]',
+      $profile->getName(),
+      $optin_url
+    );
+
     // Construct preferences URL.
     $preferences_url = $profile->getAttribute('preferences_url');
     $preferences_url = str_replace(
@@ -251,6 +264,7 @@ class CRM_Newsletter_Utils {
         array(
           'contact' => $contact,
           'mailing_lists' => $mailing_lists,
+          'optin_url' => $optin_url,
           'preferences_url' => $preferences_url,
         )
       ),
@@ -259,6 +273,7 @@ class CRM_Newsletter_Utils {
         array(
           'contact' => $contact,
           'mailing_lists' => $mailing_lists,
+          'optin_url' => $optin_url,
           'preferences_url' => $preferences_url,
         )
       ),

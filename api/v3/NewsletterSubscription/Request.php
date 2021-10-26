@@ -86,6 +86,17 @@ function civicrm_api3_newsletter_subscription_request($params) {
     $mailing_lists = CRM_Newsletter_Utils::getSubscriptionStatus($contact_id, $profile->getName());
 
     // Send an e-mail with the opt-in template.
+    $optin_url = $profile->getAttribute('optin_url');
+    $optin_url = str_replace(
+      '[CONTACT_HASH]',
+      $contact['hash'],
+      $optin_url
+    );
+    $optin_url = str_replace(
+      '[PROFILE]',
+      $profile->getName(),
+      $optin_url
+    );
     $preferences_url = $profile->getAttribute('preferences_url');
     $preferences_url = str_replace(
       '[CONTACT_HASH]',
@@ -109,6 +120,7 @@ function civicrm_api3_newsletter_subscription_request($params) {
         array(
           'contact' => $contact,
           'mailing_lists' => $mailing_lists,
+          'optin_url' => $optin_url,
           'preferences_url' => $preferences_url,
         )
       ),
@@ -117,6 +129,7 @@ function civicrm_api3_newsletter_subscription_request($params) {
         array(
           'contact' => $contact,
           'mailing_lists' => $mailing_lists,
+          'optin_url' => $optin_url,
           'preferences_url' => $preferences_url,
         )
       ),

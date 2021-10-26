@@ -347,6 +347,14 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
 
     $this->add(
       'text',
+      'optin_url',
+      E::ts('Opt-in URL'),
+      array(),
+      TRUE
+    );
+
+    $this->add(
+      'text',
       'preferences_url',
       E::ts('Preferences URL'),
       array(),
@@ -503,6 +511,9 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
     }
 
     // Preferences URL must be a valid URL.
+    if (filter_var($values['optin_url'], FILTER_VALIDATE_URL) === FALSE) {
+      $errors['optin_url'] = E::ts('Please enter a valid URL.');
+    }
     if (filter_var($values['preferences_url'], FILTER_VALIDATE_URL) === FALSE) {
       $errors['preferences_url'] = E::ts('Please enter a valid URL.');
     }
