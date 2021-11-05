@@ -12,7 +12,7 @@
 | written permission from the original author(s).             |
 +-------------------------------------------------------------*}
 
-{crmScope extensionKey='de.systopia.eck'}
+{crmScope extensionKey='de.systopia.newsletter'}
 <div class="crm-block crm-form-block">
 
   {if $op == 'create' or $op == 'edit'}
