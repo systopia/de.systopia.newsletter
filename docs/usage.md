@@ -20,7 +20,7 @@ This extension assumes a form-based flow of users subscribing to mailing lists,
 confirming their subscription and possibly changing them at a later stage.
 
 - The user first subscribes to one or more mailing lists. They will be matched
-  with existing contacts and receive a confirmation/doupble opt-in email with a
+  with existing contacts and receive a confirmation/double opt-in email with a
   link to their confirmation/preferences page.
 - After following the link and confirming and/or changing their preferences,
   they will be added to/removed from groups according to their choices. An
@@ -62,8 +62,8 @@ given profile, and sends it to the system which, in turn, creates the
 preferences form based on that information.
 
 The form input is sent in to the `NewletterSubscription.Confirm` API action that
-this extension provides. The API action will validate the the input and update
-all group memberships for the configured mailing lists, setting them to either
+this extension provides. The API action will validate the input and update all
+group memberships for the configured mailing lists, setting them to either
 *Added*, when the user selected it, or *Removed*, when the user de-selected it.
 The form will then generate and send an information e-mail to the contact, again
 containing a link to their personal preferences form for further reference.
