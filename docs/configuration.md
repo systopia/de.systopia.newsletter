@@ -103,7 +103,9 @@ for the following data:
 
 - the contact
 - the available mailing lists (with subscription status)
-- the preferences URL for the contact
+- the preferences URL for the contact (make sure to not let CKEditor
+  add `http://` in front of the token as this will lead to invalid URLs in the
+  e-mail.)
 
 The mailing lists variable is an array of group subscription information for the
 contact, keyed by group ID. Each group's subscription information is also an
