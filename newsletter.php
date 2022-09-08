@@ -173,6 +173,28 @@ function newsletter_civicrm_alterAPIPermissions($entity, $action, &$params, &$pe
 }
 
 /**
+ * Implements hook_civicrm_navigationMenu().
+ *
+ * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_navigationMenu
+ */
+function newsletter_civicrm_navigationMenu(&$menu) {
+  _newsletter_civix_insert_navigation_menu(
+    $menu,
+    'Administer/Communications',
+    [
+      'label' => E::ts('Advanced Newsletter Management'),
+      'name' => 'newsletter',
+      'url' => 'civicrm/admin/settings/newsletter',
+      // TODO: Adjust permission once there is a separate one.
+      'permission' => 'administer CiviCRM',
+      'operator' => 'OR',
+      'separator' => 0,
+      'icon' => 'crm-i fa-newspaper-o',
+    ]
+  );
+}
+
+/**
  * Implements hook_civicrm_tokens().
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_tokens
