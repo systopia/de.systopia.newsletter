@@ -239,11 +239,43 @@ class CRM_Newsletter_Profile {
         'label' => E::ts('E-mail address'),
         'type' => 'Text',
       ),
+      'url' => array(
+        'label' => E::ts('Website'),
+        'type' => 'Text',
+      ),
+      'phone' => array(
+        'label' => E::ts('Phone number'),
+        'type' => 'Text',
+      ),
+      'phone2' => array(
+        'label' => E::ts('Phone number 2'),
+        'type' => 'Text',
+      ),
       'prefix_id' => array(
         'label' => E::ts('Prefix'),
         'type' => 'Select',
         'options' => $individual_prefix_options,
       ),
+    );
+
+    $static += array_map(
+      function($addressField) {
+        $field = [
+          'label' => $addressField['label'],
+          'type' => $addressField['input_type'],
+        ];
+        if (!empty($addressField['options'])) {
+          $field['options'] = $addressField['options'];
+        }
+        return $field;
+      },
+      \Civi\Api4\Address::getFields()
+        ->setLoadOptions(TRUE)
+        ->addWhere('name', 'IN', CRM_Xcm_Tools::getAddressFields())
+        ->addSelect('name', 'label', 'options', 'input_type')
+        ->execute()
+        ->indexBy('name')
+        ->getArrayCopy()
     );
 
     $dynamic = array();
