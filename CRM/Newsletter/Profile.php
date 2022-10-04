@@ -220,6 +220,7 @@ class CRM_Newsletter_Profile {
     $individual_prefix_values = civicrm_api3('OptionValue', 'get', array(
       'return' => array("value", "label"),
       'option_group_id' => "individual_prefix",
+      'is_active' => 1,
     ));
     $individual_prefix_options = array();
     foreach ($individual_prefix_values['values'] as $individual_prefix_value) {
