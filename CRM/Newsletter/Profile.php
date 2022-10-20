@@ -252,6 +252,7 @@ class CRM_Newsletter_Profile {
         'label' => E::ts('Phone number'),
         'type' => 'Text',
       ),
+      // TODO: phone2 is only available when it is activated in the XCM profile.
       'phone2' => array(
         'label' => E::ts('Phone number 2'),
         'type' => 'Text',
