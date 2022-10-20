@@ -86,6 +86,7 @@ function civicrm_api3_newsletter_subscription_request($params) {
     $mailing_lists = CRM_Newsletter_Utils::getSubscriptionStatus($contact_id, $profile->getName());
 
     // Send an e-mail with the opt-in template.
+    // TODO: Shouldn't this be the "info" template?
     $optin_url = $profile->getAttribute('optin_url');
     $optin_url = str_replace(
       '[CONTACT_HASH]',
