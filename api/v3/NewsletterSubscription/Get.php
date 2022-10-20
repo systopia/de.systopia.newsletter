@@ -47,6 +47,9 @@ function civicrm_api3_newsletter_subscription_get($params) {
     }
     foreach (array_keys($profile->getAttribute('contact_fields')) as $contact_field) {
       $contact_params['return'][] = $contact_field;
+      if ($contact_field == 'country_id') {
+        $contact_params['return'][] = 'country';
+      }
     }
 
     $contact = civicrm_api3('Contact', 'getsingle', $contact_params);
