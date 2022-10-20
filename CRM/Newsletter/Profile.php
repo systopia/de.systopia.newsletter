@@ -232,6 +232,10 @@ class CRM_Newsletter_Profile {
         'type' => 'Select',
         'options' => $individual_prefix_options,
       ),
+      'formal_title' => array(
+        'label' => E::ts('Formal title'),
+        'type' => 'Text',
+      ),
       'first_name' => array(
         'label' => E::ts('First name'),
         'type' => 'Text',
