@@ -114,3 +114,11 @@ array, containing the group title (`title`), the translated subscription status
 iterate through the `$mailing_lists` variable in your e-mail templates and
 output the contact's subscription status and even display them differently
 depending on the raw status, which will not change with localization.
+
+!!!note
+    Make sure, when testing, that outbound e-mail is not deactivated in
+    CivICRM's settings, as this will cause all attempts to send e-mail be
+    redirected to the *Outbound E-Mail* administration page, which will
+    terminate the API request and return either the administration page or the
+    CMS's *Access denied* page when the user does not (and should not) have
+    administration permissions.
