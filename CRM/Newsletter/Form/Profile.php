@@ -170,7 +170,11 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       $contact_field_names[$contact_field_name]['description'] = 'contact_field_' . $contact_field_name . '_description';
 
       // Add fields for overriding option value labels.
-      if (!empty($contact_field['options'])) {
+      if (!empty($contact_field['options']) && !in_array($contact_field_name, [
+          'country_id',
+          'state_province_id',
+          'county_id',
+        ])) {
         foreach ($contact_field['options'] as $option_value => $option_label) {
           $this->add(
             'text',
