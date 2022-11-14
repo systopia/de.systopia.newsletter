@@ -47,12 +47,32 @@ function civicrm_api3_newsletter_subscription_get($params) {
     }
     foreach (array_keys($profile->getAttribute('contact_fields')) as $contact_field) {
       $contact_params['return'][] = $contact_field;
+      if ($contact_field == 'country_id') {
+        $contact_params['return'][] = 'country';
+      }
     }
 
     $contact = civicrm_api3('Contact', 'getsingle', $contact_params);
     if (!empty($contact['is_error'])) {
       throw new CiviCRM_API3_Exception(E::ts('Could not retrieve contact for given hash.'), 'api_error');
     }
+    // Add secondary phone number if used.
+    if (in_array('phone2', $contact_params['return'])) {
+      $secondary_phone_type = CRM_Xcm_Configuration::getConfigProfile($profile->getAttribute('xcm_profile'))
+        ->secondaryPhoneType();
+      if (!empty($secondary_phone_type)) {
+        $secondary_phone = \Civi\Api4\Phone::get(false)
+          ->addSelect('phone')
+          ->addWhere('contact_id', '=', $contact['id'])
+          ->addWhere('phone_type_id', '=', $secondary_phone_type)
+          ->execute()
+          ->first();
+        if ($secondary_phone) {
+          $contact['phone2'] = $secondary_phone['phone'];
+        }
+      }
+    }
+
     $contact_id = $contact['id'];
 
     // Get current group memberships for submitted group IDs.

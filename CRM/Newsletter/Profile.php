@@ -228,6 +228,15 @@ class CRM_Newsletter_Profile {
     }
 
     $static = array(
+      'prefix_id' => array(
+        'label' => E::ts('Prefix'),
+        'type' => 'Select',
+        'options' => $individual_prefix_options,
+      ),
+      'formal_title' => array(
+        'label' => E::ts('Formal title'),
+        'type' => 'Text',
+      ),
       'first_name' => array(
         'label' => E::ts('First name'),
         'type' => 'Text',
@@ -240,11 +249,52 @@ class CRM_Newsletter_Profile {
         'label' => E::ts('E-mail address'),
         'type' => 'Text',
       ),
-      'prefix_id' => array(
-        'label' => E::ts('Prefix'),
-        'type' => 'Select',
-        'options' => $individual_prefix_options,
+      'url' => array(
+        'label' => E::ts('Website'),
+        'type' => 'Text',
       ),
+      'phone' => array(
+        'label' => E::ts('Phone number'),
+        'type' => 'Text',
+      ),
+      // TODO: phone2 is only available when it is activated in the XCM profile.
+      'phone2' => array(
+        'label' => E::ts('Phone number 2'),
+        'type' => 'Text',
+      ),
+    );
+
+    $static += array_map(
+      function ($addressField) {
+        $field = [
+          'label' => $addressField['label'],
+          'type' => $addressField['input_type'],
+        ];
+        if (!empty($addressField['options'])) {
+          $field['options'] = $addressField['options'];
+        }
+        return $field;
+      },
+      // Add reordered address fields.
+      array_replace(
+        array_flip([
+          'street_address',
+          'supplemental_address_1',
+          'supplemental_address_2',
+          'supplemental_address_3',
+          'postal_code',
+          'city',
+          'county_id',
+          'state_province_id',
+          'country_id',
+        ]),
+        \Civi\Api4\Address::getFields()
+          ->setLoadOptions(TRUE)
+          ->addWhere('name', 'IN', CRM_Xcm_Tools::getAddressFields())
+          ->addSelect('name', 'label', 'options', 'input_type')
+          ->execute()
+          ->indexBy('name')
+          ->getArrayCopy())
     );
 
     $dynamic = array();
