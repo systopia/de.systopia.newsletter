@@ -39,7 +39,10 @@ function civicrm_api3_newsletter_profile_getsingle($params) {
     foreach ($profile_data['contact_fields'] as $field_name => &$field) {
       $field['type'] = $contact_fields[$field_name]['type'];
       if (!empty($contact_fields[$field_name]['options'])) {
-        $field['options'] = $contact_fields[$field_name]['options'];
+        $field['options'] = array_replace(
+          $contact_fields[$field_name]['options'],
+            $field['options'] ?? []
+        );
       }
     }
 

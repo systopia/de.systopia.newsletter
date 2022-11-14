@@ -168,6 +168,18 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
         E::ts('Field description')
       );
       $contact_field_names[$contact_field_name]['description'] = 'contact_field_' . $contact_field_name . '_description';
+
+      // Add fields for overriding option value labels.
+      if (!empty($contact_field['options'])) {
+        foreach ($contact_field['options'] as $option_value => $option_label) {
+          $this->add(
+            'text',
+            'contact_field_' . $contact_field_name . '_option_' . $option_value,
+            E::ts('Label for option %1', [1 => $option_label])
+          );
+          $contact_field_names[$contact_field_name]['options'][$option_value] = 'contact_field_' . $contact_field_name . '_option_' . $option_value;
+        }
+      }
     }
     $this->assign('contact_field_names', $contact_field_names);
 
@@ -558,6 +570,11 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
             }
             $defaults['contact_field_' . $contact_field . '_label'] = $values['label'];
             $defaults['contact_field_' . $contact_field . '_description'] = $values['description'];
+            if (!empty($values['options'])) {
+              foreach ($values['options'] as $option_value => $option_label) {
+                $defaults['contact_field_' . $contact_field . '_option_' . $option_value] = $option_label;
+              }
+            }
           }
         }
         elseif ($element_name == 'mailing_lists') {
@@ -597,6 +614,13 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
               }
               $values['contact_fields'][$contact_field_name]['label'] = $values['contact_field_' . $contact_field_name . '_label'];
               $values['contact_fields'][$contact_field_name]['description'] = $values['contact_field_' . $contact_field_name . '_description'];
+              if (!empty($contact_field['options'])) {
+                foreach ($contact_field['options'] as $option_value => $option_label) {
+                  if ($values['contact_field_' . $contact_field_name . '_option_' . $option_value] !== '') {
+                    $values['contact_fields'][$contact_field_name]['options'][$option_value] = $values['contact_field_' . $contact_field_name . '_option_' . $option_value];
+                  }
+                }
+              }
             }
           }
         }
