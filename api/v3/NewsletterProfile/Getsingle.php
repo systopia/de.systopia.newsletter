@@ -38,10 +38,12 @@ function civicrm_api3_newsletter_profile_getsingle($params) {
     $contact_fields = CRM_Newsletter_Profile::availableContactFields();
     foreach ($profile_data['contact_fields'] as $field_name => &$field) {
       $field['type'] = $contact_fields[$field_name]['type'];
+
+      // Replace options defined in profile configuration.
       if (!empty($contact_fields[$field_name]['options'])) {
         $field['options'] = array_replace(
           $contact_fields[$field_name]['options'],
-            $field['options'] ?? []
+            array_filter($field['options'], function ($replacement) { return isset($replacement) && $replacement !== ''; }) ?? []
         );
       }
     }
