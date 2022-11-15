@@ -165,6 +165,7 @@ class CRM_Newsletter_Profile {
     return array(
       'xcm_profile',
       'form_title',
+      'language',
       'contact_fields',
       'mailing_lists',
       'mailing_lists_label',
@@ -348,6 +349,7 @@ class CRM_Newsletter_Profile {
     $default_data = array(
       'xcm_profile' => '',
       'form_title' => '',
+      'language' => Civi::settings()->get('lcMessages'),
       'contact_fields' => array(),
       'mailing_lists' => self::getGroups(),
       'mailing_lists_label' => E::ts('Mailing lists'),

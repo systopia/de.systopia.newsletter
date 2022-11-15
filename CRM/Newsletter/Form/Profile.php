@@ -134,6 +134,14 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       FALSE
     );
 
+    $this->add(
+      'select',
+      'language',
+      E::ts('Language'),
+      ['' => E::ts('- Default language -')] + CRM_Core_I18n::uiLanguages(),
+      FALSE
+    );
+
     $contact_fields = CRM_Newsletter_Profile::availableContactFields();
     $contact_field_names = array();
     foreach ($contact_fields as $contact_field_name => $contact_field) {

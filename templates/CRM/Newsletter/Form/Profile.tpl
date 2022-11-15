@@ -44,6 +44,11 @@
           </tr>
 
           <tr class="crm-section">
+            <td class="label">{$form.language.label}</td>
+            <td class="content">{$form.language.html}</td>
+          </tr>
+
+          <tr class="crm-section">
             <td class="label">{$form.optin_url.label}</td>
             <td class="content">
                 {$form.optin_url.html}
