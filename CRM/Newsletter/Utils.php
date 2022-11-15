@@ -89,10 +89,11 @@ class CRM_Newsletter_Utils {
     $mailing_lists = array();
     foreach (reset($subscription['values'])['subscription_status'] as $group_id => $group_status) {
       $group = civicrm_api3('Group', 'getsingle', array(
-        'id' => $group_id
+        'id' => $group_id,
+        'return' => ['id', 'title', 'frontend_title']
       ));
       $mailing_lists[$group_id] = array(
-        'title' => $group['title'],
+        'title' => $group['frontend_title'] ?: $group['title'],
         'status' => E::ts($group_status),
         'status_raw' => $group_status,
       );
@@ -118,12 +119,12 @@ class CRM_Newsletter_Utils {
       // Retrieve group information.
       $group = civicrm_api3('Group', 'getsingle', array(
         'id' => $group_id,
-        'return' => array('children', 'description', 'name', 'parents'),
+        'return' => array('children', 'description', 'name', 'title', 'frontend_title', 'parents'),
       ));
 
       // Compose the group item.
       $group_tree_item = array(
-        'title' => $group_title,
+        'title' => $group['frontend_title'] ?: $group['title'],
         'description' => !empty($group['description']) ? $group['description'] : '',
         'name' => !empty($group['name']) ? $group['name'] : '',
       );
