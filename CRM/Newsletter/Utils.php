@@ -119,13 +119,13 @@ class CRM_Newsletter_Utils {
       // Retrieve group information.
       $group = civicrm_api3('Group', 'getsingle', array(
         'id' => $group_id,
-        'return' => array('children', 'description', 'name', 'title', 'frontend_title', 'parents'),
+        'return' => array('children', 'description', 'frontend_description', 'name', 'title', 'frontend_title', 'parents'),
       ));
 
       // Compose the group item.
       $group_tree_item = array(
         'title' => $group['frontend_title'] ?: $group['title'],
-        'description' => !empty($group['description']) ? $group['description'] : '',
+        'description' => $group['frontend_description'] ?: $group['description'] ?: '',
         'name' => !empty($group['name']) ? $group['name'] : '',
       );
       // Add children.
