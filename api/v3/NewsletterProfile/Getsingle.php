@@ -34,12 +34,23 @@ function civicrm_api3_newsletter_profile_getsingle($params) {
     $profile_name = $profile->getName();
     $profile_data = $profile->getData();
 
+    // Set locale to profile language for translated option values.
+    $current_locale = CRM_Core_I18n::getLocale();
+    $profile_locale = $profile_data['language'] ?: Civi::settings()->get('lcMessages');
+    CRM_Core_Session::singleton()->set('lcMessages', $profile_locale);
+    CRM_Core_I18n::singleton()->setLocale($profile_locale);
+
     // Add contact field type and options, if applicable.
     $contact_fields = CRM_Newsletter_Profile::availableContactFields();
     foreach ($profile_data['contact_fields'] as $field_name => &$field) {
       $field['type'] = $contact_fields[$field_name]['type'];
+
+      // Replace options defined in profile configuration.
       if (!empty($contact_fields[$field_name]['options'])) {
-        $field['options'] = $contact_fields[$field_name]['options'];
+        $field['options'] = array_replace(
+          $contact_fields[$field_name]['options'],
+            array_filter($field['options'], function ($replacement) { return isset($replacement) && $replacement !== ''; }) ?? []
+        );
       }
     }
 
@@ -55,9 +66,18 @@ function civicrm_api3_newsletter_profile_getsingle($params) {
     $profile_data['mailing_lists_tree'] = $group_tree;
 
     $return = array($profile_name => $profile_data);
+
+    // Reset locale to original language.
+    CRM_Core_Session::singleton()->set('lcMessages', $current_locale);
+    CRM_Core_I18n::singleton()->setLocale($current_locale);
+
     return civicrm_api3_create_success($return);
   }
   catch (\Exception $exception) {
+    // Reset locale to original language.
+    CRM_Core_Session::singleton()->set('lcMessages', $current_locale);
+    CRM_Core_I18n::singleton()->setLocale($current_locale);
+
     return civicrm_api3_create_error($exception->getMessage(), array('error_code' => $exception->getCode()));
   }
 }

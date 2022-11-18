@@ -44,6 +44,11 @@
           </tr>
 
           <tr class="crm-section">
+            <td class="label">{$form.language.label}</td>
+            <td class="content">{$form.language.html}</td>
+          </tr>
+
+          <tr class="crm-section">
             <td class="label">{$form.optin_url.label}</td>
             <td class="content">
                 {$form.optin_url.html}
@@ -158,6 +163,23 @@
                       <td class="label">{$form.$field_name_description.label}</td>
                       <td class="content">{$form.$field_name_description.html}</td>
                     </tr>
+
+                    {if !empty($contact_field.options)}
+                      <tr class="crm-section">
+                        <td class="label">{ts}Replace option labels{/ts}</td>
+                        <td>
+                          <table class="form-layout-compressed">
+                              {foreach from=$contact_field.options item=field_name_option}
+                                <tr class="crm-section">
+                                  <td class="label">{$form.$field_name_option.label}</td>
+                                  <td class="content">{$form.$field_name_option.html}</td>
+                                </tr>
+                              {/foreach}
+                          </table>
+                        </td>
+                      </tr>
+                    {/if}
+
                   </table>
                 </td>
 
