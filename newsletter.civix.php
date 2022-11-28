@@ -147,7 +147,7 @@ function _newsletter_civix_civicrm_postInstall() {
  *
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_uninstall
  */
-function _newsletter_civix_civicrm_uninstall() {
+function _newsletter_civix_civicrm_uninstall(): void {
   _newsletter_civix_civicrm_config();
   if ($upgrader = _newsletter_civix_upgrader()) {
     $upgrader->onUninstall();
@@ -159,7 +159,7 @@ function _newsletter_civix_civicrm_uninstall() {
  *
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_enable
  */
-function _newsletter_civix_civicrm_enable() {
+function _newsletter_civix_civicrm_enable(): void {
   _newsletter_civix_civicrm_config();
   if ($upgrader = _newsletter_civix_upgrader()) {
     if (is_callable([$upgrader, 'onEnable'])) {
@@ -175,7 +175,7 @@ function _newsletter_civix_civicrm_enable() {
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_disable
  * @return mixed
  */
-function _newsletter_civix_civicrm_disable() {
+function _newsletter_civix_civicrm_disable(): void {
   _newsletter_civix_civicrm_config();
   if ($upgrader = _newsletter_civix_upgrader()) {
     if (is_callable([$upgrader, 'onDisable'])) {
