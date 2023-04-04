@@ -465,7 +465,7 @@ class CRM_Newsletter_Profile {
           'return'         => 'id,title,frontend_title'
         ));
         foreach ($query['values'] as $group) {
-          $groups[$group['id']] = $group['frontend_title'] ?: $group['title'];
+          $groups[$group['id']] = !empty($group['frontend_title']) ? $group['frontend_title'] : $group['title'];
         }
       }
     }

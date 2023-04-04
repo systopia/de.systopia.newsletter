@@ -93,7 +93,7 @@ class CRM_Newsletter_Utils {
         'return' => ['id', 'title', 'frontend_title']
       ));
       $mailing_lists[$group_id] = array(
-        'title' => $group['frontend_title'] ?: $group['title'],
+        'title' => !empty($group['frontend_title']) ? $group['frontend_title'] : $group['title'],
         'status' => E::ts($group_status),
         'status_raw' => $group_status,
       );
@@ -124,8 +124,8 @@ class CRM_Newsletter_Utils {
 
       // Compose the group item.
       $group_tree_item = array(
-        'title' => $group['frontend_title'] ?: $group['title'],
-        'description' => $group['frontend_description'] ?: $group['description'] ?: '',
+        'title' => !empty($group['frontend_title']) ? $group['frontend_title'] : $group['title'],
+        'description' => !empty($group['frontend_description']) ? $group['frontend_description'] : (!empty($group['description']) ? $group['description'] : ''),
         'name' => !empty($group['name']) ? $group['name'] : '',
       );
       // Add children.
