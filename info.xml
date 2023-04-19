@@ -30,9 +30,6 @@
     for external newsletter management on a Drupal website, but may be used
     without it. It depends on the de.systopia.xcm extension version 1.9+.
   </comments>
-  <requires>
-    <ext>de.systopia.xcm</ext>
-  </requires>
   <civix>
     <namespace>CRM/Newsletter</namespace>
     <format>22.10.0</format>
