@@ -49,7 +49,7 @@ function civicrm_api3_newsletter_profile_getsingle($params) {
       if (!empty($contact_fields[$field_name]['options'])) {
         $field['options'] = array_replace(
           $contact_fields[$field_name]['options'],
-            array_filter($field['options'], function ($replacement) { return isset($replacement) && $replacement !== ''; }) ?? []
+          array_filter($field['options'] ?? [], function ($replacement) { return isset($replacement) && $replacement !== ''; })
         );
       }
     }
