@@ -202,7 +202,7 @@ class CRM_Newsletter_Utils {
    *
    * @throws \Exception
    */
-  public static function send_configured_mail($contact, $profile, $type) {
+  public static function send_configured_mail($contact, string $contact_checksum, $profile, $type) {
     // Prepare token (Smarty variables) values.
     switch ($type) {
       case 'unsubscribe_all':
@@ -229,8 +229,8 @@ class CRM_Newsletter_Utils {
     // Construct opt-in URL.
     $optin_url = $profile->getAttribute('optin_url');
     $optin_url = str_replace(
-      '[CONTACT_HASH]',
-      $contact['hash'],
+      '[CONTACT_CHECKSUM]',
+      $contact_checksum,
       $optin_url
     );
     $optin_url = str_replace(
@@ -242,8 +242,8 @@ class CRM_Newsletter_Utils {
     // Construct preferences URL.
     $preferences_url = $profile->getAttribute('preferences_url');
     $preferences_url = str_replace(
-      '[CONTACT_HASH]',
-      $contact['hash'],
+      '[CONTACT_CHECKSUM]',
+      $contact_checksum,
       $preferences_url
     );
     $preferences_url = str_replace(

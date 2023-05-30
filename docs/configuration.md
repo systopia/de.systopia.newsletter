@@ -5,8 +5,8 @@ within the *System settings* section (civicrm/admin/settings/newsletter). This
 page offers you to *Configure profiles*.
 
 !!!tip
-    Also make sure that you install and configure the CiviCRM Extension 
-    "Extended Contact Matcher" (de.systopia.xcm) to define yor contact matching 
+    Also make sure that you install and configure the CiviCRM Extension
+    "Extended Contact Matcher" (de.systopia.xcm) to define yor contact matching
     behaviour. Please refer to the extension's
     [documentation](https://docs.civicrm.org/xcm/en/latest/).
 
@@ -15,7 +15,7 @@ page offers you to *Configure profiles*.
 Profiles define properties of newsletter subscription and accompanying
 preferences forms for users to manage their subscriptions. There will always be
 a *default* profile - at the very least you should configure this default
-profile or create a new one. 
+profile or create a new one.
 
 ![Profile Configuration](img/profile_configuration.png?raw=true "Profile Configuration")
 
@@ -29,12 +29,12 @@ in order to navigate your recipients to the correct personal preference page.
 - *Submit button label*: The form's submit button will have this as a caption.
 - *Preferences URL*: This must be set to the URL of the form for users to manage
   their subscription preferences and must include placeholders for the profile
-  name `[PROFILE]` and a hash string identifying the CiviCRM contact
-  `[CONTACT_HASH]`. The URL will be used for links in e-mails generated and sent
-  by the extension to inform users about their subscription and how to manage
-  them.
+  name `[PROFILE]` and a checksum string identifying the CiviCRM contact
+  `[CONTACT_CHECKSUM]`. The URL will be used for links in e-mails generated and
+  sent by the extension to inform users about their subscription and how to
+  manage them.
 - *Unsubscribe to all Mailingslists button*: If you choose to provide that
-  button, contacts can unsubcribe from all mailing lists in your system.
+  button, contacts can unsubscribe from all mailing lists in your system.
 
 ### Mailing lists
 

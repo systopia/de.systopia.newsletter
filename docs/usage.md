@@ -9,7 +9,7 @@ unsubscribing, you should not use CiviCRM default tokens when sending a mailing
 but the custom token provided by the extension that links users to their
 personal preferences page. The token for the default profile is
 `{newsletter.preferences_url_default}` but you will be able to choose the token
-for the profile you would like to link to from CiviCRM's token menu.  
+for the profile you would like to link to from CiviCRM's token menu.
 
 ![Token Menu](img/token_menu.png?raw=true "Token Menu")
 
@@ -28,7 +28,7 @@ confirming their subscription and possibly changing them at a later stage.
 - In order to change their preferences, the user needs to use a personalized
   link. That link can be included in CiviCRM mailings via the tokens provided by
   the extension or by your external system. The link needs to contain the
-  contact's hash and the identifier for the profile being used.
+  contact's checksum and the identifier for the profile being used.
 
 ### Subscription stage
 
@@ -56,7 +56,7 @@ stage.
 
 When generating this form, the system issues a request to the API action
 `NewsletterSubscription.Get` that this extension provides. Taking the profile
-name and the contact hash, this action retrieves the subscription status for
+name and the contact checksum, this action retrieves the subscription status for
 all mailing lists and the contact data for all contact fields defined within the
 given profile, and sends it to the system which, in turn, creates the
 preferences form based on that information.
@@ -94,8 +94,8 @@ When generating this form, the system issues a request to the API action
 within the profile, but no mailing list options. Instead of presenting a form
 for the user to input their contact data again, a link may be provided to
 request the API to re-send the confirmation e-mail (containing a link to the
-preferences page) by providing the contact hash and the contact ID (which is to
-be retrieved using the contact hash).
+preferences page) by providing the contact checksum and the contact ID (which is
+to be retrieved using the contact checksum).
 
 The form input is sent in to the `NewsletterSubscription.Request` API action,
 which will generate and send the information e-mail to the contact as in the

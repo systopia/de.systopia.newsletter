@@ -38,6 +38,7 @@
     <mixin>menu-xml@1.0.0</mixin>
   </mixins>
   <classloader>
+    <psr4 prefix="Civi\" path="Civi"/>
     <psr0 prefix="CRM_" path="."/>
   </classloader>
 </extension>

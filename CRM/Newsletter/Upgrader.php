@@ -43,4 +43,25 @@ class CRM_Newsletter_Upgrader extends CRM_Newsletter_Upgrader_Base {
     return TRUE;
   }
 
+  /**
+   * Replace "[CONTACT_HASH]" with "[CONTACT_CHECKSUM"] in URLs.
+   */
+  public function upgrade_5101(): bool {
+    foreach (CRM_Newsletter_Profile::getProfiles() as $profile) {
+      foreach(['optin_url', 'preferences_url', 'request_link_url'] as $attribute_name) {
+        $profile->setAttribute(
+          $attribute_name,
+          str_replace(
+            '[CONTACT_HASH]',
+            '[CONTACT_CHECKSUM]',
+            $profile->getAttribute($attribute_name) ?? ''
+          )
+        );
+        $profile->saveProfile();
+      }
+    }
+
+    return TRUE;
+  }
+
 }

@@ -53,7 +53,7 @@
             <td class="content">
                 {$form.optin_url.html}
               <div class="description">
-                  {ts}A URL to the opt-in page. Must include the tokens <code>[PROFILE]</code> and <code>[CONTACT_HASH]</code> which will be replaced with the actual contact hash for identifying the contact.{/ts}
+                  {ts}A URL to the opt-in page. Must include the tokens <code>[PROFILE]</code> and <code>[CONTACT_CHECKSUM]</code> which will be replaced with the actual contact checksum for identifying the contact.{/ts}
               </div>
             </td>
           </tr>
@@ -63,7 +63,7 @@
             <td class="content">
                 {$form.preferences_url.html}
               <div class="description">
-                  {ts}A URL to the preferences form. Must include the tokens <code>[PROFILE]</code> and <code>[CONTACT_HASH]</code> which will be replaced with the actual contact hash for identifying the contact.{/ts}
+                  {ts}A URL to the preferences form. Must include the tokens <code>[PROFILE]</code> and <code>[CONTACT_CHECKSUM]</code> which will be replaced with the actual contact checksum for identifying the contact.{/ts}
               </div>
             </td>
           </tr>
@@ -73,7 +73,7 @@
             <td class="content">
                 {$form.request_link_url.html}
               <div class="description">
-                  {ts}A URL to the Request link form. Must include the token <code>[PROFILE]</code> and may include the token <code>[CONTACT_HASH]</code> which will be replaced with the actual contact hash for identifying the contact.{/ts}
+                  {ts}A URL to the Request link form. Must include the token <code>[PROFILE]</code> and may include the token <code>[CONTACT_CHECKSUM]</code> which will be replaced with the actual contact checksum for identifying the contact.{/ts}
               </div>
             </td>
           </tr>
