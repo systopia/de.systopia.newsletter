@@ -4,8 +4,7 @@ Sending Newsletters with CiviCRM is a common task and there is some useful
 functionality in core for that purpose, including Double-Opt-In e-mails,
 multiple newsletter groups, etc.
 
-However, when offering a lot of mailing lists, users should have means for
-managing their subscriptions. Also, CiviCRM forms may not be suitable for every
+However, when offering multiple mailing lists, subscribers should have a comfortable way to manage their preferences. Also, CiviCRM forms may not be suitable for every
 scenario.
 
 Instead of creating external forms and custom API actions for each project, this
@@ -27,3 +26,5 @@ This extension is supposed to work with the
 [civicrm_newsletter](https://github.com/systopia/civicrm_newsletter) Drupal
 module for external newsletter management on a Drupal website, but may be used
 without it, i.e. anything that implements the extension's API.
+
+Read the docs [here](https://docs.civicrm.org/newsletter/en/latest/).
