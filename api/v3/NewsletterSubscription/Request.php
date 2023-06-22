@@ -13,6 +13,7 @@
 | written permission from the original author(s).             |
 +-------------------------------------------------------------*/
 
+use Civi\Newsletter\ContactChecksumService;
 use CRM_Newsletter_ExtensionUtil as E;
 
 /**
@@ -31,19 +32,24 @@ function civicrm_api3_newsletter_subscription_request($params) {
       );
     }
 
-    // If a contact hash is given, do not require contact fields.
-    if (!empty($params['contact_hash'])) {
-      // Validate contact ID and hash. This throws exceptions for invalid hashes.
-      $contact = civicrm_api3('Contact', 'getsingle', array(
-        'hash' => $params['contact_hash'],
-      ));
-      // Validate contact hash against given contact ID (in case a hash for an
-      // existing contact was given but does not match the given contact ID).
-      if ($contact['id'] != $params['contact_id']) {
-        throw new CiviCRM_API3_Exception(E::ts('Invalid contact hash for given contact ID.'), 'api_error');
+    // If a contact checksum is given, do not require contact fields.
+    if (isset($params['contact_checksum']) || !empty($params['contact_hash'])) {
+      // Resolve checksum and compare it with the given contact ID (in case a
+      // checksum for an existing contact was given, but does not match the
+      // given contact ID).
+      $contact_id = ContactChecksumService::getInstance()->resolveChecksum(
+        $params['contact_checksum'] ?? $params['contact_hash']
+      );
+      if (NULL === $contact_id && !empty($params['contact_hash'])) {
+        // @todo: Remove code used for backward compatibility.
+        $contact_id = civicrm_api3('Contact', 'getsingle', array(
+          'return' => ['id'],
+          'hash' => $params['contact_hash'],
+        ))['id'] ?? NULL;
       }
-
-      $contact_id = $contact['id'];
+      if (NULL === $contact_id || $contact_id != $params['contact_id']) {
+        throw new CiviCRM_API3_Exception(E::ts('Invalid contact checksum for given contact ID.'), 'api_error');
+      }
     }
     else {
       $contact_fields = array_intersect_key($params, $profile->getAttribute('contact_fields'));
@@ -78,19 +84,15 @@ function civicrm_api3_newsletter_subscription_request($params) {
     $contact = civicrm_api3('Contact', 'getsingle', array(
       'id' => $contact_id,
     ));
-    $contact_hash = civicrm_api3('Contact', 'getsingle', array(
-      'id' => $contact_id,
-      'return' => array('hash')
-    ));
-    $contact['hash'] = $contact_hash['hash'];
+    $contact_checksum = ContactChecksumService::getInstance()->generateChecksum($contact_id);
     $mailing_lists = CRM_Newsletter_Utils::getSubscriptionStatus($contact_id, $profile->getName());
 
     // Send an e-mail with the opt-in template.
     // TODO: Shouldn't this be the "info" template?
     $optin_url = $profile->getAttribute('optin_url');
     $optin_url = str_replace(
-      '[CONTACT_HASH]',
-      $contact['hash'],
+      '[CONTACT_CHECKSUM]',
+      $contact_checksum,
       $optin_url
     );
     $optin_url = str_replace(
@@ -100,8 +102,8 @@ function civicrm_api3_newsletter_subscription_request($params) {
     );
     $preferences_url = $profile->getAttribute('preferences_url');
     $preferences_url = str_replace(
-      '[CONTACT_HASH]',
-      $contact['hash'],
+      '[CONTACT_CHECKSUM]',
+      $contact_checksum,
       $preferences_url
     );
     $preferences_url = str_replace(
@@ -162,12 +164,19 @@ function _civicrm_api3_newsletter_subscription_request_spec(&$params) {
     'api.default' => 'default',
     'description' => 'The Newsletter profile name. If omitted, the default profile will be used.',
   );
+  $params['contact_checksum'] = array(
+    'name' => 'contact_checksum',
+    'title' => 'Contact checksum',
+    'type' => CRM_Utils_Type::T_STRING,
+    'api.required' => 0,
+    'description' => 'Generated checksum of the contact to request a link for.',
+  );
   $params['contact_hash'] = array(
     'name' => 'contact_hash',
     'title' => 'Contact hash',
     'type' => CRM_Utils_Type::T_STRING,
     'api.required' => 0,
-    'description' => 'The CiviCRM hash of the contact to request a link for.',
+    'description' => 'Generated checksum of the contact to request a link for. (Deprecated: Use contact_checksum instead.)',
   );
   $params['contact_id'] = array(
     'name' => 'contact_id',

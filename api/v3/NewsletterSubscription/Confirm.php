@@ -13,6 +13,7 @@
 | written permission from the original author(s).             |
 +-------------------------------------------------------------*/
 
+use Civi\Newsletter\ContactChecksumService;
 use CRM_Newsletter_ExtensionUtil as E;
 
 /**
@@ -31,17 +32,29 @@ function civicrm_api3_newsletter_subscription_confirm($params) {
       );
     }
 
-    // Validate contact ID and hash. This throws exceptions for invalid hashes.
-    $contact = civicrm_api3('Contact', 'getsingle', array(
-      'hash' => $params['contact_hash'],
-    ));
-    // Validate contact hash against given contact ID (in case a hash for an
-    // existing contact was given but does not match the given contact ID).
-    if ($contact['id'] != $params['contact_id']) {
-      throw new CiviCRM_API3_Exception(E::ts('Invalid contact hash for given contact ID.'), 'api_error');
+    $contact_checksum = $params['contact_checksum'] ?? $params['contact_hash'] ?? NULL;
+    if (NULL === $contact_checksum) {
+      throw new CiviCRM_API3_Exception(E::ts('Contact checksum is missing.'), 'api_error');
     }
 
-    $contact_id = $contact['id'];
+    // Resolve checksum and compare it with the given contact ID (in case a
+    // checksum for an existing contact was given, but does not match the given
+    // contact ID).
+    $contact_id = ContactChecksumService::getInstance()->resolveChecksum($contact_checksum);
+    if (NULL === $contact_id && !empty($params['contact_hash'])) {
+      // @todo: Remove code used for backward compatibility.
+      $contact_id = civicrm_api3('Contact', 'getsingle', array(
+        'return' => ['id'],
+        'hash' => $params['contact_hash'],
+      ))['id'] ?? NULL;
+    }
+    if (NULL === $contact_id || $contact_id != $params['contact_id']) {
+      throw new CiviCRM_API3_Exception(E::ts('Invalid contact checksum for given contact ID.'), 'api_error');
+    }
+
+    $contact = civicrm_api3('Contact', 'getsingle', array(
+      'id' => $contact_id,
+    ));
 
     $allowed_mailing_lists = array_keys($profile->getAttribute('mailing_lists'));
     $current_mailing_lists = array();
@@ -122,6 +135,7 @@ function civicrm_api3_newsletter_subscription_confirm($params) {
     if (!empty($email_template)) {
       CRM_Newsletter_Utils::send_configured_mail(
         $contact,
+        $contact_checksum,
         $profile,
         $email_template
       );
@@ -158,12 +172,22 @@ function _civicrm_api3_newsletter_subscription_confirm_spec(&$params) {
     'description' => 'The CiviCRM ID of the contact to confirm newsletter subscriptions for.',
   );
 
+  $params['contact_checksum'] = array(
+    'name' => 'contact_checksum',
+    'title' => 'Contact checksum',
+    'type' => CRM_Utils_Type::T_STRING,
+    // @todo: Change to 1 when contact_hash is removed.
+    'api.required' => 0,
+    'description' => 'Generated checksum of the contact to confirm subscriptions for.',
+  );
+
   $params['contact_hash'] = array(
     'name' => 'contact_hash',
     'title' => 'Contact hash',
     'type' => CRM_Utils_Type::T_STRING,
-    'api.required' => 1,
-    'description' => 'The CiviCRM hash of the contact to confirm newsletter subscriptions for.',
+    'api.required' => 0,
+    'deprecated' => TRUE,
+    'description' => 'Generated checksum of the contact to confirm subscriptions for. (Deprecated: Use contact_checksum instead.)',
   );
 
   $params['mailing_lists'] = array(

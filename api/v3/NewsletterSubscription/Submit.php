@@ -13,6 +13,7 @@
 | written permission from the original author(s).             |
 +-------------------------------------------------------------*/
 
+use Civi\Newsletter\ContactChecksumService;
 use CRM_Newsletter_ExtensionUtil as E;
 
 /**
@@ -62,11 +63,7 @@ function civicrm_api3_newsletter_subscription_submit($params) {
     $contact = civicrm_api3('Contact', 'getsingle', array(
       'id' => $contact_id,
     ));
-    $contact_hash = civicrm_api3('Contact', 'getsingle', array(
-      'id' => $contact_id,
-      'return' => array('hash')
-    ));
-    $contact['hash'] = $contact_hash['hash'];
+    $contact_checksum = ContactChecksumService::getInstance()->generateChecksum($contact_id);
 
     // Validate submitted group IDs.
     if (!is_array($params['mailing_lists'])) {
@@ -122,6 +119,7 @@ function civicrm_api3_newsletter_subscription_submit($params) {
     // Send an e-mail with the opt-in template.
     CRM_Newsletter_Utils::send_configured_mail(
       $contact,
+      $contact_checksum,
       $profile,
       'optin'
     );

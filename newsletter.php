@@ -1,6 +1,8 @@
 <?php
 
 require_once 'newsletter.civix.php';
+
+use Civi\Newsletter\ContactChecksumService;
 use CRM_Newsletter_ExtensionUtil as E;
 
 /**
@@ -174,12 +176,12 @@ function newsletter_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = 
   if (is_array($cids) && array_key_exists('newsletter', $tokens)) {
     foreach (CRM_Newsletter_Profile::getProfiles() as $profile_name => $profile) {
       foreach ($cids as $cid) {
-        $contact = civicrm_api3('Contact', 'getsingle', array('id' => $cid, 'return' => array('hash')));
+        $contact_checksum = ContactChecksumService::getInstance()->generateChecksum($cid);
 
         $optin_url = $profile->getAttribute('optin_url');
         $optin_url = str_replace(
-          '[CONTACT_HASH]',
-          $contact['hash'],
+          '[CONTACT_CHECKSUM]',
+          $contact_checksum,
           $optin_url
         );
         $optin_url = str_replace(
@@ -191,8 +193,8 @@ function newsletter_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = 
 
         $preferences_url = $profile->getAttribute('preferences_url');
         $preferences_url = str_replace(
-          '[CONTACT_HASH]',
-          $contact['hash'],
+          '[CONTACT_CHECKSUM]',
+          $contact_checksum,
           $preferences_url
         );
         $preferences_url = str_replace(
@@ -204,8 +206,8 @@ function newsletter_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = 
 
         $request_link_url = $profile->getAttribute('request_link_url');
         $request_link_url = str_replace(
-          '[CONTACT_HASH]',
-          $contact['hash'],
+          '[CONTACT_CHECKSUM]',
+          $contact_checksum,
           $request_link_url
         );
         $request_link_url = str_replace(
