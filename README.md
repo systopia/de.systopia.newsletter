@@ -4,8 +4,9 @@ Sending Newsletters with CiviCRM is a common task and there is some useful
 functionality in core for that purpose, including Double-Opt-In e-mails,
 multiple newsletter groups, etc.
 
-However, when offering multiple mailing lists, subscribers should have a comfortable way to manage their preferences. Also, CiviCRM forms may not be suitable for every
-scenario.
+However, when offering multiple mailing lists, subscribers should have a
+comfortable way to manage their preferences. Also, CiviCRM forms may not be
+suitable for every scenario.
 
 Instead of creating external forms and custom API actions for each project, this
 extension offers configurable newsletter form profiles, along with API actions
