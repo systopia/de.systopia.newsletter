@@ -118,6 +118,6 @@ available, named
 It provides all three forms (subscription, preferences, request link) and was
 developed in tandem with this extension.
 
-It is dependent on the [CiviMRF](https://github.com/CiviMRF/cmrf_core) library
+It is dependent on the [CiviMRF](https://drupal.org/project/cmrf_core) library
 module for making standardised requests to any CiviCRM REST API over the web or
 locally (when running CiviCRM and the Drupal Website in the same installation).
