@@ -7,7 +7,7 @@
     <!-- TODO: Use separate permission. -->
     <access_arguments>administer CiviCRM</access_arguments>
     <desc>Configure the Advanced Newsletter Management extension</desc>
-    <adminGroup>System Settings</adminGroup>
+    <adminGroup>Communications</adminGroup>
     <icon>admin/option.png</icon>
   </item>
   <item>
