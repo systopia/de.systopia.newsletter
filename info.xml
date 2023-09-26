@@ -20,7 +20,6 @@
   <version>1.0-dev</version>
   <develStage>dev</develStage>
   <compatibility>
-    <ver>4.7</ver>
     <ver>5.0</ver>
   </compatibility>
   <requires>
