@@ -85,6 +85,25 @@ function civicrm_api3_newsletter_subscription_get($params) {
         }
       }
     }
+    // Add tertiary phone number if used.
+    if (
+      method_exists(\CRM_Xcm_Configuration::class, 'tertiaryPhoneType')
+      && in_array('phone3', $contact_params['return'])
+    ) {
+      $tertiary_phone_type = CRM_Xcm_Configuration::getConfigProfile($profile->getAttribute('xcm_profile'))
+        ->tertiaryPhoneType();
+      if (!empty($tertiary_phone_type)) {
+        $tertiary_phone = \Civi\Api4\Phone::get(false)
+          ->addSelect('phone')
+          ->addWhere('contact_id', '=', $contact['id'])
+          ->addWhere('phone_type_id', '=', $tertiary_phone)
+          ->execute()
+          ->first();
+        if ($tertiary_phone) {
+          $contact['phone3'] = $tertiary_phone['phone'];
+        }
+      }
+    }
 
     $contact_id = $contact['id'];
 
