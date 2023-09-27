@@ -326,14 +326,17 @@ class CRM_Newsletter_Profile {
         if (in_array($contact_field['html_type'], array(
           'Multi-Select',
           'CheckBox',
+          'Radio',
           'Select'
         ))) {
-          $option_values = civicrm_api3('OptionValue', 'get', array(
-            'option_group_id' => $contact_field['option_group_id'],
-          ));
-          $dynamic['custom_' . $contact_field['id']]['options'] = array();
-          foreach ($option_values['values'] as $option_value) {
-            $dynamic['custom_' . $contact_field['id']]['options'][$option_value['value']] = $option_value['label'];
+          if (!empty($contact_field['option_group_id'])) {
+            $option_values = civicrm_api3('OptionValue', 'get', array(
+              'option_group_id' => $contact_field['option_group_id'],
+            ));
+            $dynamic['custom_' . $contact_field['id']]['options'] = array();
+            foreach ($option_values['values'] as $option_value) {
+              $dynamic['custom_' . $contact_field['id']]['options'][$option_value['value']] = $option_value['label'];
+            }
           }
         }
       }
