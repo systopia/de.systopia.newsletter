@@ -298,6 +298,15 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
     );
 
     $this->add(
+      'select',
+      'sender_email',
+      E::ts('Sender'),
+      $this->getSenderOptions(),
+      true,
+      ['class' => 'crm-select2 huge']
+    );
+
+    $this->add(
       'text',
       'template_optin_subject',
       E::ts('Subject for opt-in e-mail'),
@@ -675,6 +684,18 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       }
     }
     return static::$_xcm_profiles;
+  }
+
+  /**
+   * Get a list of the available/allowed sender email addresses
+   */
+  protected function getSenderOptions() {
+    $dropdown_list = [];
+    $from_email_addresses = CRM_Core_OptionGroup::values('from_email_address');
+    foreach ($from_email_addresses as $key => $from_email_address) {
+      $dropdown_list[$key] = htmlentities($from_email_address);
+    }
+    return $dropdown_list;
   }
 
 }

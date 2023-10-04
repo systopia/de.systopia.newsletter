@@ -48,20 +48,20 @@ class CRM_Newsletter_Utils {
   /**
    * Returns "From" e-mail addresses configured within CiviCRM.
    *
-   * @param bool $default
-   *   Whether to return only default addresses.
+   * @param CRM_Newsletter_Profile $profile
+   *   The newsletter profile
    *
    * @return string
-   *   The first "From" e-mail address found.
+   *   The "From" e-mail address defined in $profile. If it doesn't exist, the default "From" e-mail address is returned.
    */
-  public static function getFromEmailAddress($default = FALSE) {
-    if ($default) {
-      $condition = ' AND is_default = 1';
+  public static function getFromEmailAddress(CRM_Newsletter_Profile $profile) {
+    $from_addresses = CRM_Core_OptionGroup::values('from_email_address');
+    if (isset($from_addresses[$profile->getAttribute('sender_email')])) {
+      $sender = $from_addresses[$profile->getAttribute('sender_email')];
+    } else {
+      $sender = $from_addresses[CRM_Core_OptionGroup::getDefaultValue('from_email_address')];
     }
-    else {
-      $condition = NULL;
-    }
-    return reset(CRM_Core_OptionGroup::values('from_email_address', NULL, NULL, NULL, $condition));
+    return $sender;
   }
 
   /**
@@ -254,7 +254,7 @@ class CRM_Newsletter_Utils {
 
     // Construct e-mail parameters.
     $mail_params = array(
-      'from' => CRM_Newsletter_Utils::getFromEmailAddress(TRUE),
+      'from' => CRM_Newsletter_Utils::getFromEmailAddress($profile),
       'toName' => $contact['display_name'],
       'toEmail' => $contact['email'],
       'cc' => '',
