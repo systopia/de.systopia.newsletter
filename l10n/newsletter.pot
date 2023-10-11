@@ -1,0 +1,480 @@
+#: ./CRM/Newsletter/Form/Profile.php
+msgid "Delete Advanced Newsletter Management profile <em>%1</em>"
+msgstr ""
+
+#: ./CRM/Newsletter/Form/Profile.php ./templates/CRM/Newsletter/Page/Profiles.tpl
+msgid "Reset"
+msgstr ""
+
+#: ./CRM/Newsletter/Form/Profile.php ./templates/CRM/Newsletter/Page/Profiles.tpl
+msgid "Delete"
+msgstr ""
+
+#: ./CRM/Newsletter/Form/Profile.php
+msgid "Edit Advanced Newsletter Management profile <em>%1</em>"
+msgstr ""
+
+#: ./CRM/Newsletter/Form/Profile.php
+msgid "New Advanced Newsletter Management profile"
+msgstr ""
+
+#: ./CRM/Newsletter/Form/Profile.php ./templates/CRM/Newsletter/Page/Profiles.tpl
+msgid "Profile name"
+msgstr ""
+
+#: ./CRM/Newsletter/Form/Profile.php
+msgid "Contact Matcher (XCM) Profile"
+msgstr ""
+
+#: ./CRM/Newsletter/Form/Profile.php
+msgid "Form title"
+msgstr ""
+
+#: ./CRM/Newsletter/Form/Profile.php
+msgid "Submit button label"
+msgstr ""
+
+#: ./CRM/Newsletter/Form/Profile.php
+msgid "Language"
+msgstr ""
+
+#: ./CRM/Newsletter/Form/Profile.php
+msgid "- Default language -"
+msgstr ""
+
+#: ./CRM/Newsletter/Form/Profile.php
+msgid "Show contact field \"%1\""
+msgstr ""
+
+#: ./CRM/Newsletter/Form/Profile.php
+msgid "Contact field \"%1\" is required"
+msgstr ""
+
+#: ./CRM/Newsletter/Form/Profile.php
+msgid "Field label"
+msgstr ""
+
+#: ./CRM/Newsletter/Form/Profile.php
+msgid "Field description"
+msgstr ""
+
+#: ./CRM/Newsletter/Form/Profile.php
+msgid "Label for option %1"
+msgstr ""
+
+#: ./CRM/Newsletter/Form/Profile.php
+msgid "Label for mailing lists selection"
+msgstr ""
+
+#: ./CRM/Newsletter/Form/Profile.php
+msgid "Description for mailing lists selection"
+msgstr ""
+
+#: ./CRM/Newsletter/Form/Profile.php
+msgid "Available mailing lists"
+msgstr ""
+
+#: ./CRM/Newsletter/Form/Profile.php
+msgid "Provide an unsubscribe to all Mailingslists button"
+msgstr ""
+
+#: ./CRM/Newsletter/Form/Profile.php
+msgid "Activate this if you want to unsubscribe from all groups in all profiles"
+msgstr ""
+
+#: ./CRM/Newsletter/Form/Profile.php
+msgid "Label for unsubscribe selection"
+msgstr ""
+
+#: ./CRM/Newsletter/Form/Profile.php
+msgid "Unsubscribe All Submit button label"
+msgstr ""
+
+#: ./CRM/Newsletter/Form/Profile.php
+msgid "Unsubscribe All Description"
+msgstr ""
+
+#: ./CRM/Newsletter/Form/Profile.php
+msgid "Label for Terms and conditions for public form"
+msgstr ""
+
+#: ./CRM/Newsletter/Form/Profile.php
+msgid "Description for Terms and conditions for public form"
+msgstr ""
+
+#: ./CRM/Newsletter/Form/Profile.php
+msgid "Terms and conditions for public form"
+msgstr ""
+
+#: ./CRM/Newsletter/Form/Profile.php
+msgid "Label for Terms and conditions for preferences form"
+msgstr ""
+
+#: ./CRM/Newsletter/Form/Profile.php
+msgid "Description for Terms and conditions for preferences form"
+msgstr ""
+
+#: ./CRM/Newsletter/Form/Profile.php
+msgid "Terms and conditions for preferences form"
+msgstr ""
+
+#: ./CRM/Newsletter/Form/Profile.php
+msgid "Subject for opt-in e-mail"
+msgstr ""
+
+#: ./CRM/Newsletter/Form/Profile.php
+msgid "Template for opt-in e-mail"
+msgstr ""
+
+#: ./CRM/Newsletter/Form/Profile.php
+msgid "Template for opt-in e-mail (HTML)"
+msgstr ""
+
+#: ./CRM/Newsletter/Form/Profile.php
+msgid "Subject for info e-mail"
+msgstr ""
+
+#: ./CRM/Newsletter/Form/Profile.php
+msgid "Template for info e-mail"
+msgstr ""
+
+#: ./CRM/Newsletter/Form/Profile.php
+msgid "Template for info e-mail (HTML)"
+msgstr ""
+
+#: ./CRM/Newsletter/Form/Profile.php
+msgid "Subject for unsubscribe all e-mail"
+msgstr ""
+
+#: ./CRM/Newsletter/Form/Profile.php
+msgid "Template for unsubscribe all e-mail"
+msgstr ""
+
+#: ./CRM/Newsletter/Form/Profile.php
+msgid "Template for unsubscribe all e-mail (HTML)"
+msgstr ""
+
+#: ./CRM/Newsletter/Form/Profile.php
+msgid "Opt-in URL"
+msgstr ""
+
+#: ./CRM/Newsletter/Form/Profile.php
+msgid "Preferences URL"
+msgstr ""
+
+#: ./CRM/Newsletter/Form/Profile.php
+msgid "Request link URL"
+msgstr ""
+
+#: ./CRM/Newsletter/Form/Profile.php
+msgid "Create GDPR record for new contacts"
+msgstr ""
+
+#: ./CRM/Newsletter/Form/Profile.php
+msgid "Category"
+msgstr ""
+
+#: ./CRM/Newsletter/Form/Profile.php
+msgid "Source"
+msgstr ""
+
+#: ./CRM/Newsletter/Form/Profile.php
+msgid "Type"
+msgstr ""
+
+#: ./CRM/Newsletter/Form/Profile.php
+msgid "Note"
+msgstr ""
+
+#: ./CRM/Newsletter/Form/Profile.php
+msgid "Create GDPR record when unsubscribing"
+msgstr ""
+
+#: ./CRM/Newsletter/Form/Profile.php ./CRM/Newsletter/Form/Settings.php
+msgid "Save"
+msgstr ""
+
+#: ./CRM/Newsletter/Form/Profile.php
+msgid "Only alphanumeric characters and the underscore (_) are allowed for profile names."
+msgstr ""
+
+#: ./CRM/Newsletter/Form/Profile.php
+msgid "At least one contact field must be activated."
+msgstr ""
+
+#: ./CRM/Newsletter/Form/Profile.php
+msgid "Each active field needs a label."
+msgstr ""
+
+#: ./CRM/Newsletter/Form/Profile.php
+msgid "Please enter a valid URL."
+msgstr ""
+
+#: ./CRM/Newsletter/Form/Profile.php
+msgid "Please enter a label for the terms and conditions."
+msgstr ""
+
+#: ./CRM/Newsletter/Form/Profile.php
+msgid "Please activate this if you chose to unsubscribe from all profiles."
+msgstr ""
+
+#: ./CRM/Newsletter/Form/Profile.php
+msgid "&lt;default profile&gt;"
+msgstr ""
+
+#: ./CRM/Newsletter/Page/Configuration.php
+msgid "Advanced Newsletter Management configuration"
+msgstr ""
+
+#: ./CRM/Newsletter/Page/Profiles.php
+msgid "Advanced Newsletter Management profiles"
+msgstr ""
+
+#: ./CRM/Newsletter/Profile.php
+msgid "Prefix"
+msgstr ""
+
+#: ./CRM/Newsletter/Profile.php
+msgid "Formal title"
+msgstr ""
+
+#: ./CRM/Newsletter/Profile.php
+msgid "First name"
+msgstr ""
+
+#: ./CRM/Newsletter/Profile.php
+msgid "Last name"
+msgstr ""
+
+#: ./CRM/Newsletter/Profile.php
+msgid "E-mail address"
+msgstr ""
+
+#: ./CRM/Newsletter/Profile.php
+msgid "Website"
+msgstr ""
+
+#: ./CRM/Newsletter/Profile.php
+msgid "Phone number"
+msgstr ""
+
+#: ./CRM/Newsletter/Profile.php
+msgid "Phone number 2"
+msgstr ""
+
+#: ./CRM/Newsletter/Profile.php
+msgid "Phone number 3"
+msgstr ""
+
+#: ./CRM/Newsletter/Profile.php ./templates/CRM/Newsletter/Form/Profile.tpl
+msgid "Mailing lists"
+msgstr ""
+
+#: ./CRM/Newsletter/Profile.php
+msgid "Unsubscribe"
+msgstr ""
+
+#: ./CRM/Newsletter/Profile.php
+msgid "Your newsletter subscription"
+msgstr ""
+
+#: ./CRM/Newsletter/Profile.php
+msgid "Your newsletter subscription preferences"
+msgstr ""
+
+#: ./CRM/Newsletter/Profile.php
+msgid "Your unsubscription"
+msgstr ""
+
+#: ./CRM/Newsletter/RegisterTokenFlexmailer.php
+msgid "Newsletter Profile Link from de.systopia.newsletter for profile %1"
+msgstr ""
+
+#: ./CRM/Newsletter/Upgrader/Base.php
+msgid "Upgrade %1 to revision %2"
+msgstr ""
+
+#: ./CRM/Newsletter/Utils.php
+msgid "Could not get or create a contact for the given contact data."
+msgstr ""
+
+#: ./CRM/Newsletter/Utils.php
+msgid "Added"
+msgstr ""
+
+#: ./CRM/Newsletter/Utils.php
+msgid "Pending"
+msgstr ""
+
+#: ./CRM/Newsletter/Utils.php
+msgid "Removed"
+msgstr ""
+
+#: ./api/v3/NewsletterProfile/Getsingle.php
+msgid "Advanced Newsletter Management profile not found."
+msgstr ""
+
+#: ./api/v3/NewsletterSubscription/Confirm.php ./api/v3/NewsletterSubscription/Get.php ./api/v3/NewsletterSubscription/Request.php ./api/v3/NewsletterSubscription/Submit.php
+msgid "No profile found with the given name."
+msgstr ""
+
+#: ./api/v3/NewsletterSubscription/Confirm.php
+msgid "Contact checksum is missing."
+msgstr ""
+
+#: ./api/v3/NewsletterSubscription/Confirm.php ./api/v3/NewsletterSubscription/Request.php
+msgid "Invalid contact checksum for given contact ID."
+msgstr ""
+
+#: ./api/v3/NewsletterSubscription/Confirm.php
+msgid "Mandatory key(s) missing from params array: mailing_lists"
+msgstr ""
+
+#: ./api/v3/NewsletterSubscription/Confirm.php ./api/v3/NewsletterSubscription/Submit.php
+msgid "Disallowed group ID(s): %1"
+msgstr ""
+
+#: ./api/v3/NewsletterSubscription/Confirm.php
+msgid "An array of group IDs as keys and the corresponding group status for the given contact as values."
+msgstr ""
+
+#: ./api/v3/NewsletterSubscription/Confirm.php
+msgid "Whether to automatically set all \"Pending\" group memberships to \"Added\"."
+msgstr ""
+
+#: ./api/v3/NewsletterSubscription/Confirm.php
+msgid "Whether to unsubscribe from all group memberships."
+msgstr ""
+
+#: ./api/v3/NewsletterSubscription/Get.php
+msgid "Either the contact ID or the contact checksum is required."
+msgstr ""
+
+#: ./api/v3/NewsletterSubscription/Get.php
+msgid "Invalid contact checksum."
+msgstr ""
+
+#: ./api/v3/NewsletterSubscription/Get.php
+msgid "Could not retrieve contact for given checksum."
+msgstr ""
+
+#: ./api/v3/NewsletterSubscription/Get.php
+msgid "Error retrieving current group membership."
+msgstr ""
+
+#: ./api/v3/NewsletterSubscription/Submit.php
+msgid "Missing mandatory fields %1"
+msgstr ""
+
+#: ./api/v3/NewsletterSubscription/Submit.php
+msgid "The IDs of the groups to add the contact to."
+msgstr ""
+
+#: ./newsletter.php
+msgid "Advanced Newsletter Management"
+msgstr ""
+
+#: ./newsletter.php
+msgid "Opt-in URL for profile %1"
+msgstr ""
+
+#: ./newsletter.php
+msgid "Preferences URL for profile %1"
+msgstr ""
+
+#: ./newsletter.php
+msgid "Request link URL for profile %1"
+msgstr ""
+
+#: ./templates/CRM/Newsletter/Form/Profile.tpl
+msgid "General settings"
+msgstr ""
+
+#: ./templates/CRM/Newsletter/Form/Profile.tpl
+msgid "A URL to the opt-in page. Must include the tokens %1 and %2 which will be replaced with the actual contact checksum for identifying the contact. e.g.: %3"
+msgstr ""
+
+#: ./templates/CRM/Newsletter/Form/Profile.tpl
+msgid "A URL to the preferences form. Must include the tokens %1 and %2 which will be replaced with the actual contact checksum for identifying the contact. e.g.: %3"
+msgstr ""
+
+#: ./templates/CRM/Newsletter/Form/Profile.tpl
+msgid "A URL to the Request link form. Must include the token  and may include the token %2 which will be replaced with the actual contact checksum for identifying the contact. e.g.: %3"
+msgstr ""
+
+#: ./templates/CRM/Newsletter/Form/Profile.tpl
+msgid "Contact fields"
+msgstr ""
+
+#: ./templates/CRM/Newsletter/Form/Profile.tpl
+msgid "Replace option labels"
+msgstr ""
+
+#: ./templates/CRM/Newsletter/Form/Profile.tpl
+msgid "Terms and conditions"
+msgstr ""
+
+#: ./templates/CRM/Newsletter/Form/Profile.tpl
+msgid "E-mail templates"
+msgstr ""
+
+#: ./templates/CRM/Newsletter/Form/Profile.tpl
+msgid "GDPR Records"
+msgstr ""
+
+#: ./templates/CRM/Newsletter/Form/Profile.tpl
+msgid "Create GDPR records using the de.systopia.gdprx extension."
+msgstr ""
+
+#: ./templates/CRM/Newsletter/Form/Profile.tpl
+msgid "Are you sure you want to reset the default profile?"
+msgstr ""
+
+#: ./templates/CRM/Newsletter/Form/Profile.tpl
+msgid "Are you sure you want to delete the profile <em>%1</em>?"
+msgstr ""
+
+#: ./templates/CRM/Newsletter/Form/Profile.tpl
+msgid "Profile name not given or invalid."
+msgstr ""
+
+#: ./templates/CRM/Newsletter/Page/Configuration.tpl
+msgid "Profiles"
+msgstr ""
+
+#: ./templates/CRM/Newsletter/Page/Configuration.tpl
+msgid "Configure profiles"
+msgstr ""
+
+#: ./templates/CRM/Newsletter/Page/Configuration.tpl
+msgid "Settings"
+msgstr ""
+
+#: ./templates/CRM/Newsletter/Page/Configuration.tpl
+msgid "Configure extension settings"
+msgstr ""
+
+#: ./templates/CRM/Newsletter/Page/Profiles.tpl
+msgid "New profile"
+msgstr ""
+
+#: ./templates/CRM/Newsletter/Page/Profiles.tpl
+msgid "Operations"
+msgstr ""
+
+#: ./templates/CRM/Newsletter/Page/Profiles.tpl
+msgid "Edit profile %1"
+msgstr ""
+
+#: ./templates/CRM/Newsletter/Page/Profiles.tpl
+msgid "Edit"
+msgstr ""
+
+#: ./templates/CRM/Newsletter/Page/Profiles.tpl
+msgid "Reset profile %1"
+msgstr ""
+
+#: ./templates/CRM/Newsletter/Page/Profiles.tpl
+msgid "Delete profile %1"
+msgstr ""
+

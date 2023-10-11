@@ -92,9 +92,14 @@ class CRM_Newsletter_Utils {
         'id' => $group_id,
         'return' => ['id', 'title', 'frontend_title']
       ));
+      $translatedStatus = [
+        'Added' => E::ts('Added'),
+        'Pending' => E::ts('Pending'),
+        'Removed' => E::ts('Removed'),
+      ];
       $mailing_lists[$group_id] = array(
         'title' => !empty($group['frontend_title']) ? $group['frontend_title'] : $group['title'],
-        'status' => E::ts($group_status),
+        'status' => $translatedStatus[$group_status],
         'status_raw' => $group_status,
       );
     }

@@ -149,7 +149,7 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
         'checkbox',
         'contact_field_' . $contact_field_name . '_active',
         E::ts('Show contact field "%1"', array(
-          1 => E::ts($contact_field['label'])
+          1 => $contact_field['label']
         ))
       );
       $contact_field_names[$contact_field_name]['active'] = 'contact_field_' . $contact_field_name . '_active';
@@ -158,7 +158,7 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
         'checkbox',
         'contact_field_' . $contact_field_name . '_required',
         E::ts('Contact field "%1" is required', array(
-          1 => E::ts($contact_field['label'])
+          1 => $contact_field['label']
         ))
       );
       $contact_field_names[$contact_field_name]['required'] = 'contact_field_' . $contact_field_name . '_required';

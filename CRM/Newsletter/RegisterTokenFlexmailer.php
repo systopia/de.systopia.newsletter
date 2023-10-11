@@ -26,8 +26,8 @@ class CRM_Newsletter_RegisterTokenFlexmailer {
   public static function register_tokens() {
     $additional_profiles = [];
     foreach (CRM_Newsletter_Profile::getProfiles() as $profile_name => $profile) {
-      $additional_profiles['newsletter.optin_url_' . $profile_name] = ts("Newsletter Profile Link from de.systopia.newsletter for profile {$profile_name}");
-      $additional_profiles['newsletter.preferences_url_' . $profile_name] = ts("Newsletter Profile Link from de.systopia.newsletter for profile {$profile_name}");
+      $additional_profiles['newsletter.optin_url_' . $profile_name] = E::ts("Newsletter Profile Link from de.systopia.newsletter for profile %1", [1 => $profile_name]);
+      $additional_profiles['newsletter.preferences_url_' . $profile_name] = E::ts("Newsletter Profile Link from de.systopia.newsletter for profile %1", [1 => $profile_name]);
     }
     // get Tokens from Service
     $allowed_flexmailer_tokens = \Civi::service('civi_flexmailer_required_tokens')->getRequiredTokens();
