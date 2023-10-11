@@ -53,7 +53,7 @@
             <td class="content">
                 {$form.optin_url.html}
               <div class="description">
-                  {ts}A URL to the opt-in page. Must include the tokens <code>[PROFILE]</code> and <code>[CONTACT_CHECKSUM]</code> which will be replaced with the actual contact checksum for identifying the contact.{/ts}
+                  {ts 1="<code>[PROFILE]</code>" 2="<code>[CONTACT_CHECKSUM]</code>" 3="<code>https://civi.example.com/civicrm_newsletter/optin/[PROFILE]/[CONTACT_HASH]</code>"}A URL to the opt-in page. Must include the tokens %1 and %2 which will be replaced with the actual contact checksum for identifying the contact. e.g.: %3{/ts}
               </div>
             </td>
           </tr>
@@ -63,7 +63,7 @@
             <td class="content">
                 {$form.preferences_url.html}
               <div class="description">
-                  {ts}A URL to the preferences form. Must include the tokens <code>[PROFILE]</code> and <code>[CONTACT_CHECKSUM]</code> which will be replaced with the actual contact checksum for identifying the contact.{/ts}
+                {ts 1="<code>[PROFILE]</code>" 2="<code>[CONTACT_CHECKSUM]</code>" 3="<code>https://civi.example.com/civicrm_newsletter/preferences/[PROFILE]/[CONTACT_HASH]</code>"}A URL to the preferences form. Must include the tokens %1 and %2 which will be replaced with the actual contact checksum for identifying the contact. e.g.: %3{/ts}
               </div>
             </td>
           </tr>
@@ -73,7 +73,7 @@
             <td class="content">
                 {$form.request_link_url.html}
               <div class="description">
-                  {ts}A URL to the Request link form. Must include the token <code>[PROFILE]</code> and may include the token <code>[CONTACT_CHECKSUM]</code> which will be replaced with the actual contact checksum for identifying the contact.{/ts}
+                  {ts 1="<code>[PROFILE]</code>" 2="<code>[CONTACT_CHECKSUM]</code>" 3="<code>https://civi.example.com/civicrm_newsletter/request_link/[PROFILE]/[CONTACT_HASH]</code>"}A URL to the Request link form. Must include the token  and may include the token %2 which will be replaced with the actual contact checksum for identifying the contact. e.g.: %3{/ts}
               </div>
             </td>
           </tr>
