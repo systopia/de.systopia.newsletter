@@ -112,7 +112,7 @@ function civicrm_api3_newsletter_subscription_request($params) {
       $preferences_url
     );
     $mail_params = array(
-      'from' => CRM_Newsletter_Utils::getFromEmailAddress(TRUE),
+      'from' => CRM_Newsletter_Utils::getFromEmailAddress($profile),
       'toName' => $contact['display_name'],
       'toEmail' => $contact['email'],
       'cc' => '',

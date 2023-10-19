@@ -14,6 +14,7 @@
 +-------------------------------------------------------------*/
 
 use CRM_Newsletter_ExtensionUtil as E;
+use Civi\Api4\OptionValue;
 
 /**
  * Form controller class
@@ -295,6 +296,15 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       E::ts('Terms and conditions for preferences form'),
       array(),
       FALSE
+    );
+
+    $this->add(
+      'select',
+      'sender_email',
+      E::ts('Sender'),
+      $this->getSenderOptions(),
+      true,
+      ['class' => 'crm-select2 huge']
     );
 
     $this->add(
@@ -675,6 +685,23 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       }
     }
     return static::$_xcm_profiles;
+  }
+
+  /**
+   * Get a list of the available/allowed sender email addresses
+   */
+  protected function getSenderOptions() {
+    $from_email_addresses = OptionValue::get(FALSE)
+      ->addSelect('label', 'value', 'is_default')
+      ->addWhere('option_group_id:name', '=', 'from_email_address')
+      ->addOrderBy('is_default', 'DESC')
+      ->execute()
+      ->indexBy('value')
+      ->column('label');
+    return array_map(function($value) {
+      return htmlspecialchars($value);
+    }, $from_email_addresses);
+    return $from_email_addresses;
   }
 
 }

@@ -14,6 +14,7 @@
 +-------------------------------------------------------------*/
 
 use CRM_Newsletter_ExtensionUtil as E;
+use Civi\Api4\OptionValue;
 
 /**
  * Class CRM_Newsletter_Utils
@@ -48,20 +49,26 @@ class CRM_Newsletter_Utils {
   /**
    * Returns "From" e-mail addresses configured within CiviCRM.
    *
-   * @param bool $default
-   *   Whether to return only default addresses.
+   * @param CRM_Newsletter_Profile|NULL $profile
+   *   The newsletter profile. If not given, the default "From" e-mail address
+   *   is returned.
    *
    * @return string
-   *   The first "From" e-mail address found.
+   *   The "From" e-mail address defined in $profile. If it doesn't exist, or no
+   *   profile is given, the default "From" e-mail address is returned.
    */
-  public static function getFromEmailAddress($default = FALSE) {
-    if ($default) {
-      $condition = ' AND is_default = 1';
-    }
-    else {
-      $condition = NULL;
-    }
-    return reset(CRM_Core_OptionGroup::values('from_email_address', NULL, NULL, NULL, $condition));
+  public static function getFromEmailAddress(?CRM_Newsletter_Profile $profile = NULL): string {
+    $from_addresses = OptionValue::get(FALSE)
+      ->addSelect('label', 'value', 'is_default')
+      ->addWhere('option_group_id:name', '=', 'from_email_address')
+      ->addOrderBy('is_default', 'DESC')
+      ->execute()
+      ->indexBy('value')
+      ->column('label');
+    // Assuming there is always a default, it's the first element (due to
+    // sorting).
+    $default = reset($from_addresses);
+    return isset($profile) ? $from_addresses[$profile->getAttribute('sender_email')] ?? $default : $default;
   }
 
   /**
@@ -259,7 +266,7 @@ class CRM_Newsletter_Utils {
 
     // Construct e-mail parameters.
     $mail_params = array(
-      'from' => CRM_Newsletter_Utils::getFromEmailAddress(TRUE),
+      'from' => CRM_Newsletter_Utils::getFromEmailAddress($profile),
       'toName' => $contact['display_name'],
       'toEmail' => $contact['email'],
       'cc' => '',

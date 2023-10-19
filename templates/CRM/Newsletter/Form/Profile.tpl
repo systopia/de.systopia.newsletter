@@ -248,6 +248,17 @@
           <tr class="crm-section  {cycle values="odd,even"}">
             <td>
               <table class="form-layout-compressed">
+                <tr class="crm-section">
+                  <td class="label">{$form.sender_email.label}</td>
+                  <td class="content">{$form.sender_email.html}</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <tr class="crm-section  {cycle values="odd,even"}">
+            <td>
+              <table class="form-layout-compressed">
 
                 <tr class="crm-section">
                   <td class="label">{$form.template_optin_subject.label}</td>
