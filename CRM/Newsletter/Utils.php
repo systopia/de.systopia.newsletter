@@ -14,6 +14,7 @@
 +-------------------------------------------------------------*/
 
 use CRM_Newsletter_ExtensionUtil as E;
+use Civi\Api4\OptionValue;
 
 /**
  * Class CRM_Newsletter_Utils
@@ -48,20 +49,26 @@ class CRM_Newsletter_Utils {
   /**
    * Returns "From" e-mail addresses configured within CiviCRM.
    *
-   * @param CRM_Newsletter_Profile $profile
-   *   The newsletter profile
+   * @param CRM_Newsletter_Profile|NULL $profile
+   *   The newsletter profile. If not given, the default "From" e-mail address
+   *   is returned.
    *
    * @return string
-   *   The "From" e-mail address defined in $profile. If it doesn't exist, the default "From" e-mail address is returned.
+   *   The "From" e-mail address defined in $profile. If it doesn't exist, or no
+   *   profile is given, the default "From" e-mail address is returned.
    */
-  public static function getFromEmailAddress(CRM_Newsletter_Profile $profile) {
-    $from_addresses = CRM_Core_OptionGroup::values('from_email_address');
-    if (isset($from_addresses[$profile->getAttribute('sender_email')])) {
-      $sender = $from_addresses[$profile->getAttribute('sender_email')];
-    } else {
-      $sender = $from_addresses[CRM_Core_OptionGroup::getDefaultValue('from_email_address')];
-    }
-    return $sender;
+  public static function getFromEmailAddress(?CRM_Newsletter_Profile $profile = NULL): string {
+    $from_addresses = OptionValue::get(FALSE)
+      ->addSelect('label', 'value', 'is_default')
+      ->addWhere('option_group_id:name', '=', 'from_email_address')
+      ->addOrderBy('is_default', 'DESC')
+      ->execute()
+      ->indexBy('value')
+      ->column('label');
+    // Assuming there is always a default, it's the first element (due to
+    // sorting).
+    $default = reset($from_addresses);
+    return isset($profile) ? $from_addresses[$profile->getAttribute('sender_email')] ?? $default : $default;
   }
 
   /**

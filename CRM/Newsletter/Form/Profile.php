@@ -14,6 +14,7 @@
 +-------------------------------------------------------------*/
 
 use CRM_Newsletter_ExtensionUtil as E;
+use Civi\Api4\OptionValue;
 
 /**
  * Form controller class
@@ -690,16 +691,17 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
    * Get a list of the available/allowed sender email addresses
    */
   protected function getSenderOptions() {
-    $dropdown_list = [];
-    $from_email_addresses = CRM_Core_OptionGroup::values('from_email_address');
-    $default_from = CRM_Core_OptionGroup::getDefaultValue('from_email_address');
-    // set default from address at the beginning of the array, so that it will be the prefilled value
-    array_unshift($from_email_addresses, $from_email_addresses[$default_from]);
-    unset($from_email_addresses[$default_from]);
-    foreach ($from_email_addresses as $key => $from_email_address) {
-      $dropdown_list[$key] = htmlentities($from_email_address);
-    }
-    return $dropdown_list;
+    $from_email_addresses = OptionValue::get(FALSE)
+      ->addSelect('label', 'value', 'is_default')
+      ->addWhere('option_group_id:name', '=', 'from_email_address')
+      ->addOrderBy('is_default', 'DESC')
+      ->execute()
+      ->indexBy('value')
+      ->column('label');
+    return array_map(function($value) {
+      return htmlspecialchars($value);
+    }, $from_email_addresses);
+    return $from_email_addresses;
   }
 
 }
