@@ -28,7 +28,7 @@ This extension is supposed to work with the
 module for external newsletter management on a Drupal website, but may be used
 without it, i.e. anything that implements the extension's API.
 
-Read the docs [here](https://docs.civicrm.org/newsletter/en/latest/).
+Read the docs [here](https://docs.civicrm.org/newsletter/en/latest/) (automatic publishing).
 
 ## We need your support
 This CiviCRM extension is provided as Free and Open Source Software, 
