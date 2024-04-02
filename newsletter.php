@@ -64,7 +64,12 @@ function newsletter_civicrm_enable() {
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_permission
  */
 function newsletter_civicrm_permission(&$permissions) {
-  $permissions['access Advanced Newsletter Management API'] = 'Advanced Newsletter Management: Access API';
+  $permissions['access Advanced Newsletter Management API'] = [
+    'label' => E::ts('Advanced Newsletter Management: Access API'),
+    'description' => E::ts(
+      'Allows accessing the API for retrieving, creating, and confirming newsletter subscriptions via the CiviCRM Advanced Newsletter Management API.'
+    ),
+  ];
 }
 
 /**
