@@ -48,48 +48,12 @@ function newsletter_civicrm_install() {
 }
 
 /**
- * Implements hook_civicrm_postInstall().
- *
- * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_postInstall
- */
-function newsletter_civicrm_postInstall() {
-  _newsletter_civix_civicrm_postInstall();
-}
-
-/**
- * Implements hook_civicrm_uninstall().
- *
- * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_uninstall
- */
-function newsletter_civicrm_uninstall() {
-  _newsletter_civix_civicrm_uninstall();
-}
-
-/**
  * Implements hook_civicrm_enable().
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_enable
  */
 function newsletter_civicrm_enable() {
   _newsletter_civix_civicrm_enable();
-}
-
-/**
- * Implements hook_civicrm_disable().
- *
- * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_disable
- */
-function newsletter_civicrm_disable() {
-  _newsletter_civix_civicrm_disable();
-}
-
-/**
- * Implements hook_civicrm_upgrade().
- *
- * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_upgrade
- */
-function newsletter_civicrm_upgrade($op, CRM_Queue_Queue $queue = NULL) {
-  return _newsletter_civix_civicrm_upgrade($op, $queue);
 }
 
 // --- Functions below this ship commented out. Uncomment as required. ---
@@ -219,13 +183,4 @@ function newsletter_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = 
       }
     }
   }
-}
-
-/**
- * Implements hook_civicrm_entityTypes().
- *
- * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_entityTypes
- */
-function newsletter_civicrm_entityTypes(&$entityTypes) {
-  _newsletter_civix_civicrm_entityTypes($entityTypes);
 }
