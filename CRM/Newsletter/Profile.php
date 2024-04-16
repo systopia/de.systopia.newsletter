@@ -295,7 +295,7 @@ class CRM_Newsletter_Profile {
           'state_province_id',
           'country_id',
         ]),
-        \Civi\Api4\Address::getFields()
+        \Civi\Api4\Address::getFields(FALSE)
           ->setLoadOptions(TRUE)
           ->addWhere('name', 'IN', CRM_Xcm_Tools::getAddressFields())
           ->addSelect('name', 'label', 'options', 'input_type')
