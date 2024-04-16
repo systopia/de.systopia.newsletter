@@ -49,6 +49,10 @@ msgid "Submit button label"
 msgstr "Beschriftung der Absendeschaltfläche"
 
 #: CRM/Newsletter/Form/Profile.php
+msgid "Label for unsubscribe button"
+msgstr "Beschriftung für Abmelde-Schaltfläche"
+
+#: CRM/Newsletter/Form/Profile.php
 msgid "Language"
 msgstr "Sprache"
 
@@ -129,11 +133,15 @@ msgstr "Beschriftung für Nutzungsbedingungen des Einstellungsformulars"
 
 #: CRM/Newsletter/Form/Profile.php
 msgid "Description for Terms and conditions for preferences form"
-msgstr "BEschreibung für Nutzungsbedingungen des Einstellungformulars"
+msgstr "Beschreibung für Nutzungsbedingungen des Einstellungformulars"
 
 #: CRM/Newsletter/Form/Profile.php
 msgid "Terms and conditions for preferences form"
 msgstr "Nutzungsbedingungen des Einstellungsformulars"
+
+#: CRM/Newsletter/Form/Profile.php
+msgid "Sender"
+msgstr "Absender"
 
 #: CRM/Newsletter/Form/Profile.php
 msgid "Subject for opt-in e-mail"
@@ -226,7 +234,7 @@ msgstr "Mindestens ein Kontaktfeld muss aktiviert werden."
 
 #: CRM/Newsletter/Form/Profile.php
 msgid "Each active field needs a label."
-msgstr "Jedes aktive Feld benötigt eine Beschriftung"
+msgstr "Jedes aktive Feld benötigt eine Beschriftung."
 
 #: CRM/Newsletter/Form/Profile.php
 msgid "Please enter a valid URL."
@@ -290,13 +298,17 @@ msgstr "Telefonnummer 2"
 msgid "Phone number 3"
 msgstr "Telefonnummer 3"
 
+#: CRM/Newsletter/Profile.php
+msgid "Unsubscribe"
+msgstr "Abmelden"
+
 #: CRM/Newsletter/Profile.php templates/CRM/Newsletter/Form/Profile.tpl
 msgid "Mailing lists"
 msgstr "Newsletter"
 
 #: CRM/Newsletter/Profile.php
-msgid "Unsubscribe"
-msgstr "Abmelden"
+msgid "Unsubscribe from all mailing lists"
+msgstr "Von allen Newslettern abmelden"
 
 #: CRM/Newsletter/Profile.php
 msgid "Your newsletter subscription"
@@ -316,10 +328,6 @@ msgstr ""
 "Advanced Newsletter Management-Profil-Link von de.systopia.newsletter für "
 "Profil %1"
 
-#: CRM/Newsletter/Upgrader/Base.php
-msgid "Upgrade %1 to revision %2"
-msgstr ""
-
 #: CRM/Newsletter/Utils.php
 msgid "Could not get or create a contact for the given contact data."
 msgstr ""
@@ -328,15 +336,15 @@ msgstr ""
 
 #: CRM/Newsletter/Utils.php
 msgid "Added"
-msgstr ""
+msgstr "Hinzugefügt"
 
 #: CRM/Newsletter/Utils.php
 msgid "Pending"
-msgstr ""
+msgstr "Ausstehend"
 
 #: CRM/Newsletter/Utils.php
 msgid "Removed"
-msgstr ""
+msgstr "Entfernt"
 
 #: api/v3/NewsletterProfile/Getsingle.php
 msgid "Advanced Newsletter Management profile not found."
@@ -411,6 +419,16 @@ msgid "The IDs of the groups to add the contact to."
 msgstr "Die IDs der Gruppen, zu denen der Kontakt hinzugefügt werden soll."
 
 #: newsletter.php
+msgid "Advanced Newsletter Management: Access API"
+msgstr ""
+
+#: newsletter.php
+msgid ""
+"Allows accessing the API for retrieving, creating, and confirming newsletter "
+"subscriptions via the CiviCRM Advanced Newsletter Management API."
+msgstr ""
+
+#: newsletter.php
 msgid "Advanced Newsletter Management"
 msgstr "Advanced Newsletter Management"
 
@@ -425,6 +443,15 @@ msgstr "URL der Einstellungs-Seite für Profil %1"
 #: newsletter.php
 msgid "Request link URL for profile %1"
 msgstr "URL der Linkanforderungs-Seite für Profil %1"
+
+#: templates/CRM/Newsletter/Form/Profile.hlp
+msgid ""
+"This label is used if the profile contains only one list and the frontend is "
+"configured to hide the list name in that case."
+msgstr ""
+"Diese Beschriftung wird verwendet, wenn das Profil nur einen Newsletter "
+"enthält und das Frontend so konfiguriert ist, dass in dem Fall kein "
+"Newsletter-Name angezeigt wird."
 
 #: templates/CRM/Newsletter/Form/Profile.tpl
 msgid "General settings"
@@ -482,7 +509,7 @@ msgstr "DSGVO-Datensätze"
 
 #: templates/CRM/Newsletter/Form/Profile.tpl
 msgid "Create GDPR records using the de.systopia.gdprx extension."
-msgstr "DSGVO-Datensätze mit der Erweiterung de.systopia.gdprx erstellen"
+msgstr "DSGVO-Datensätze mit der Erweiterung de.systopia.gdprx erstellen."
 
 #: templates/CRM/Newsletter/Form/Profile.tpl
 msgid "Are you sure you want to reset the default profile?"

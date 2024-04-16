@@ -44,6 +44,11 @@
           </tr>
 
           <tr class="crm-section">
+            <td class="label">{$form.unsubscribe_submit_label.label}</td>
+            <td class="content">{$form.unsubscribe_submit_label.html} {help id="unsubscribe_submit_label" title=$help_title}</td>
+          </tr>
+
+          <tr class="crm-section">
             <td class="label">{$form.language.label}</td>
             <td class="content">{$form.language.html}</td>
           </tr>

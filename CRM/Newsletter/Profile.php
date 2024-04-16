@@ -165,6 +165,7 @@ class CRM_Newsletter_Profile {
     return array(
       'xcm_profile',
       'form_title',
+      'unsubscribe_submit_label',
       'language',
       'contact_fields',
       'mailing_lists',
@@ -358,6 +359,7 @@ class CRM_Newsletter_Profile {
     $default_data = array(
       'xcm_profile' => '',
       'form_title' => '',
+      'unsubscribe_submit_label' => E::ts('Unsubscribe'),
       'language' => Civi::settings()->get('lcMessages'),
       'contact_fields' => array(),
       'mailing_lists' => self::getGroups(),
@@ -366,7 +368,7 @@ class CRM_Newsletter_Profile {
       'mailing_lists_unsubscribe_all' => '',
       'mailing_lists_unsubscribe_all_profiles' => '',
       'mailing_lists_unsubscribe_all_label' => E::ts('Unsubscribe'),
-      'mailing_lists_unsubscribe_all_submit_label' => '',
+      'mailing_lists_unsubscribe_all_submit_label' => E::ts('Unsubscribe from all mailing lists'),
       'mailing_lists_unsubscribe_all_description' => '',
       'conditions_public' => '',
       'conditions_public_label' => '',

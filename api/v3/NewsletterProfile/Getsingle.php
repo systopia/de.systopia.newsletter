@@ -29,7 +29,7 @@ function civicrm_api3_newsletter_profile_getsingle($params) {
     }
 
     // these fields are for back end configuration only, and wont be exposed to the frontend
-    $blacklisted_options = ['mailing_lists_unsubscribe_all_profiles'];
+    $blacklisted_options = [];
 
     $profile_name = $profile->getName();
     $profile_data = $profile->getData();
