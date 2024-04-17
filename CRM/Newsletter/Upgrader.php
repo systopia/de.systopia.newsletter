@@ -64,4 +64,21 @@ class CRM_Newsletter_Upgrader extends CRM_Extension_Upgrader_Base {
     return TRUE;
   }
 
+  /**
+   * Set new defaults in existing profiles.
+   */
+  public function upgrade_5102(): bool {
+    $default_profile = CRM_Newsletter_Profile::createDefaultProfile();
+    foreach (CRM_Newsletter_Profile::getProfiles() as $profile) {
+      foreach(['unsubscribe_submit_label', 'mailing_lists_unsubscribe_all_submit_label'] as $attribute_name) {
+        if ('' === ($profile->getAttribute($attribute_name) ?? '')) {
+          $profile->setAttribute($attribute_name, $default_profile->getAttribute($attribute_name));
+        }
+      }
+      $profile->saveProfile();
+    }
+
+    return TRUE;
+  }
+
 }

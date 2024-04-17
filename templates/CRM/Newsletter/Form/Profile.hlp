@@ -1,0 +1,3 @@
+{htxt id='unsubscribe_submit_label'}
+  <p>{ts domain="de.systopia.newsletter"}This label is used if the profile contains only one list and the frontend is configured to hide the list name in that case.{/ts}</p>
+{/htxt}

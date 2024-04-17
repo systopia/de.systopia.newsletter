@@ -135,6 +135,16 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       FALSE
     );
 
+
+
+    $this->add(
+      'text',
+      'unsubscribe_submit_label',
+      E::ts('Label for unsubscribe button'),
+      [],
+      TRUE
+    );
+
     $this->add(
       'select',
       'language',
@@ -235,7 +245,7 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       'text',
       'mailing_lists_unsubscribe_all_label',
       E::ts('Label for unsubscribe selection'),
-      array(),
+      [],
       TRUE
     );
 
@@ -243,8 +253,8 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       'text',
       'mailing_lists_unsubscribe_all_submit_label',
       E::ts('Unsubscribe All Submit button label'),
-      array(),
-      FALSE
+      [],
+      TRUE
     );
     $this->add(
       'text',
