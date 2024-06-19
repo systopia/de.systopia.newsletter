@@ -44,6 +44,20 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
    * static::getXCMProfiles().
    */
   protected static $_xcm_profiles = NULL;
+  
+  /**
+   * @var string
+   *
+   * The default weight of form fields, for positioning within the form
+   */
+  public static $_form_field_weight_default = 50;
+  
+  /**
+   * @var string
+   *
+   * The max weight value for form fields
+   */
+  public static $_form_field_weight_max = 100;
 
   /**
    * Builds the form structure.
@@ -187,6 +201,19 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
         E::ts('Field description')
       );
       $contact_field_names[$contact_field_name]['description'] = 'contact_field_' . $contact_field_name . '_description';
+
+      $this->add(
+        'text',
+        'contact_field_' . $contact_field_name . '_weight',
+        E::ts('Field position'),
+        array('placeholder' => E::ts(
+	  'Default weight: %1',
+          array(
+            1 => static::$_form_field_weight_default
+          )
+        ))
+      );
+      $contact_field_names[$contact_field_name]['weight'] = 'contact_field_' . $contact_field_name . '_weight';
 
       // Add fields for overriding option value labels.
       if (!empty($contact_field['options']) && !in_array($contact_field_name, [
@@ -552,6 +579,23 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       ) {
         $errors['contact_field_' . $available_name . '_label'] = E::ts('Each active field needs a label.');
       }
+
+      $fieldName = 'contact_field_' . $available_name . '_weight';
+      $fieldValue = $values[$fieldName];
+      if (isset($fieldValue) && $fieldValue !== '' ) {
+        if (
+          ! ctype_digit(strval($fieldValue)) 
+          || (int)$fieldValue > static::$_form_field_weight_max 
+        ) {
+          $errors[$fieldName] = E::ts(
+            'Weight field must be set to a integer number between 0 and %1 but has value [%2].',
+            array(
+              1 => static::$_form_field_weight_max,
+              2 => $fieldValue
+            )
+          );
+        }
+      }
     }
 
     // Preferences URL must be a valid URL.
@@ -602,6 +646,7 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
             }
             $defaults['contact_field_' . $contact_field . '_label'] = $values['label'];
             $defaults['contact_field_' . $contact_field . '_description'] = $values['description'];
+            $defaults['contact_field_' . $contact_field . '_weight'] = $values['weight'];
             if (!empty($values['options'])) {
               foreach ($values['options'] as $option_value => $option_label) {
                 $defaults['contact_field_' . $contact_field . '_option_' . $option_value] = $option_label;
@@ -654,6 +699,8 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
                 }
               }
             }
+            // always save weight, otherwise field position would be lost when field is deactivated.
+            $values['contact_fields'][$contact_field_name]['weight'] = $values['contact_field_' . $contact_field_name . '_weight'];
           }
         }
 

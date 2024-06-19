@@ -143,6 +143,7 @@
                 {assign var=field_name_required value=$contact_field.required}
                 {assign var=field_name_label value=$contact_field.label}
                 {assign var=field_name_description value=$contact_field.description}
+                {assign var=field_name_weight value=$contact_field.weight}
               <tr class="crm-section {cycle values="odd,even"}">
 
                 <td>
@@ -163,6 +164,8 @@
                     <tr class="crm-section">
                       <td class="label">{$form.$field_name_label.label}</td>
                       <td class="content">{$form.$field_name_label.html}</td>
+                      <td class="label">{$form.$field_name_weight.label}</td>
+                      <td class="content">{$form.$field_name_weight.html}{help id="field_weight" title=$help_title}</td>
                     </tr>
                     <tr class="crm-section">
                       <td class="label">{$form.$field_name_description.label}</td>

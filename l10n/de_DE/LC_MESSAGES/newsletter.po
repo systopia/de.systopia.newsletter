@@ -61,6 +61,10 @@ msgid "- Default language -"
 msgstr "- Standardsprache -"
 
 #: CRM/Newsletter/Form/Profile.php
+msgid "Default weight: %1"
+msgstr "Standard-Position: %1"
+
+#: CRM/Newsletter/Form/Profile.php
 msgid "Show contact field \"%1\""
 msgstr "Kontaktfeld \"%1\" anzeigen"
 
@@ -75,6 +79,10 @@ msgstr "Feldbeschriftung"
 #: CRM/Newsletter/Form/Profile.php
 msgid "Field description"
 msgstr "Feldbeschreibung"
+
+#: CRM/Newsletter/Form/Profile.php
+msgid "Field position weight"
+msgstr "Feldposition"
 
 #: CRM/Newsletter/Form/Profile.php
 msgid "Label for option %1"
@@ -235,6 +243,10 @@ msgstr "Mindestens ein Kontaktfeld muss aktiviert werden."
 #: CRM/Newsletter/Form/Profile.php
 msgid "Each active field needs a label."
 msgstr "Jedes aktive Feld benötigt eine Beschriftung."
+
+#: CRM/Newsletter/Form/Profile.php
+msgid "Each weight field must be set to a integer number between 0 and %1 but has value [%2]"
+msgstr "Für jede Position ist nur einen Wert zwischen 0 und %1 gültig, gesetzt wurde [%2]"
 
 #: CRM/Newsletter/Form/Profile.php
 msgid "Please enter a valid URL."
