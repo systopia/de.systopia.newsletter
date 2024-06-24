@@ -47,7 +47,7 @@ msgid "- Default language -"
 msgstr ""
 
 #: CRM/Newsletter/Form/Profile.php
-msgid "Default Weight: %1"
+msgid "Leave empty for default position."
 msgstr ""
 
 #: CRM/Newsletter/Form/Profile.php
@@ -223,7 +223,7 @@ msgid "Each active field needs a label."
 msgstr ""
 
 #: CRM/Newsletter/Form/Profile.php
-msgid "Each weight field must be set to a integer number between 0 and %1 but has value [%2]"
+msgid "Weight field must be set to a positive or negative integer number, but has value [%1]."
 msgstr ""
 
 #: CRM/Newsletter/Form/Profile.php

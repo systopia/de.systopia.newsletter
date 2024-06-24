@@ -46,20 +46,6 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
   protected static $_xcm_profiles = NULL;
   
   /**
-   * @var string
-   *
-   * The default weight of form fields, for positioning within the form
-   */
-  public static $_form_field_weight_default = 50;
-  
-  /**
-   * @var string
-   *
-   * The max weight value for form fields
-   */
-  public static $_form_field_weight_max = 100;
-
-  /**
    * Builds the form structure.
    */
   public function buildQuickForm() {
@@ -206,12 +192,9 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
         'text',
         'contact_field_' . $contact_field_name . '_weight',
         E::ts('Field position'),
-        array('placeholder' => E::ts(
-	  'Default weight: %1',
-          array(
-            1 => static::$_form_field_weight_default
-          )
-        ))
+        [ 
+          'placeholder' => E::ts('Leave empty for default position.')
+        ]
       );
       $contact_field_names[$contact_field_name]['weight'] = 'contact_field_' . $contact_field_name . '_weight';
 
@@ -582,19 +565,16 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
 
       $fieldName = 'contact_field_' . $available_name . '_weight';
       $fieldValue = $values[$fieldName];
-      if (isset($fieldValue) && $fieldValue !== '' ) {
-        if (
-          ! ctype_digit(strval($fieldValue)) 
-          || (int)$fieldValue > static::$_form_field_weight_max 
-        ) {
-          $errors[$fieldName] = E::ts(
-            'Weight field must be set to a integer number between 0 and %1 but has value [%2].',
-            array(
-              1 => static::$_form_field_weight_max,
-              2 => $fieldValue
-            )
-          );
-        }
+      if (isset($fieldValue) 
+          && strlen($fieldValue) > 0 
+          && filter_var($fieldValue, FILTER_VALIDATE_INT) === false 
+      ) {
+        $errors[$fieldName] = E::ts(
+          'Weight field must be set to a positive or negative integer number, but has value [%1].',
+          [
+            1 => $fieldValue
+          ]
+        );
       }
     }
 
