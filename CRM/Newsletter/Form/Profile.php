@@ -681,8 +681,9 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
               $values['contact_fields'][$contact_field_name]['description'] = $values['contact_field_' . $contact_field_name . '_description'];
               if (!empty($contact_field['options'])) {
                 foreach ($contact_field['options'] as $option_value => $option_label) {
-                  if ($values['contact_field_' . $contact_field_name . '_option_' . $option_value] !== '') {
-                    $values['contact_fields'][$contact_field_name]['options'][$option_value] = $values['contact_field_' . $contact_field_name . '_option_' . $option_value];
+                  $optionName = 'contact_field_' . $contact_field_name . '_option_' . $option_value;
+                  if (isset($values[$optionName]) && $values[$optionName] !== '') {
+                    $values['contact_fields'][$contact_field_name]['options'][$option_value] = $values[$optionName];
                   }
                 }
               }
