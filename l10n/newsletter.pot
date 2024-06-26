@@ -47,10 +47,6 @@ msgid "- Default language -"
 msgstr ""
 
 #: CRM/Newsletter/Form/Profile.php
-msgid "Leave empty for default position."
-msgstr ""
-
-#: CRM/Newsletter/Form/Profile.php
 msgid "Show contact field \"%1\""
 msgstr ""
 
@@ -67,7 +63,11 @@ msgid "Field description"
 msgstr ""
 
 #: CRM/Newsletter/Form/Profile.php
-msgid "Field position weight"
+msgid "Field position"
+msgstr ""
+
+#: CRM/Newsletter/Form/Profile.php
+msgid "Leave empty for default position."
 msgstr ""
 
 #: CRM/Newsletter/Form/Profile.php
@@ -447,15 +447,11 @@ msgid "Fields with the same weight value will be ordered according to the positi
 msgstr ""
 
 #: templates/CRM/Newsletter/Form/Profile.tpl
-msgid "About the unsubscribe label"
-msgstr ""
-
-#: templates/CRM/Newsletter/Form/Profile.tpl
-msgid "How to position fields"
-msgstr ""
-
-#: templates/CRM/Newsletter/Form/Profile.tpl
 msgid "General settings"
+msgstr ""
+
+#: templates/CRM/Newsletter/Form/Profile.tpl
+msgid "About the unsubscribe label"
 msgstr ""
 
 #: templates/CRM/Newsletter/Form/Profile.tpl
@@ -472,6 +468,10 @@ msgstr ""
 
 #: templates/CRM/Newsletter/Form/Profile.tpl
 msgid "Contact fields"
+msgstr ""
+
+#: templates/CRM/Newsletter/Form/Profile.tpl
+msgid "How to position fields"
 msgstr ""
 
 #: templates/CRM/Newsletter/Form/Profile.tpl
