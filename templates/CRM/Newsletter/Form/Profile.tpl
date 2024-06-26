@@ -22,6 +22,7 @@
 
       <div class="crm-accordion-body">
         <table class="form-layout-compressed">
+          {assign var=unsubscribe_submit_help_title value='About the unsubscribe label'}
 
           <tr class="crm-section">
             <td class="label">{$form.name.label}</td>
@@ -45,7 +46,7 @@
 
           <tr class="crm-section">
             <td class="label">{$form.unsubscribe_submit_label.label}</td>
-            <td class="content">{$form.unsubscribe_submit_label.html} {help id="unsubscribe_submit_label" title=$help_title}</td>
+            <td class="content">{$form.unsubscribe_submit_label.html} {help id="unsubscribe_submit_label" title=$unsubscribe_submit_help_title}</td>
           </tr>
 
           <tr class="crm-section">
@@ -144,6 +145,7 @@
                 {assign var=field_name_label value=$contact_field.label}
                 {assign var=field_name_description value=$contact_field.description}
                 {assign var=field_name_weight value=$contact_field.weight}
+                {assign var=weight_help_title value='How to position fields'}
               <tr class="crm-section {cycle values="odd,even"}">
 
                 <td>
@@ -165,7 +167,7 @@
                       <td class="label">{$form.$field_name_label.label}</td>
                       <td class="content">{$form.$field_name_label.html}</td>
                       <td class="label">{$form.$field_name_weight.label}</td>
-                      <td class="content">{$form.$field_name_weight.html}{help id="field_weight" title=$help_title}</td>
+                      <td class="content">{$form.$field_name_weight.html}{help id="field_weight" title=$weight_help_title}</td>
                     </tr>
                     <tr class="crm-section">
                       <td class="label">{$form.$field_name_description.label}</td>
