@@ -456,6 +456,14 @@ msgstr "URL der Einstellungs-Seite für Profil %1"
 msgid "Request link URL for profile %1"
 msgstr "URL der Linkanforderungs-Seite für Profil %1"
 
+#: templates/CRM/Newsletter/Form/Profile.tpl
+msgid "About the unsubscribe label"
+msgstr "Die Beschriftung der Abmelde-Schaltfläche"
+
+#: templates/CRM/Newsletter/Form/Profile.tpl
+msgid "How to position fields"
+msgstr "Die Position der Formular-Felder ändern"
+
 #: templates/CRM/Newsletter/Form/Profile.hlp
 msgid ""
 "This label is used if the profile contains only one list and the frontend is "

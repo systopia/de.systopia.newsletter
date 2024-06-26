@@ -22,7 +22,7 @@
 
       <div class="crm-accordion-body">
         <table class="form-layout-compressed">
-          {assign var=unsubscribe_submit_help_title value='About the unsubscribe label'}
+          {capture assign=unsubscribe_submit_help_title}{ts}About the unsubscribe label{/ts}{/capture}
 
           <tr class="crm-section">
             <td class="label">{$form.name.label}</td>
@@ -145,7 +145,7 @@
                 {assign var=field_name_label value=$contact_field.label}
                 {assign var=field_name_description value=$contact_field.description}
                 {assign var=field_name_weight value=$contact_field.weight}
-                {assign var=weight_help_title value='How to position fields'}
+                {capture assign=weight_help_title}{ts}How to position fields{/ts}{/capture}
               <tr class="crm-section {cycle values="odd,even"}">
 
                 <td>

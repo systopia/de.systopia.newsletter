@@ -419,6 +419,14 @@ msgid "This label is used if the profile contains only one list and the frontend
 msgstr ""
 
 #: templates/CRM/Newsletter/Form/Profile.tpl
+msgid "About the unsubscribe label"
+msgstr ""
+
+#: templates/CRM/Newsletter/Form/Profile.tpl
+msgid "How to position fields"
+msgstr ""
+
+#: templates/CRM/Newsletter/Form/Profile.tpl
 msgid "General settings"
 msgstr ""
 
