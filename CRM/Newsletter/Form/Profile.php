@@ -620,13 +620,21 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
         if ($element_name == 'contact_fields') {
           // Translate the array structure into individual fields.
           foreach ($value as $contact_field => $values) {
-            $defaults['contact_field_' . $contact_field . '_active'] = $values['active'];
+            if (!empty($values['active'])) {
+              $defaults['contact_field_' . $contact_field . '_active'] = $values['active'];
+            }
             if (!empty($values['required'])) {
               $defaults['contact_field_' . $contact_field . '_required'] = $values['required'];
             }
-            $defaults['contact_field_' . $contact_field . '_label'] = $values['label'];
-            $defaults['contact_field_' . $contact_field . '_description'] = $values['description'];
-            $defaults['contact_field_' . $contact_field . '_weight'] = $values['weight'];
+            if (!empty($values['label'])) {
+              $defaults['contact_field_' . $contact_field . '_label'] = $values['label'];
+            }
+            if (!empty($values['description'])) {
+              $defaults['contact_field_' . $contact_field . '_description'] = $values['description'];
+            }
+            if (!empty($values['weight'])) {
+              $defaults['contact_field_' . $contact_field . '_weight'] = $values['weight'];
+            }
             if (!empty($values['options'])) {
               foreach ($values['options'] as $option_value => $option_label) {
                 $defaults['contact_field_' . $contact_field . '_option_' . $option_value] = $option_label;
