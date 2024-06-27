@@ -61,6 +61,10 @@ msgid "- Default language -"
 msgstr "- Standardsprache -"
 
 #: CRM/Newsletter/Form/Profile.php
+msgid "Leave empty for default position."
+msgstr "Für Standard-Position leer lassen."
+
+#: CRM/Newsletter/Form/Profile.php
 msgid "Show contact field \"%1\""
 msgstr "Kontaktfeld \"%1\" anzeigen"
 
@@ -75,6 +79,10 @@ msgstr "Feldbeschriftung"
 #: CRM/Newsletter/Form/Profile.php
 msgid "Field description"
 msgstr "Feldbeschreibung"
+
+#: CRM/Newsletter/Form/Profile.php
+msgid "Field position weight"
+msgstr "Feldposition"
 
 #: CRM/Newsletter/Form/Profile.php
 msgid "Label for option %1"
@@ -235,6 +243,10 @@ msgstr "Mindestens ein Kontaktfeld muss aktiviert werden."
 #: CRM/Newsletter/Form/Profile.php
 msgid "Each active field needs a label."
 msgstr "Jedes aktive Feld benötigt eine Beschriftung."
+
+#: CRM/Newsletter/Form/Profile.php
+msgid "Weight field must be set to a positive or negative integer number, but has value [%1]."
+msgstr "Für jede Position ist ein positiver oder negativer Wert möglich, gesetzt wurde [%1]."
 
 #: CRM/Newsletter/Form/Profile.php
 msgid "Please enter a valid URL."
@@ -444,6 +456,14 @@ msgstr "URL der Einstellungs-Seite für Profil %1"
 msgid "Request link URL for profile %1"
 msgstr "URL der Linkanforderungs-Seite für Profil %1"
 
+#: templates/CRM/Newsletter/Form/Profile.tpl
+msgid "About the unsubscribe label"
+msgstr "Die Beschriftung der Abmelde-Schaltfläche"
+
+#: templates/CRM/Newsletter/Form/Profile.tpl
+msgid "How to position fields"
+msgstr "Die Position der Formular-Felder ändern"
+
 #: templates/CRM/Newsletter/Form/Profile.hlp
 msgid ""
 "This label is used if the profile contains only one list and the frontend is "
@@ -452,6 +472,34 @@ msgstr ""
 "Diese Beschriftung wird verwendet, wenn das Profil nur einen Newsletter "
 "enthält und das Frontend so konfiguriert ist, dass in dem Fall kein "
 "Newsletter-Name angezeigt wird."
+
+#: templates/CRM/Newsletter/Form/Profile.hlp
+msgid "A weight is used to change the positioning of fields within the form."
+msgstr "Eine Gewichtung kann genutzt werden, um die Position eines Feldes innerhalb des Formulars zu verändern."
+
+#: templates/CRM/Newsletter/Form/Profile.hlp
+msgid "The effect of field positioning can be seen in the view that renders this form."
+msgstr "Die eingestellten Feld Positionen sind in der Formular Ansicht zu sehen."
+
+#: templates/CRM/Newsletter/Form/Profile.hlp
+msgid "Leave weights empty for default positioning, that is, the position of the fields seen here. The default weight is considered to be 0."
+msgstr "Für die Standard-Positionierung können die Gewichtungen leer gelassen werden. Das entspricht dem Wert 0. Dann werden die Felder so angezeigt, wie hier in der Konfiguration zu sehen."
+
+#: templates/CRM/Newsletter/Form/Profile.hlp
+msgid "If position of fields should be changed, choose positive or negative weight values for the fields in question."
+msgstr "Um die Position eines Feldes zu ändern, können positive oder negative Werte angegeben werden."
+
+#: templates/CRM/Newsletter/Form/Profile.hlp
+msgid "The higher the weight value, the more a field will be shifted to the bottom of the form."
+msgstr "Je höher ein Wert ist, desto weiter wird das entsprechende Feld im Formular nach unten verschoben."
+
+#: templates/CRM/Newsletter/Form/Profile.hlp
+msgid "The lower the weight value, the more a field will be shifted to the top of the form."
+msgstr "Je niedriger ein Wert ist, desto weiter wird das entsprechende Feld im Formular nach oben verschoben."
+
+#: templates/CRM/Newsletter/Form/Profile.hlp
+msgid "Fields with the same weight value will be ordered according to the position of the fields seen here."
+msgstr "Felder mit der gleichen Gewichtung werden in der Reihenfolge angezeigt, wie hier in der Konfiguration zu sehen."
 
 #: templates/CRM/Newsletter/Form/Profile.tpl
 msgid "General settings"
