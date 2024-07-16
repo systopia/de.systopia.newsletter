@@ -567,7 +567,7 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       $fieldValue = $values[$fieldName];
       if (isset($fieldValue) 
           && strlen($fieldValue) > 0 
-          && filter_var($fieldValue, FILTER_VALIDATE_INT) === false 
+          && filter_var($fieldValue, FILTER_VALIDATE_INT) === FALSE 
       ) {
         $errors[$fieldName] = E::ts(
           'Weight field must be set to a positive or negative integer number, but has value [%1].',
