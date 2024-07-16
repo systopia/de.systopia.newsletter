@@ -44,7 +44,7 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
    * static::getXCMProfiles().
    */
   protected static $_xcm_profiles = NULL;
-
+  
   /**
    * Builds the form structure.
    */
@@ -187,6 +187,16 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
         E::ts('Field description')
       );
       $contact_field_names[$contact_field_name]['description'] = 'contact_field_' . $contact_field_name . '_description';
+
+      $this->add(
+        'text',
+        'contact_field_' . $contact_field_name . '_weight',
+        E::ts('Field position'),
+        [ 
+          'placeholder' => E::ts('Leave empty for default position.')
+        ]
+      );
+      $contact_field_names[$contact_field_name]['weight'] = 'contact_field_' . $contact_field_name . '_weight';
 
       // Add fields for overriding option value labels.
       if (!empty($contact_field['options']) && !in_array($contact_field_name, [
@@ -552,6 +562,20 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       ) {
         $errors['contact_field_' . $available_name . '_label'] = E::ts('Each active field needs a label.');
       }
+
+      $fieldName = 'contact_field_' . $available_name . '_weight';
+      $fieldValue = $values[$fieldName];
+      if (isset($fieldValue) 
+          && strlen($fieldValue) > 0 
+          && filter_var($fieldValue, FILTER_VALIDATE_INT) === FALSE 
+      ) {
+        $errors[$fieldName] = E::ts(
+          'Weight field must be set to a positive or negative integer number, but has value [%1].',
+          [
+            1 => $fieldValue
+          ]
+        );
+      }
     }
 
     // Preferences URL must be a valid URL.
@@ -596,12 +620,21 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
         if ($element_name == 'contact_fields') {
           // Translate the array structure into individual fields.
           foreach ($value as $contact_field => $values) {
-            $defaults['contact_field_' . $contact_field . '_active'] = $values['active'];
+            if (!empty($values['active'])) {
+              $defaults['contact_field_' . $contact_field . '_active'] = $values['active'];
+            }
             if (!empty($values['required'])) {
               $defaults['contact_field_' . $contact_field . '_required'] = $values['required'];
             }
-            $defaults['contact_field_' . $contact_field . '_label'] = $values['label'];
-            $defaults['contact_field_' . $contact_field . '_description'] = $values['description'];
+            if (!empty($values['label'])) {
+              $defaults['contact_field_' . $contact_field . '_label'] = $values['label'];
+            }
+            if (!empty($values['description'])) {
+              $defaults['contact_field_' . $contact_field . '_description'] = $values['description'];
+            }
+            if (!empty($values['weight'])) {
+              $defaults['contact_field_' . $contact_field . '_weight'] = $values['weight'];
+            }
             if (!empty($values['options'])) {
               foreach ($values['options'] as $option_value => $option_label) {
                 $defaults['contact_field_' . $contact_field . '_option_' . $option_value] = $option_label;
@@ -648,12 +681,15 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
               $values['contact_fields'][$contact_field_name]['description'] = $values['contact_field_' . $contact_field_name . '_description'];
               if (!empty($contact_field['options'])) {
                 foreach ($contact_field['options'] as $option_value => $option_label) {
-                  if ($values['contact_field_' . $contact_field_name . '_option_' . $option_value] !== '') {
-                    $values['contact_fields'][$contact_field_name]['options'][$option_value] = $values['contact_field_' . $contact_field_name . '_option_' . $option_value];
+                  $optionName = 'contact_field_' . $contact_field_name . '_option_' . $option_value;
+                  if (isset($values[$optionName]) && $values[$optionName] !== '') {
+                    $values['contact_fields'][$contact_field_name]['options'][$option_value] = $values[$optionName];
                   }
                 }
               }
             }
+            // always save weight, otherwise field position would be lost when field is deactivated.
+            $values['contact_fields'][$contact_field_name]['weight'] = $values['contact_field_' . $contact_field_name . '_weight'];
           }
         }
 

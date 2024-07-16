@@ -63,6 +63,14 @@ msgid "Field description"
 msgstr ""
 
 #: CRM/Newsletter/Form/Profile.php
+msgid "Field position"
+msgstr ""
+
+#: CRM/Newsletter/Form/Profile.php
+msgid "Leave empty for default position."
+msgstr ""
+
+#: CRM/Newsletter/Form/Profile.php
 msgid "Label for option %1"
 msgstr ""
 
@@ -212,6 +220,10 @@ msgstr ""
 
 #: CRM/Newsletter/Form/Profile.php
 msgid "Each active field needs a label."
+msgstr ""
+
+#: CRM/Newsletter/Form/Profile.php
+msgid "Weight field must be set to a positive or negative integer number, but has value [%1]."
 msgstr ""
 
 #: CRM/Newsletter/Form/Profile.php
@@ -406,8 +418,40 @@ msgstr ""
 msgid "This label is used if the profile contains only one list and the frontend is configured to hide the list name in that case."
 msgstr ""
 
+#: templates/CRM/Newsletter/Form/Profile.hlp
+msgid "A weight is used to change the positioning of fields within the form."
+msgstr ""
+
+#: templates/CRM/Newsletter/Form/Profile.hlp
+msgid "The effect of field positioning can be seen in the view that renders this form."
+msgstr ""
+
+#: templates/CRM/Newsletter/Form/Profile.hlp
+msgid "Leave weights empty for default positioning, that is, the position of the fields seen here. The default weight is considered to be 0."
+msgstr ""
+
+#: templates/CRM/Newsletter/Form/Profile.hlp
+msgid "If position of fields should be changed, choose positive or negative weight values for the fields in question."
+msgstr ""
+
+#: templates/CRM/Newsletter/Form/Profile.hlp
+msgid "The higher the weight value, the more a field will be shifted to the bottom of the form."
+msgstr ""
+
+#: templates/CRM/Newsletter/Form/Profile.hlp
+msgid "The lower the weight value, the more a field will be shifted to the top of the form."
+msgstr ""
+
+#: templates/CRM/Newsletter/Form/Profile.hlp
+msgid "Fields with the same weight value will be ordered according to the position of the fields seen here."
+msgstr ""
+
 #: templates/CRM/Newsletter/Form/Profile.tpl
 msgid "General settings"
+msgstr ""
+
+#: templates/CRM/Newsletter/Form/Profile.tpl
+msgid "About the unsubscribe label"
 msgstr ""
 
 #: templates/CRM/Newsletter/Form/Profile.tpl
@@ -424,6 +468,10 @@ msgstr ""
 
 #: templates/CRM/Newsletter/Form/Profile.tpl
 msgid "Contact fields"
+msgstr ""
+
+#: templates/CRM/Newsletter/Form/Profile.tpl
+msgid "How to position fields"
 msgstr ""
 
 #: templates/CRM/Newsletter/Form/Profile.tpl
