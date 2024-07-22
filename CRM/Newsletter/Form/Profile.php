@@ -135,8 +135,6 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       FALSE
     );
 
-
-
     $this->add(
       'text',
       'unsubscribe_submit_label',
@@ -152,6 +150,41 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       ['' => E::ts('- Default language -')] + CRM_Core_I18n::uiLanguages(),
       FALSE
     );
+
+    $contact_form_description_names = [];
+    foreach (CRM_Newsletter_Profile::availableDescriptionFields() as $description_field_name =>  $description_field_data) {
+      $full_name = 'contact_form_descriptions_' . $description_field_name . '_active';
+      $this->add(
+        'checkbox',
+        $full_name,
+        E::ts('Show summary'),
+        [],
+        FALSE
+      );
+      $contact_form_description_names[$description_field_name]['active'] = $full_name;
+
+      $full_name = 'contact_form_descriptions_' . $description_field_name . '_description';
+      $this->add(
+        'textarea',
+        $full_name,
+        $description_field_data['label'],
+        [],
+        FALSE
+      );
+      $contact_form_description_names[$description_field_name]['description'] = $full_name;
+
+      $full_name = 'contact_form_descriptions_' . $description_field_name . '_weight';
+      $this->add(
+        'text',
+        $full_name,
+        E::ts('Field position'),
+        [
+          'placeholder' => E::ts('Leave empty for default position.')
+        ]
+      );
+      $contact_form_description_names[$description_field_name]['weight'] = $full_name;
+    }
+    $this->assign('contact_form_description_names', $contact_form_description_names);
 
     $contact_fields = CRM_Newsletter_Profile::availableContactFields();
     $contact_field_names = array();
@@ -563,18 +596,33 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
         $errors['contact_field_' . $available_name . '_label'] = E::ts('Each active field needs a label.');
       }
 
-      $fieldName = 'contact_field_' . $available_name . '_weight';
-      $fieldValue = $values[$fieldName];
-      if (isset($fieldValue) 
-          && strlen($fieldValue) > 0 
-          && filter_var($fieldValue, FILTER_VALIDATE_INT) === FALSE 
+      $field_name = 'contact_field_' . $available_name . '_weight';
+      $field_value = $values[$field_name];
+      if (isset($field_value)
+          && strlen($field_value) > 0
+          && filter_var($field_value, FILTER_VALIDATE_INT) === FALSE
       ) {
-        $errors[$fieldName] = E::ts(
+        $errors[$field_name] = E::ts(
           'Weight field must be set to a positive or negative integer number, but has value [%1].',
           [
-            1 => $fieldValue
+            1 => $field_value
           ]
         );
+      }
+    }
+
+    // if description fields are activated, a description text is necessary
+    foreach (CRM_Newsletter_Profile::availableDescriptionFields() as $description_field_name => $description_field_data) {
+      $field_name = 'contact_form_descriptions_' . $description_field_name . '_active';
+      $field_value_is_active = $values[$field_name];
+
+      if (isset($field_value_is_active) && (bool)$field_value_is_active) {
+        $field_name = 'contact_form_descriptions_' . $description_field_name . '_description';
+        $field_value_description = $values[$field_name];
+
+        if (isset($field_value_description) && strlen(trim($field_value_description)) == 0) {
+          $errors[$field_name] = E::ts('Text needs to be entered into description field.');
+        }
       }
     }
 
@@ -647,6 +695,21 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
           // array of IDs.
           $defaults[$element_name] = array_keys($value);
         }
+        elseif ($element_name == 'contact_form_descriptions') {
+          foreach ($value as $description_field_name => $description_field_data) {
+            $field_name = 'contact_form_descriptions_' . $description_field_name;
+
+            if (!empty($description_field_data['active'])) {
+              $defaults[$field_name . '_active'] = $description_field_data['active'];
+            }
+            if (!empty($description_field_data['description'])) {
+              $defaults[$field_name . '_description'] = $description_field_data['description'];
+            }
+            if (!empty($description_field_data['weight'])) {
+              $defaults[$field_name . '_weight'] = $description_field_data['weight'];
+            }
+          }
+        }
         else {
           $defaults[$element_name] = $value;
         }
@@ -692,8 +755,18 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
             $values['contact_fields'][$contact_field_name]['weight'] = $values['contact_field_' . $contact_field_name . '_weight'];
           }
         }
-
-        if ($element_name == 'mailing_lists') {
+        elseif ($element_name == 'contact_form_descriptions') {
+          foreach (CRM_Newsletter_Profile::availableDescriptionFields() as $description_field_name => $description_field_data) {
+            $field_name = 'contact_form_descriptions_' . $description_field_name;
+            if (!empty($values[$field_name . '_active'])) {
+              $values['contact_form_descriptions'][$description_field_name]['active'] = $values[$field_name . '_active'];
+            }
+            // always save weight and description, otherwise field data would be lost when field is deactivated.
+            $values['contact_form_descriptions'][$description_field_name]['description'] = $values[$field_name . '_description'];
+            $values['contact_form_descriptions'][$description_field_name]['weight'] = $values[$field_name . '_weight'];
+          }
+        }
+        elseif ($element_name == 'mailing_lists') {
           // Store ID => Group name.
           $values['mailing_lists'] = array_intersect_key(CRM_Newsletter_Profile::getGroups(), array_flip($values['mailing_lists']));
         }
