@@ -61,6 +61,22 @@ msgid "- Default language -"
 msgstr "- Standardsprache -"
 
 #: CRM/Newsletter/Form/Profile.php
+msgid "Show summary"
+msgstr "Newsletter Details anzeigen"
+
+#: CRM/Newsletter/Form/Profile.php
+msgid "Your newsletter summary"
+msgstr "Details für den Newsletter"
+
+#: CRM/Newsletter/Form/Profile.php
+msgid "Your newsletter summary 2"
+msgstr "Details für den Newsletter 2"
+
+#: CRM/Newsletter/Form/Profile.php
+msgid "Your newsletter summary 3"
+msgstr "Details für den Newsletter 3"
+
+#: CRM/Newsletter/Form/Profile.php
 msgid "Leave empty for default position."
 msgstr "Für Standard-Position leer lassen."
 
@@ -247,6 +263,10 @@ msgstr "Jedes aktive Feld benötigt eine Beschriftung."
 #: CRM/Newsletter/Form/Profile.php
 msgid "Weight field must be set to a positive or negative integer number, but has value [%1]."
 msgstr "Für jede Position ist ein positiver oder negativer Wert möglich, gesetzt wurde [%1]."
+
+#: CRM/Newsletter/Form/Profile.php
+msgid "Text needs to be entered into description field."
+msgstr "Newsletter Beschreibung ist leer."
 
 #: CRM/Newsletter/Form/Profile.php
 msgid "Please enter a valid URL."
@@ -464,6 +484,10 @@ msgstr "Die Beschriftung der Abmelde-Schaltfläche"
 msgid "How to position fields"
 msgstr "Die Position der Formular-Felder ändern"
 
+#: templates/CRM/Newsletter/Form/Profile.tpl
+msgid "Enter one or more form description paragraphs"
+msgstr "Einen oder mehrere Beschreibungen hinzufügen"
+
 #: templates/CRM/Newsletter/Form/Profile.hlp
 msgid ""
 "This label is used if the profile contains only one list and the frontend is "
@@ -500,6 +524,18 @@ msgstr "Je niedriger ein Wert ist, desto weiter wird das entsprechende Feld im F
 #: templates/CRM/Newsletter/Form/Profile.hlp
 msgid "Fields with the same weight value will be ordered according to the position of the fields seen here."
 msgstr "Felder mit der gleichen Gewichtung werden in der Reihenfolge angezeigt, wie hier in der Konfiguration zu sehen."
+
+#: templates/CRM/Newsletter/Form/Profile.hlp
+msgid "One can add several text fields in between sections of the contact form."
+msgstr "Es können ein oder mehrere Textfelder in das Kontakt-Formular eingefügt werden."
+
+#: templates/CRM/Newsletter/Form/Profile.hlp
+msgid "Each text field can hold a description or help text, ie. a short guide for entering correct information into the form."
+msgstr "Jedes Textfeld kann eine Beschreibung oder Hilfetext enthalten, zB. eine Hilfe zur Angabe von korrekten Daten im Formular."
+
+#: templates/CRM/Newsletter/Form/Profile.hlp
+msgid "Text fields can be positioned within the form by changing the weight-value. See also the help description for weight-values."
+msgstr "Textfelder können an beliebige Stellen im Formular gesetzt werden. Mehr Details dazu in der Hilfe zur Angabe von Feld-Positionen."
 
 #: templates/CRM/Newsletter/Form/Profile.tpl
 msgid "General settings"

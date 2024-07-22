@@ -47,6 +47,18 @@ msgid "- Default language -"
 msgstr ""
 
 #: CRM/Newsletter/Form/Profile.php
+msgid "Show summary"
+msgstr ""
+
+#: CRM/Newsletter/Form/Profile.php
+msgid "Field position"
+msgstr ""
+
+#: CRM/Newsletter/Form/Profile.php
+msgid "Leave empty for default position."
+msgstr ""
+
+#: CRM/Newsletter/Form/Profile.php
 msgid "Show contact field \"%1\""
 msgstr ""
 
@@ -60,14 +72,6 @@ msgstr ""
 
 #: CRM/Newsletter/Form/Profile.php
 msgid "Field description"
-msgstr ""
-
-#: CRM/Newsletter/Form/Profile.php
-msgid "Field position"
-msgstr ""
-
-#: CRM/Newsletter/Form/Profile.php
-msgid "Leave empty for default position."
 msgstr ""
 
 #: CRM/Newsletter/Form/Profile.php
@@ -227,6 +231,10 @@ msgid "Weight field must be set to a positive or negative integer number, but ha
 msgstr ""
 
 #: CRM/Newsletter/Form/Profile.php
+msgid "Text needs to be entered into description field."
+msgstr ""
+
+#: CRM/Newsletter/Form/Profile.php
 msgid "Please enter a valid URL."
 msgstr ""
 
@@ -284,6 +292,18 @@ msgstr ""
 
 #: CRM/Newsletter/Profile.php
 msgid "Phone number 3"
+msgstr ""
+
+#: CRM/Newsletter/Profile.php
+msgid "Your newsletter summary"
+msgstr ""
+
+#: CRM/Newsletter/Profile.php
+msgid "Your newsletter summary 2"
+msgstr ""
+
+#: CRM/Newsletter/Profile.php
+msgid "Your newsletter summary 3"
 msgstr ""
 
 #: CRM/Newsletter/Profile.php
@@ -446,6 +466,18 @@ msgstr ""
 msgid "Fields with the same weight value will be ordered according to the position of the fields seen here."
 msgstr ""
 
+#: templates/CRM/Newsletter/Form/Profile.hlp
+msgid "One can add several text fields in between sections of the contact form."
+msgstr ""
+
+#: templates/CRM/Newsletter/Form/Profile.hlp
+msgid "Each text field can hold a description or help text, ie. a short guide for entering correct information into the form."
+msgstr ""
+
+#: templates/CRM/Newsletter/Form/Profile.hlp
+msgid "Text fields can be positioned within the form by changing the weight-value. See also the help description for weight-values."
+msgstr ""
+
 #: templates/CRM/Newsletter/Form/Profile.tpl
 msgid "General settings"
 msgstr ""
@@ -472,6 +504,10 @@ msgstr ""
 
 #: templates/CRM/Newsletter/Form/Profile.tpl
 msgid "How to position fields"
+msgstr ""
+
+#: templates/CRM/Newsletter/Form/Profile.tpl
+msgid "Enter one or more form description paragraphs"
 msgstr ""
 
 #: templates/CRM/Newsletter/Form/Profile.tpl
