@@ -157,7 +157,7 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       $this->add(
         'checkbox',
         $full_name,
-        E::ts('Show summary'),
+        E::ts('Show description'),
         [],
         FALSE
       );
@@ -597,15 +597,15 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       }
 
       $field_name = 'contact_field_' . $available_name . '_weight';
-      $field_value = $values[$field_name];
-      if (isset($field_value)
+      $fieldValue = $values[$field_name];
+      if (isset($fieldValue)
           && strlen($field_value) > 0
-          && filter_var($field_value, FILTER_VALIDATE_INT) === FALSE
+          && filter_var($fieldValue, FILTER_VALIDATE_INT) === FALSE
       ) {
         $errors[$field_name] = E::ts(
           'Weight field must be set to a positive or negative integer number, but has value [%1].',
           [
-            1 => $field_value
+            1 => $fieldValue
           ]
         );
       }
