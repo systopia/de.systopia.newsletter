@@ -15,5 +15,5 @@
 {htxt id='field_form_description'}
   <p>{ts domain="de.systopia.newsletter"}One can add several text fields in between sections of the contact form.{/ts}</p>
   <p>{ts domain="de.systopia.newsletter"}Each text field can hold a description or help text, ie. a short guide for entering correct information into the form.{/ts}</p>
-  <p>{ts domain="de.systopia.newsletter"}Text fields can be positioned within the form by changing the weight-value. See also the help description for weight-values.{/ts}</p>
+  <p>{ts domain="de.systopia.newsletter"}Text fields can be positioned within the form by changing the weight value. See also the help description for weight values.{/ts}</p>
 {/htxt}
