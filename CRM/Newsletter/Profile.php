@@ -24,6 +24,11 @@ class CRM_Newsletter_Profile {
    * The name of the mailing list group type.
    */
   const GROUP_TYPE_MAILING_LIST = 'Mailing List';
+  
+  /**
+   * The maximum number of description fields that can be insterted into the contact form.
+   */
+  private const NUM_DESCRIPTION_FIELDS_MAX = 3;
 
   /**
    * @var CRM_Newsletter_Profile[] $_profiles
@@ -355,17 +360,15 @@ class CRM_Newsletter_Profile {
    *   values.
    */
   public static function availableDescriptionFields() {
-    return [
-      'summary_01' => [
-        'label' => E::ts('Your newsletter summary'),
-      ],
-      'summary_02' => [
-        'label' => E::ts('Your newsletter summary 2'),
-      ],
-      'summary_03' => [
-        'label' => E::ts('Your newsletter summary 3'),
-      ],
-    ];
+    $fields = [];
+
+    for ($i = 0; $i <= CRM_Newsletter_Profile::NUM_DESCRIPTION_FIELDS_MAX; $i++) {
+      $key = 'description_' . $i;
+      $fields[$key] = [
+        'label' => E::ts('Intermediate Description Text (%1)', [1 => $i]),
+      ];
+    }
+    return $fields;
   }
 
   /**
