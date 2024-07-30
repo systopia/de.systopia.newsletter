@@ -24,6 +24,11 @@ class CRM_Newsletter_Profile {
    * The name of the mailing list group type.
    */
   const GROUP_TYPE_MAILING_LIST = 'Mailing List';
+  
+  /**
+   * The maximum number of description fields that can be insterted into the contact form.
+   */
+  private const NUM_DESCRIPTION_FIELDS_MAX = 3;
 
   /**
    * @var CRM_Newsletter_Profile[] $_profiles
@@ -206,6 +211,7 @@ class CRM_Newsletter_Profile {
       'gdprx_unsubscribe_all_source',
       'gdprx_unsubscribe_all_type',
       'gdprx_unsubscribe_all_note',
+      'contact_form_descriptions',
     );
   }
 
@@ -346,6 +352,25 @@ class CRM_Newsletter_Profile {
     return $static + $dynamic;
   }
 
+ /**
+   * Retrieves possible description fields for a profile.
+   *
+   * @return array
+   *   An array with description field names as keys and their translated labels as
+   *   values.
+   */
+  public static function availableDescriptionFields() {
+    $fields = [];
+
+    for ($i = 0; $i <= CRM_Newsletter_Profile::NUM_DESCRIPTION_FIELDS_MAX; $i++) {
+      $key = 'description_' . $i;
+      $fields[$key] = [
+        'label' => E::ts('Intermediate Description Text (%1)', [1 => $i + 1]),
+      ];
+    }
+    return $fields;
+  }
+
   /**
    * Retrieves the default profile with "factory" defaults.
    *
@@ -388,6 +413,7 @@ class CRM_Newsletter_Profile {
       'preferences_url' => CRM_Core_Config::singleton()->userFrameworkBaseURL,
       'request_link_url' => CRM_Core_Config::singleton()->userFrameworkBaseURL,
       'submit_label' => '',
+      'contact_form_descriptions' => [],
     );
     foreach (self::availableContactFields() as $field_name => $field) {
       $default_data['contact_fields'][$field_name] = array(
@@ -397,6 +423,16 @@ class CRM_Newsletter_Profile {
         'description' => '',
       );
     }
+
+    foreach (self::availableDescriptionFields() as $field_name => $field) {
+      $default_data['contact_form_descriptions'][$field_name] = [
+        'active' => 0,
+        'required' => 0,
+        'label' => $field['label'],
+        'description' => '',
+      ];
+    }
+
     return new CRM_Newsletter_Profile($name, $default_data);
   }
 

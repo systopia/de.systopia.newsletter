@@ -139,6 +139,39 @@
 
       <div class="crm-accordion-body">
         <table class="form-layout">
+            {foreach from=$contact_form_description_names item=description_field}
+              {assign var=field_name_active value=$description_field.active}
+              {assign var=field_name_description value=$description_field.description}
+              {assign var=field_name_weight value=$description_field.weight}
+              {capture assign=weight_help_title}{ts}How to position fields{/ts}{/capture}
+              {capture assign=form_description_help_title}{ts}Enter one or more form description paragraphs{/ts}{/capture}
+              <tr class="crm-section">
+                <td>
+                  <table class="form-layout-compressed">
+                    <tr class="crm-section">
+                      <td class="label">{$form.$field_name_active.label}</td>
+                      <td class="content">{$form.$field_name_active.html}</td>
+                    </tr>
+                  </table>
+                </td>
+                <td>
+                  <table class="form-layout-compressed">
+                    <tr class="crm-section">
+                      <td class="label">{$form.$field_name_description.label}</td>
+                      <td class="content">{$form.$field_name_description.html}{help id="field_form_description" title=$form_description_help_title}</td>
+                      <td class="label">{$form.$field_name_weight.label}</td>
+                      <td class="content">{$form.$field_name_weight.html}{help id="field_weight" title=$weight_help_title}</td>
+                    </tr>
+                  </table>
+                </td>
+                <td>
+                  <table class="form-layout-compressed">
+                    <tr class="crm-section">
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            {/foreach}
             {foreach from=$contact_field_names item=contact_field}
                 {assign var=field_name_active value=$contact_field.active}
                 {assign var=field_name_required value=$contact_field.required}
