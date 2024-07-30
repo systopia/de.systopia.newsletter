@@ -365,7 +365,7 @@ class CRM_Newsletter_Profile {
     for ($i = 0; $i <= CRM_Newsletter_Profile::NUM_DESCRIPTION_FIELDS_MAX; $i++) {
       $key = 'description_' . $i;
       $fields[$key] = [
-        'label' => E::ts('Intermediate Description Text (%1)', [1 => $i]),
+        'label' => E::ts('Intermediate Description Text (%1)', [1 => $i + 1]),
       ];
     }
     return $fields;
