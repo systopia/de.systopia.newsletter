@@ -519,7 +519,7 @@ msgstr "Felder mit der gleichen Gewichtung werden in der Reihenfolge angezeigt, 
 
 #: templates/CRM/Newsletter/Form/Profile.hlp
 msgid "One can add several text fields in between sections of the contact form."
-msgstr "Es können ein oder mehrere Felder für Beschreibungstexte in das Kontakt-Formular eingefügt werden."
+msgstr "Es können mehrere Felder für Beschreibungstexte in das Kontakt-Formular eingefügt werden."
 
 #: templates/CRM/Newsletter/Form/Profile.hlp
 msgid "Each text field can hold a description or help text, ie. a short guide for entering correct information into the form."
