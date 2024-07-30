@@ -56,12 +56,22 @@ required for subscriptions with this profile.
 Along with some pre-defined core contact fields, every custom field for contacts
 can be added to the form configuration.
 
+Additionally, a couple of description fields are available. They might be used
+to insert description or help text into the subscription form.
+
 For each field, define:
 
 - whether to *Show contact field <field_name>*
 - whether the *Contact field <field_name> is required*
 - the *Field label* on the form
 - the *Field description* on the form
+
+!!!tip
+    Set the weight of a field in order to indicate its position within the rendered
+    subscription form. As default, each field has a weight of 0 and will be positioned
+    within the form as seen in the Contact fields section. A more positive weight value
+    will move a field to the bottom of the form, a more negative weight value will move
+    a field to the top of the form.
 
 !!!tip
     If you want to have subscription forms for different languages, define two
