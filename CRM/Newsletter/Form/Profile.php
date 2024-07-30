@@ -703,7 +703,7 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
               $defaults[$field_name . '_active'] = $description_field_data['active'];
             }
             if (!empty($description_field_data['description'])) {
-              $defaults[$field_name . '_description'] = $description_field_data['description'];
+              $defaults[$field_name . '_description'] = html_entity_decode($description_field_data['description']);
             }
             if (!empty($description_field_data['weight'])) {
               $defaults[$field_name . '_weight'] = $description_field_data['weight'];
@@ -762,7 +762,7 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
               $values['contact_form_descriptions'][$description_field_name]['active'] = $values[$field_name . '_active'];
             }
             // always save weight and description, otherwise field data would be lost when field is deactivated.
-            $values['contact_form_descriptions'][$description_field_name]['description'] = $values[$field_name . '_description'];
+            $values['contact_form_descriptions'][$description_field_name]['description'] = html_entity_decode($values[$field_name . '_description']);
             $values['contact_form_descriptions'][$description_field_name]['weight'] = $values[$field_name . '_weight'];
           }
         }
