@@ -59,7 +59,8 @@ class CRM_Newsletter_Utils {
    */
   public static function getFromEmailAddress(?CRM_Newsletter_Profile $profile = NULL): string {
     $from_addresses = OptionValue::get(FALSE)
-      ->addSelect('label', 'value', 'is_default')
+      ->addSelect('label', 'value')
+      ->addWhere('domain_id', '=', 'current_domain')
       ->addWhere('option_group_id:name', '=', 'from_email_address')
       ->addOrderBy('is_default', 'DESC')
       ->execute()
