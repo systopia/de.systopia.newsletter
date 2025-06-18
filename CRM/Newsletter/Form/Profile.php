@@ -811,7 +811,8 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
    */
   protected function getSenderOptions() {
     $from_email_addresses = OptionValue::get(FALSE)
-      ->addSelect('label', 'value', 'is_default')
+      ->addSelect('label', 'value')
+      ->addWhere('domain_id', '=', 'current_domain')
       ->addWhere('option_group_id:name', '=', 'from_email_address')
       ->addOrderBy('is_default', 'DESC')
       ->execute()
