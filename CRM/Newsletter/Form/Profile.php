@@ -44,7 +44,7 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
    * static::getXCMProfiles().
    */
   protected static $_xcm_profiles = NULL;
-  
+
   /**
    * Builds the form structure.
    */
@@ -225,7 +225,7 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
         'text',
         'contact_field_' . $contact_field_name . '_weight',
         E::ts('Field position'),
-        [ 
+        [
           'placeholder' => E::ts('Leave empty for default position.')
         ]
       );
@@ -810,14 +810,34 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
    * Get a list of the available/allowed sender email addresses
    */
   protected function getSenderOptions() {
-    $from_email_addresses = OptionValue::get(FALSE)
-      ->addSelect('label', 'value')
-      ->addWhere('domain_id', '=', 'current_domain')
-      ->addWhere('option_group_id:name', '=', 'from_email_address')
-      ->addOrderBy('is_default', 'DESC')
-      ->execute()
-      ->indexBy('value')
-      ->column('label');
+    // TODO: Remove check when minimum core version requirement is >= 6.0.0.
+    if (class_exists('\Civi\Api4\SiteEmailAddress')) {
+      $from_email_addresses = \Civi\Api4\SiteEmailAddress::get(FALSE)
+        ->addSelect('display_name', 'email', 'id')
+        ->addWhere('domain_id', '=', 'current_domain')
+        ->addWhere('is_active', '=', TRUE)
+        ->addOrderBy('is_default', 'DESC')
+        ->execute()
+        ->indexBy('id')
+        ->getArrayCopy();
+        // Include "email" column as the option value label did.
+      $from_email_addresses = array_map(
+        fn($address) => sprintf('"%s" <%s>', $address['display_name'], $address['email']),
+        $from_email_addresses
+      );
+    }
+    else {
+      $from_email_addresses = OptionValue::get(FALSE)
+        ->addSelect('value', 'label')
+        ->addWhere('domain_id', '=', 'current_domain')
+        ->addWhere('option_group_id:name', '=', 'from_email_address')
+        ->addWhere('is_active', '=', TRUE)
+        ->addOrderBy('is_default', 'DESC')
+        ->execute()
+        ->indexBy('value')
+        ->column('label');
+    }
+
     return array_map(function($value) {
       return htmlspecialchars($value);
     }, $from_email_addresses);
