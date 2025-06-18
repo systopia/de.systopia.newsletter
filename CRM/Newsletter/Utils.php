@@ -58,14 +58,33 @@ class CRM_Newsletter_Utils {
    *   profile is given, the default "From" e-mail address is returned.
    */
   public static function getFromEmailAddress(?CRM_Newsletter_Profile $profile = NULL): string {
-    $from_addresses = OptionValue::get(FALSE)
-      ->addSelect('label', 'value')
-      ->addWhere('domain_id', '=', 'current_domain')
-      ->addWhere('option_group_id:name', '=', 'from_email_address')
-      ->addOrderBy('is_default', 'DESC')
-      ->execute()
-      ->indexBy('value')
-      ->column('label');
+    // TODO: Remove check when minimum core version requirement is >= 6.0.0.
+    if (class_exists('\Civi\Api4\SiteEmailAddress')) {
+      $from_addresses = \Civi\Api4\SiteEmailAddress::get(FALSE)
+        ->addSelect('display_name', 'id')
+        ->addWhere('domain_id', '=', 'current_domain')
+        ->addWhere('is_active', '=', TRUE)
+        ->addOrderBy('is_default', 'DESC')
+        ->execute()
+        ->indexBy('id')
+        ->getArrayCopy();
+      // Include "email" column as the option value label did.
+      $from_addresses = array_map(
+        fn($address) => sprintf('"%s" <%s>', $address['display_name'], $address['email']),
+        $from_addresses
+      );
+    }
+    else {
+      $from_addresses = OptionValue::get(FALSE)
+        ->addSelect('value', 'label')
+        ->addWhere('domain_id', '=', 'current_domain')
+        ->addWhere('option_group_id:name', '=', 'from_email_address')
+        ->addWhere('is_active', '=', TRUE)
+        ->addOrderBy('is_default', 'DESC')
+        ->execute()
+        ->indexBy('value')
+        ->column('label');
+    }
     // Assuming there is always a default, it's the first element (due to
     // sorting).
     $default = reset($from_addresses);
