@@ -61,7 +61,7 @@ class CRM_Newsletter_Utils {
     // TODO: Remove check when minimum core version requirement is >= 6.0.0.
     if (class_exists('\Civi\Api4\SiteEmailAddress')) {
       $from_addresses = \Civi\Api4\SiteEmailAddress::get(FALSE)
-        ->addSelect('display_name', 'id')
+        ->addSelect('display_name', 'email', 'id')
         ->addWhere('domain_id', '=', 'current_domain')
         ->addWhere('is_active', '=', TRUE)
         ->addOrderBy('is_default', 'DESC')
