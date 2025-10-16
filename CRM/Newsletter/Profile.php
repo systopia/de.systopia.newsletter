@@ -254,6 +254,14 @@ class CRM_Newsletter_Profile {
         'label' => E::ts('Last name'),
         'type' => 'Text',
       ),
+      'nick_name' => array(
+        'label' => E::ts('Nick name'),
+        'type' => 'Text',
+      ),
+      'job_title' => array(
+        'label' => E::ts('Job title'),
+        'type' => 'Text',
+      ),
       'email' => array(
         'label' => E::ts('E-mail address'),
         'type' => 'Text',
