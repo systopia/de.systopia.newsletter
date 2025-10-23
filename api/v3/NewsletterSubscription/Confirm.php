@@ -26,7 +26,7 @@ use CRM_Newsletter_ExtensionUtil as E;
 function civicrm_api3_newsletter_subscription_confirm($params) {
   try {
     if (!$profile = CRM_Newsletter_Profile::getProfile($params['profile'])) {
-      throw new CiviCRM_API3_Exception(
+      throw new CRM_Core_Exception(
         E::ts('No profile found with the given name.'),
         'api_error'
       );
@@ -34,7 +34,7 @@ function civicrm_api3_newsletter_subscription_confirm($params) {
 
     $contact_checksum = $params['contact_checksum'] ?? $params['contact_hash'] ?? NULL;
     if (NULL === $contact_checksum) {
-      throw new CiviCRM_API3_Exception(E::ts('Contact checksum is missing.'), 'api_error');
+      throw new CRM_Core_Exception(E::ts('Contact checksum is missing.'), 'api_error');
     }
 
     // Resolve checksum and compare it with the given contact ID (in case a
@@ -49,7 +49,7 @@ function civicrm_api3_newsletter_subscription_confirm($params) {
       ))['id'] ?? NULL;
     }
     if (NULL === $contact_id || $contact_id != $params['contact_id']) {
-      throw new CiviCRM_API3_Exception(E::ts('Invalid contact checksum for given contact ID.'), 'api_error');
+      throw new CRM_Core_Exception(E::ts('Invalid contact checksum for given contact ID.'), 'api_error');
     }
 
     $contact = civicrm_api3('Contact', 'getsingle', array(
@@ -107,7 +107,7 @@ function civicrm_api3_newsletter_subscription_confirm($params) {
     else {
       // Validate submitted group IDs.
       if (empty($params['mailing_lists'])) {
-        throw new CiviCRM_API3_Exception(
+        throw new CRM_Core_Exception(
           E::ts('Mandatory key(s) missing from params array: mailing_lists'),
           'mandatory_missing'
         );
@@ -121,7 +121,7 @@ function civicrm_api3_newsletter_subscription_confirm($params) {
         $allowed_mailing_lists
       );
       if (!empty($disallowed_groups)) {
-        throw new CiviCRM_API3_Exception(E::ts('Disallowed group ID(s): %1', array(
+        throw new CRM_Core_Exception(E::ts('Disallowed group ID(s): %1', array(
           1 => implode(', ', $disallowed_groups)
         )), 'api_error');
       }
@@ -144,7 +144,7 @@ function civicrm_api3_newsletter_subscription_confirm($params) {
     return civicrm_api3_create_success($group_contact_results);
   }
   catch (Exception $exception) {
-    $error_code = ($exception instanceof CiviCRM_API3_Exception ? $exception->getErrorCode() : $exception->getCode());
+    $error_code = ($exception instanceof CRM_Core_Exception ? $exception->getErrorCode() : $exception->getCode());
     return civicrm_api3_create_error($exception->getMessage(), array('error_code' => $error_code));
   }
 }

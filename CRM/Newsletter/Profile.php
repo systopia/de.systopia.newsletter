@@ -222,7 +222,7 @@ class CRM_Newsletter_Profile {
    *   An array with contact field names as keys and their translated labels as
    *   values.
    *
-   * @throws \CiviCRM_API3_Exception
+   * @throws \CRM_Core_Exception
    *   When retrieving field data failed.
    */
   public static function availableContactFields() {
@@ -517,7 +517,7 @@ class CRM_Newsletter_Profile {
         }
       }
     }
-    catch (CiviCRM_API3_Exception $exception) {
+    catch (CRM_Core_Exception $exception) {
       $error = CRM_Core_Error::createError($exception->getMessage(), 0);
       CRM_Core_Error::displaySessionError($error);
     }
