@@ -26,7 +26,7 @@ use CRM_Newsletter_ExtensionUtil as E;
 function civicrm_api3_newsletter_subscription_submit($params) {
   try {
     if (!$profile = CRM_Newsletter_Profile::getProfile($params['profile'])) {
-      throw new CiviCRM_API3_Exception(
+      throw new CRM_Core_Exception(
         E::ts('No profile found with the given name.'),
         'api_error'
       );
@@ -43,7 +43,7 @@ function civicrm_api3_newsletter_subscription_submit($params) {
       $params
     );
     if (!empty($missing_contact_fields)) {
-      throw new CiviCRM_API3_Exception(
+      throw new CRM_Core_Exception(
         E::ts('Missing mandatory fields %1', array(
           1 => implode(', ', array_keys($missing_contact_fields)),
         )),
@@ -74,7 +74,7 @@ function civicrm_api3_newsletter_subscription_submit($params) {
       array_keys($profile->getAttribute('mailing_lists'))
     );
     if (!empty($disallowed_groups)) {
-      throw new CiviCRM_API3_Exception(E::ts('Disallowed group ID(s): %1', array(
+      throw new CRM_Core_Exception(E::ts('Disallowed group ID(s): %1', array(
         1 => implode(', ', $disallowed_groups)
       )), 'api_error');
     }
@@ -127,7 +127,7 @@ function civicrm_api3_newsletter_subscription_submit($params) {
     return $group_contact_results;
   }
   catch (Exception $exception) {
-    $error_code = ($exception instanceof CiviCRM_API3_Exception ? $exception->getErrorCode() : $exception->getCode());
+    $error_code = ($exception instanceof CRM_Core_Exception ? $exception->getErrorCode() : $exception->getCode());
     return civicrm_api3_create_error($exception->getMessage(), array('error_code' => $error_code));
   }
 }

@@ -26,11 +26,11 @@ use CRM_Newsletter_ExtensionUtil as E;
 function civicrm_api3_newsletter_subscription_get($params) {
   try {
     if (empty($params['contact_id']) && !isset($params['contact_checksum']) && empty($params['contact_hash'])) {
-      throw new CiviCRM_API3_Exception(E::ts('Either the contact ID or the contact checksum is required.'), 'mandatory_missing');
+      throw new CRM_Core_Exception(E::ts('Either the contact ID or the contact checksum is required.'), 'mandatory_missing');
     }
 
     if (!$profile = CRM_Newsletter_Profile::getProfile($params['profile'])) {
-      throw new CiviCRM_API3_Exception(
+      throw new CRM_Core_Exception(
         E::ts('No profile found with the given name.'),
         'api_error'
       );
@@ -54,7 +54,7 @@ function civicrm_api3_newsletter_subscription_get($params) {
         ))['id'] ?? NULL;
       }
       if (NULL === $contact_params['id']) {
-        throw new CiviCRM_API3_Exception(E::ts('Invalid contact checksum.'), 'unauthorized');
+        throw new CRM_Core_Exception(E::ts('Invalid contact checksum.'), 'unauthorized');
       }
     }
 
@@ -67,7 +67,7 @@ function civicrm_api3_newsletter_subscription_get($params) {
 
     $contact = civicrm_api3('Contact', 'getsingle', $contact_params);
     if (!empty($contact['is_error'])) {
-      throw new CiviCRM_API3_Exception(E::ts('Could not retrieve contact for given checksum.'), 'api_error');
+      throw new CRM_Core_Exception(E::ts('Could not retrieve contact for given checksum.'), 'api_error');
     }
     // Add secondary phone number if used.
     if (in_array('phone2', $contact_params['return'])) {
@@ -116,7 +116,7 @@ function civicrm_api3_newsletter_subscription_get($params) {
       'return' => array('group_id'),
     ));
     if (!empty($added_group_contacts['is_error'])) {
-      throw new CiviCRM_API3_Exception(E::ts('Error retrieving current group membership.'), 'api_error');
+      throw new CRM_Core_Exception(E::ts('Error retrieving current group membership.'), 'api_error');
     }
     foreach ($added_group_contacts['values'] as $group) {
       $current_groups[$group['group_id']] = 'Added';
@@ -128,7 +128,7 @@ function civicrm_api3_newsletter_subscription_get($params) {
       'return' => array('group_id'),
     ));
     if (!empty($pending_group_contacts['is_error'])) {
-      throw new CiviCRM_API3_Exception(E::ts('Error retrieving current group membership.'), 'api_error');
+      throw new CRM_Core_Exception(E::ts('Error retrieving current group membership.'), 'api_error');
     }
     foreach ($pending_group_contacts['values'] as $group) {
       $current_groups[$group['group_id']] = 'Pending';
@@ -151,7 +151,7 @@ function civicrm_api3_newsletter_subscription_get($params) {
     return civicrm_api3_create_success($return);
   }
   catch (Exception $exception) {
-    $error_code = ($exception instanceof CiviCRM_API3_Exception ? $exception->getErrorCode() : $exception->getCode());
+    $error_code = ($exception instanceof CRM_Core_Exception ? $exception->getErrorCode() : $exception->getCode());
     return civicrm_api3_create_error($exception->getMessage(), array('error_code' => $error_code));
   }
 }

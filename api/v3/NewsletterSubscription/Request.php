@@ -26,7 +26,7 @@ use CRM_Newsletter_ExtensionUtil as E;
 function civicrm_api3_newsletter_subscription_request($params) {
   try {
     if (!$profile = CRM_Newsletter_Profile::getProfile($params['profile'])) {
-      throw new CiviCRM_API3_Exception(
+      throw new CRM_Core_Exception(
         E::ts('No profile found with the given name.'),
         'api_error'
       );
@@ -48,7 +48,7 @@ function civicrm_api3_newsletter_subscription_request($params) {
         ))['id'] ?? NULL;
       }
       if (NULL === $contact_id || $contact_id != $params['contact_id']) {
-        throw new CiviCRM_API3_Exception(E::ts('Invalid contact checksum for given contact ID.'), 'api_error');
+        throw new CRM_Core_Exception(E::ts('Invalid contact checksum for given contact ID.'), 'api_error');
       }
     }
     else {
@@ -145,7 +145,7 @@ function civicrm_api3_newsletter_subscription_request($params) {
     return civicrm_api3_create_success();
   }
   catch (Exception $exception) {
-    $error_code = ($exception instanceof CiviCRM_API3_Exception ? $exception->getErrorCode() : $exception->getCode());
+    $error_code = ($exception instanceof CRM_Core_Exception ? $exception->getErrorCode() : $exception->getCode());
     return civicrm_api3_create_error($exception->getMessage(), array('error_code' => $error_code));
   }
 }

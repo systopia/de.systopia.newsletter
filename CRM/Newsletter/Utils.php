@@ -106,7 +106,7 @@ class CRM_Newsletter_Utils {
    *   - title: The translated group title
    *   - status: The translated subscription status for the given contact
    *
-   * @throws CiviCRM_API3_Exception When an API call failed.
+   * @throws CRM_Core_Exception When an API call failed.
    */
   public static function getSubscriptionStatus($contact_id, $profile_name = 'default') {
     $subscription = civicrm_api3('NewsletterSubscription', 'get', array(
@@ -141,7 +141,7 @@ class CRM_Newsletter_Utils {
    *
    * @return array
    *
-   * @throws \CiviCRM_API3_Exception
+   * @throws \CRM_Core_Exception
    */
   public static function buildGroupTree($groups) {
     $group_tree = array();
@@ -208,7 +208,7 @@ class CRM_Newsletter_Utils {
    * @return array
    *    Returns array with unsubscribed_ids
    *
-   * @throws CiviCRM_API3_Exception
+   * @throws CRM_Core_Exception
    */
   public static function unsubscribe_all($groups, $contact_id) {
     $unsubscribe_results = [];
@@ -333,7 +333,7 @@ class CRM_Newsletter_Utils {
    * @return array
    *    results from unsubscribe keyed by group_id
    *
-   * @throws CiviCRM_API3_Exception
+   * @throws CRM_Core_Exception
    */
   public static function update_group_subscription($mailinglists, $contact_id, $unsubscribe_from_all_profiles) {
 
