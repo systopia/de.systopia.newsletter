@@ -49,11 +49,11 @@ function civicrm_api3_newsletter_profile_get($params) {
  * @param $params
  */
 function _civicrm_api3_newsletter_profile_get_spec(&$params) {
-  $params['name'] = array(
+  $params['name'] = [
     'name' => 'name',
     'title' => 'Newsletter profile name',
     'type' => CRM_Utils_Type::T_STRING,
     'api.required' => 0,
     'description' => 'The Newsletter profile name. If omitted, the default profile will be returned.',
-  );
+  ];
 }

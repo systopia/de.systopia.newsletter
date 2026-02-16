@@ -21,7 +21,7 @@ class CRM_Newsletter_Page_Profiles extends CRM_Core_Page {
     // Example: Set the page-title dynamically; alternatively, declare a static title in xml/Menu/*.xml
     CRM_Utils_System::setTitle(E::ts('Advanced Newsletter Management profiles'));
 
-    $profiles = array();
+    $profiles = [];
     foreach (CRM_Newsletter_Profile::getProfiles() as $profile_name => $profile) {
       $profiles[$profile_name]['name'] = $profile_name;
       foreach (CRM_Newsletter_Profile::allowedAttributes() as $attribute) {

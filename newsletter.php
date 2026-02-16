@@ -22,10 +22,10 @@ function newsletter_civicrm_config(&$config) {
  */
 function newsletter_civicrm_container($container) {
   //  we can only register for flexmailer events if it is installed
-  if(function_exists("flexmailer_civicrm_config")) {
+  if (function_exists('flexmailer_civicrm_config')) {
     $container->addResource(new \Symfony\Component\Config\Resource\FileResource(__FILE__));
     $container->findDefinition('dispatcher')->addMethodCall('addListener',
-      array(\Civi\FlexMailer\Validator::EVENT_CHECK_SENDABLE, '_newsletter_check_sendable', 100)
+      [\Civi\FlexMailer\Validator::EVENT_CHECK_SENDABLE, '_newsletter_check_sendable', 100]
     );
   }
 }
@@ -34,7 +34,7 @@ function newsletter_civicrm_container($container) {
  * Internal function for FlexMailer  Event callback
  * @param \Civi\FlexMailer\Event\CheckSendableEvent $e
  */
-function _newsletter_check_sendable(\Civi\FlexMailer\Event\CheckSendableEvent $e){
+function _newsletter_check_sendable(\Civi\FlexMailer\Event\CheckSendableEvent $e) {
   CRM_Newsletter_RegisterTokenFlexmailer::register_tokens();
 }
 
@@ -79,11 +79,11 @@ function newsletter_civicrm_permission(&$permissions) {
  */
 function newsletter_civicrm_alterAPIPermissions($entity, $action, &$params, &$permissions) {
   // Restrict API calls to the permission.
-  $permissions['newsletter_profile']['get'] = array('access Advanced Newsletter Management API');
-  $permissions['newsletter_subscription']['get']  = array('access Advanced Newsletter Management API');
-  $permissions['newsletter_subscription']['submit']  = array('access Advanced Newsletter Management API');
-  $permissions['newsletter_subscription']['confirm']  = array('access Advanced Newsletter Management API');
-  $permissions['newsletter_subscription']['request']  = array('access Advanced Newsletter Management API');
+  $permissions['newsletter_profile']['get'] = ['access Advanced Newsletter Management API'];
+  $permissions['newsletter_subscription']['get']  = ['access Advanced Newsletter Management API'];
+  $permissions['newsletter_subscription']['submit']  = ['access Advanced Newsletter Management API'];
+  $permissions['newsletter_subscription']['confirm']  = ['access Advanced Newsletter Management API'];
+  $permissions['newsletter_subscription']['request']  = ['access Advanced Newsletter Management API'];
 }
 
 /**
@@ -117,21 +117,21 @@ function newsletter_civicrm_tokens(&$tokens) {
   foreach (CRM_Newsletter_Profile::getProfiles() as $profile_name => $profile) {
     $tokens['newsletter']['newsletter.optin_url_' . $profile_name] = E::ts(
       'Opt-in URL for profile %1',
-      array(
+      [
         1 => $profile->getName(),
-      )
+      ]
     );
     $tokens['newsletter']['newsletter.preferences_url_' . $profile_name] = E::ts(
       'Preferences URL for profile %1',
-      array(
+      [
         1 => $profile->getName(),
-      )
+      ]
     );
     $tokens['newsletter']['newsletter.request_link_url_' . $profile_name] = E::ts(
       'Request link URL for profile %1',
-      array(
+      [
         1 => $profile->getName(),
-      )
+      ]
     );
   }
 }
@@ -141,7 +141,7 @@ function newsletter_civicrm_tokens(&$tokens) {
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_tokenValues
  */
-function newsletter_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = array(), $context = null) {
+function newsletter_civicrm_tokenValues(&$values, $cids, $job = NULL, $tokens = [], $context = NULL) {
   if (is_array($cids) && array_key_exists('newsletter', $tokens)) {
     foreach (CRM_Newsletter_Profile::getProfiles() as $profile_name => $profile) {
       foreach ($cids as $cid) {

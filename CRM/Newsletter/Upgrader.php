@@ -48,7 +48,7 @@ class CRM_Newsletter_Upgrader extends CRM_Extension_Upgrader_Base {
    */
   public function upgrade_5101(): bool {
     foreach (CRM_Newsletter_Profile::getProfiles() as $profile) {
-      foreach(['optin_url', 'preferences_url', 'request_link_url'] as $attribute_name) {
+      foreach (['optin_url', 'preferences_url', 'request_link_url'] as $attribute_name) {
         $profile->setAttribute(
           $attribute_name,
           str_replace(
@@ -70,7 +70,7 @@ class CRM_Newsletter_Upgrader extends CRM_Extension_Upgrader_Base {
   public function upgrade_5102(): bool {
     $default_profile = CRM_Newsletter_Profile::createDefaultProfile();
     foreach (CRM_Newsletter_Profile::getProfiles() as $profile) {
-      foreach(['unsubscribe_submit_label', 'mailing_lists_unsubscribe_all_submit_label'] as $attribute_name) {
+      foreach (['unsubscribe_submit_label', 'mailing_lists_unsubscribe_all_submit_label'] as $attribute_name) {
         if ('' === ($profile->getAttribute($attribute_name) ?? '')) {
           $profile->setAttribute($attribute_name, $default_profile->getAttribute($attribute_name));
         }

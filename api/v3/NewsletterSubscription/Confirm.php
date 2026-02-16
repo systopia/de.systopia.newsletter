@@ -43,21 +43,21 @@ function civicrm_api3_newsletter_subscription_confirm($params) {
     $contact_id = ContactChecksumService::getInstance()->resolveChecksum($contact_checksum);
     if (NULL === $contact_id && !empty($params['contact_hash'])) {
       // @todo: Remove code used for backward compatibility.
-      $contact_id = civicrm_api3('Contact', 'getsingle', array(
+      $contact_id = civicrm_api3('Contact', 'getsingle', [
         'return' => ['id'],
         'hash' => $params['contact_hash'],
-      ))['id'] ?? NULL;
+      ])['id'] ?? NULL;
     }
     if (NULL === $contact_id || $contact_id != $params['contact_id']) {
       throw new CRM_Core_Exception(E::ts('Invalid contact checksum for given contact ID.'), 'api_error');
     }
 
-    $contact = civicrm_api3('Contact', 'getsingle', array(
+    $contact = civicrm_api3('Contact', 'getsingle', [
       'id' => $contact_id,
-    ));
+    ]);
 
     $allowed_mailing_lists = array_keys($profile->getAttribute('mailing_lists'));
-    $current_mailing_lists = array();
+    $current_mailing_lists = [];
     foreach (CRM_Newsletter_Utils::getSubscriptionStatus($contact_id, $profile->getName()) as $group_id => $group_info) {
       $current_mailing_lists[$group_id] = $group_info['status_raw'];
     }
@@ -113,17 +113,17 @@ function civicrm_api3_newsletter_subscription_confirm($params) {
         );
       }
       // TODO: This will not work, as we're expecting an array with status.
-//      if (!is_array($params['mailing_lists'])) {
-//        $params['mailing_lists'] = explode(',', $params['mailing_lists']);
-//      }
+      //      if (!is_array($params['mailing_lists'])) {
+      //        $params['mailing_lists'] = explode(',', $params['mailing_lists']);
+      //      }
       $disallowed_groups = array_diff(
         array_keys($params['mailing_lists']),
         $allowed_mailing_lists
       );
       if (!empty($disallowed_groups)) {
-        throw new CRM_Core_Exception(E::ts('Disallowed group ID(s): %1', array(
-          1 => implode(', ', $disallowed_groups)
-        )), 'api_error');
+        throw new CRM_Core_Exception(E::ts('Disallowed group ID(s): %1', [
+          1 => implode(', ', $disallowed_groups),
+        ]), 'api_error');
       }
 
       $email_template = 'info';
@@ -145,7 +145,7 @@ function civicrm_api3_newsletter_subscription_confirm($params) {
   }
   catch (Exception $exception) {
     $error_code = ($exception instanceof CRM_Core_Exception ? $exception->getErrorCode() : $exception->getCode());
-    return civicrm_api3_create_error($exception->getMessage(), array('error_code' => $error_code));
+    return civicrm_api3_create_error($exception->getMessage(), ['error_code' => $error_code]);
   }
 }
 
@@ -155,63 +155,63 @@ function civicrm_api3_newsletter_subscription_confirm($params) {
  * @param $params
  */
 function _civicrm_api3_newsletter_subscription_confirm_spec(&$params) {
-  $params['profile'] = array(
+  $params['profile'] = [
     'name' => 'profile',
     'title' => 'Newsletter profile name',
     'type' => CRM_Utils_Type::T_STRING,
     'api.required' => 0,
     'api.default' => 'default',
     'description' => 'The Newsletter profile name. If omitted, the default profile will be used.',
-  );
+  ];
 
-  $params['contact_id'] = array(
+  $params['contact_id'] = [
     'name' => 'contact_id',
     'title' => 'Contact ID',
     'type' => CRM_Utils_Type::T_STRING,
     'api.required' => 1,
     'description' => 'The CiviCRM ID of the contact to confirm newsletter subscriptions for.',
-  );
+  ];
 
-  $params['contact_checksum'] = array(
+  $params['contact_checksum'] = [
     'name' => 'contact_checksum',
     'title' => 'Contact checksum',
     'type' => CRM_Utils_Type::T_STRING,
     // @todo: Change to 1 when contact_hash is removed.
     'api.required' => 0,
     'description' => 'Generated checksum of the contact to confirm subscriptions for.',
-  );
+  ];
 
-  $params['contact_hash'] = array(
+  $params['contact_hash'] = [
     'name' => 'contact_hash',
     'title' => 'Contact hash',
     'type' => CRM_Utils_Type::T_STRING,
     'api.required' => 0,
     'deprecated' => TRUE,
     'description' => 'Generated checksum of the contact to confirm subscriptions for. (Deprecated: Use contact_checksum instead.)',
-  );
+  ];
 
-  $params['mailing_lists'] = array(
+  $params['mailing_lists'] = [
     'name' => 'mailing_lists',
     'title' => 'Mailing lists',
     'type' => CRM_utils_Type::T_ENUM,
     'api.required' => 0,
     'description' => E::ts('An array of group IDs as keys and the corresponding group status for the given contact as values.'),
-  );
+  ];
 
-  $params['autoconfirm'] = array(
+  $params['autoconfirm'] = [
     'name' => 'autoconfirm',
     'title' => 'Automatic confirmation',
     'type' => CRM_Utils_Type::T_BOOLEAN,
     'api.required' => 0,
     'description' => E::ts('Whether to automatically set all "Pending" group memberships to "Added".'),
-  );
+  ];
 
-  $params['unsubscribe_all'] = array(
+  $params['unsubscribe_all'] = [
     'name' => 'unsubscribe_all',
     'title' => 'Unsubscribe all',
     'type' => CRM_Utils_Type::T_BOOLEAN,
     'api.required' => 0,
     'api.default' => FALSE,
     'description' => E::ts('Whether to unsubscribe from all group memberships.'),
-  );
+  ];
 }

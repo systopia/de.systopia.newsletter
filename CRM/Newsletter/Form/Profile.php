@@ -24,7 +24,7 @@ use Civi\Api4\OptionValue;
 class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
 
   /**
-   * @var CRM_Newsletter_Profile $profile
+   * @var CRM_Newsletter_Profile
    *
    * The profile object the form is acting on.
    */
@@ -68,30 +68,33 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
     switch ($this->_op) {
       case 'delete':
         if ($profile_name) {
-          CRM_Utils_System::setTitle(E::ts('Delete Advanced Newsletter Management profile <em>%1</em>', array(1 => $profile_name)));
-          $this->addButtons(array(
-            array(
+          CRM_Utils_System::setTitle(E::ts('Delete Advanced Newsletter Management profile <em>%1</em>', [1 => $profile_name]));
+          $this->addButtons([
+            [
               'type' => 'submit',
               'name' => ($profile_name == 'default' ? E::ts('Reset') : E::ts('Delete')),
               'isDefault' => TRUE,
-            ),
-          ));
+            ],
+          ]);
         }
         parent::buildQuickForm();
         return;
+
       case 'edit':
         // When editing without a valid profile name, edit the default profile.
         if (!$profile_name) {
           $profile_name = 'default';
           $this->profile = CRM_Newsletter_Profile::getProfile($profile_name);
         }
-        CRM_Utils_System::setTitle(E::ts('Edit Advanced Newsletter Management profile <em>%1</em>', array(1 => $this->profile->getName())));
+        CRM_Utils_System::setTitle(E::ts('Edit Advanced Newsletter Management profile <em>%1</em>', [1 => $this->profile->getName()]));
         break;
+
       case 'create':
         // Load factory default profile values.
         $this->profile = CRM_Newsletter_Profile::createDefaultProfile($profile_name);
         CRM_Utils_System::setTitle(E::ts('New Advanced Newsletter Management profile'));
         break;
+
       default:
         CRM_Core_Error::fatal('Invalid operation.');
         break;
@@ -107,7 +110,7 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       ($is_default ? 'static' : 'text'),
       'name',
       E::ts('Profile name'),
-      array(),
+      [],
       !$is_default
     );
 
@@ -123,7 +126,7 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       'text',
       'form_title',
       E::ts('Form title'),
-      array(),
+      [],
       FALSE
     );
 
@@ -131,7 +134,7 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       'text',
       'submit_label',
       E::ts('Submit button label'),
-      array(),
+      [],
       FALSE
     );
 
@@ -152,7 +155,7 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
     );
 
     $contact_form_description_names = [];
-    foreach (CRM_Newsletter_Profile::availableDescriptionFields() as $description_field_name =>  $description_field_data) {
+    foreach (CRM_Newsletter_Profile::availableDescriptionFields() as $description_field_name => $description_field_data) {
       $full_name = 'contact_form_descriptions_' . $description_field_name . '_active';
       $this->add(
         'checkbox',
@@ -179,7 +182,7 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
         $full_name,
         E::ts('Field position'),
         [
-          'placeholder' => E::ts('Leave empty for default position.')
+          'placeholder' => E::ts('Leave empty for default position.'),
         ]
       );
       $contact_form_description_names[$description_field_name]['weight'] = $full_name;
@@ -187,23 +190,23 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
     $this->assign('contact_form_description_names', $contact_form_description_names);
 
     $contact_fields = CRM_Newsletter_Profile::availableContactFields();
-    $contact_field_names = array();
+    $contact_field_names = [];
     foreach ($contact_fields as $contact_field_name => $contact_field) {
       $this->add(
         'checkbox',
         'contact_field_' . $contact_field_name . '_active',
-        E::ts('Show contact field "%1"', array(
-          1 => $contact_field['label']
-        ))
+        E::ts('Show contact field "%1"', [
+          1 => $contact_field['label'],
+        ])
       );
       $contact_field_names[$contact_field_name]['active'] = 'contact_field_' . $contact_field_name . '_active';
 
       $this->add(
         'checkbox',
         'contact_field_' . $contact_field_name . '_required',
-        E::ts('Contact field "%1" is required', array(
-          1 => $contact_field['label']
-        ))
+        E::ts('Contact field "%1" is required', [
+          1 => $contact_field['label'],
+        ])
       );
       $contact_field_names[$contact_field_name]['required'] = 'contact_field_' . $contact_field_name . '_required';
 
@@ -226,17 +229,17 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
         'contact_field_' . $contact_field_name . '_weight',
         E::ts('Field position'),
         [
-          'placeholder' => E::ts('Leave empty for default position.')
+          'placeholder' => E::ts('Leave empty for default position.'),
         ]
       );
       $contact_field_names[$contact_field_name]['weight'] = 'contact_field_' . $contact_field_name . '_weight';
 
       // Add fields for overriding option value labels.
       if (!empty($contact_field['options']) && !in_array($contact_field_name, [
-          'country_id',
-          'state_province_id',
-          'county_id',
-        ])) {
+        'country_id',
+        'state_province_id',
+        'county_id',
+      ])) {
         foreach ($contact_field['options'] as $option_value => $option_label) {
           $this->add(
             'text',
@@ -253,14 +256,14 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       'text',
       'mailing_lists_label',
       E::ts('Label for mailing lists selection'),
-      array(),
+      [],
       TRUE
     );
     $this->add(
       'text',
       'mailing_lists_description',
       E::ts('Description for mailing lists selection'),
-      array(),
+      [],
       FALSE
     );
     $this->add(
@@ -269,7 +272,7 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       E::ts('Available mailing lists'),
       CRM_Newsletter_Profile::getGroups(),
       TRUE,
-      array('class' => 'crm-select2 huge', 'multiple' => 'multiple')
+      ['class' => 'crm-select2 huge', 'multiple' => 'multiple']
     );
 
     $this->add(
@@ -303,7 +306,7 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       'text',
       'mailing_lists_unsubscribe_all_description',
       E::ts('Unsubscribe All Description'),
-      array(),
+      [],
       FALSE
     );
 
@@ -311,21 +314,21 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       'text',
       'conditions_public_label',
       E::ts('Label for Terms and conditions for public form'),
-      array(),
+      [],
       FALSE
     );
     $this->add(
       'text',
       'conditions_public_description',
       E::ts('Description for Terms and conditions for public form'),
-      array(),
+      [],
       FALSE
     );
     $this->add(
       'textarea',
       'conditions_public',
       E::ts('Terms and conditions for public form'),
-      array(),
+      [],
       FALSE
     );
 
@@ -333,21 +336,21 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       'text',
       'conditions_preferences_label',
       E::ts('Label for Terms and conditions for preferences form'),
-      array(),
+      [],
       FALSE
     );
     $this->add(
       'text',
       'conditions_preferences_description',
       E::ts('Description for Terms and conditions for preferences form'),
-      array(),
+      [],
       FALSE
     );
     $this->add(
       'textarea',
       'conditions_preferences',
       E::ts('Terms and conditions for preferences form'),
-      array(),
+      [],
       FALSE
     );
 
@@ -356,7 +359,7 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       'sender_email',
       E::ts('Sender'),
       $this->getSenderOptions(),
-      true,
+      TRUE,
       ['class' => 'crm-select2 huge']
     );
 
@@ -364,7 +367,7 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       'text',
       'template_optin_subject',
       E::ts('Subject for opt-in e-mail'),
-      array(),
+      [],
       TRUE
     );
 
@@ -372,7 +375,7 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       'textarea',
       'template_optin',
       E::ts('Template for opt-in e-mail'),
-      array(),
+      [],
       TRUE
     );
 
@@ -380,7 +383,7 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       'wysiwyg',
       'template_optin_html',
       E::ts('Template for opt-in e-mail (HTML)'),
-      array(),
+      [],
       TRUE
     );
 
@@ -388,7 +391,7 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       'text',
       'template_info_subject',
       E::ts('Subject for info e-mail'),
-      array(),
+      [],
       TRUE
     );
 
@@ -396,7 +399,7 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       'textarea',
       'template_info',
       E::ts('Template for info e-mail'),
-      array(),
+      [],
       TRUE
     );
 
@@ -404,7 +407,7 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       'wysiwyg',
       'template_info_html',
       E::ts('Template for info e-mail (HTML)'),
-      array(),
+      [],
       TRUE
     );
 
@@ -412,7 +415,7 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       'text',
       'template_unsubscribe_all_subject',
       E::ts('Subject for unsubscribe all e-mail'),
-      array(),
+      [],
       TRUE
     );
 
@@ -420,7 +423,7 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       'textarea',
       'template_unsubscribe_all',
       E::ts('Template for unsubscribe all e-mail'),
-      array(),
+      [],
       TRUE
     );
 
@@ -428,7 +431,7 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       'wysiwyg',
       'template_unsubscribe_all_html',
       E::ts('Template for unsubscribe all e-mail (HTML)'),
-      array(),
+      [],
       TRUE
     );
 
@@ -436,7 +439,7 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       'text',
       'optin_url',
       E::ts('Opt-in URL'),
-      array(),
+      [],
       TRUE
     );
 
@@ -444,7 +447,7 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       'text',
       'preferences_url',
       E::ts('Preferences URL'),
-      array(),
+      [],
       TRUE
     );
 
@@ -452,7 +455,7 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       'text',
       'request_link_url',
       E::ts('Request link URL'),
-      array(),
+      [],
       TRUE
     );
 
@@ -488,7 +491,7 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
         FALSE,
         ['class' => 'crm-select2 huge']
       );
-        $this->add(
+      $this->add(
           'textarea',
           'gdprx_new_contact_note',
           E::ts('Note')
@@ -530,13 +533,13 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       );
     }
 
-    $this->addButtons(array(
-      array(
+    $this->addButtons([
+      [
         'type' => 'submit',
         'name' => E::ts('Save'),
         'isDefault' => TRUE,
-      ),
-    ));
+      ],
+    ]);
 
     // Export form elements.
     parent::buildQuickForm();
@@ -546,8 +549,8 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
    * @inheritdoc
    */
   public function addRules() {
-    if (in_array($this->_op, array('create', 'edit'))) {
-      $this->addFormRule(array('CRM_Newsletter_Form_Profile', 'validateProfileForm'));
+    if (in_array($this->_op, ['create', 'edit'])) {
+      $this->addFormRule(['CRM_Newsletter_Form_Profile', 'validateProfileForm']);
     }
   }
 
@@ -562,15 +565,15 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
    *   messages, keyed by form element name.
    */
   public static function validateProfileForm($values) {
-    $errors = array();
+    $errors = [];
 
     // Restrict profile names to alphanumeric characters and the underscore.
-    if (isset($values['name']) && preg_match("/[^A-Za-z0-9\_]/", $values['name'])) {
+    if (isset($values['name']) && preg_match('/[^A-Za-z0-9\_]/', $values['name'])) {
       $errors['name'] = E::ts('Only alphanumeric characters and the underscore (_) are allowed for profile names.');
     }
 
     // At least one contact field is mandatory.
-    $available_fields = array();
+    $available_fields = [];
     foreach (CRM_Newsletter_Profile::availableContactFields() as $available_name => $available) {
       $available_fields[] = 'contact_field_' . $available_name . '_active';
       if (!empty($values['contact_field_' . $available_name . '_active'])) {
@@ -605,7 +608,7 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
         $errors[$field_name] = E::ts(
           'Weight field must be set to a positive or negative integer number, but has value [%1].',
           [
-            1 => $fieldValue
+            1 => $fieldValue,
           ]
         );
       }
@@ -616,7 +619,7 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       $field_name = 'contact_form_descriptions_' . $description_field_name . '_active';
       $field_value_is_active = $values[$field_name];
 
-      if (isset($field_value_is_active) && (bool)$field_value_is_active) {
+      if (isset($field_value_is_active) && (bool) $field_value_is_active) {
         $field_name = 'contact_form_descriptions_' . $description_field_name . '_description';
         $field_value_description = $values[$field_name];
 
@@ -638,7 +641,7 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
     }
 
     // When terms and conditions are given, a label must be set as well.
-    foreach (array('public', 'preferences') as $conditions_type) {
+    foreach (['public', 'preferences'] as $conditions_type) {
       if (
         !empty($values['conditions_' . $conditions_type])
         && empty($values['conditions_' . $conditions_type . '_label'])
@@ -662,7 +665,7 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
    */
   public function setDefaultValues() {
     $defaults = parent::setDefaultValues();
-    if (in_array($this->_op, array('create', 'edit'))) {
+    if (in_array($this->_op, ['create', 'edit'])) {
       $defaults['name'] = $this->profile->getName();
       foreach ($this->profile->getData() as $element_name => $value) {
         if ($element_name == 'contact_fields') {
@@ -723,7 +726,7 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
    */
   public function postProcess() {
     $values = $this->exportValues();
-    if (in_array($this->_op, array('create', 'edit'))) {
+    if (in_array($this->_op, ['create', 'edit'])) {
       if (empty($values['name'])) {
         $values['name'] = 'default';
       }
@@ -773,12 +776,13 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
 
         if (isset($values[$element_name])) {
           $this->profile->setAttribute($element_name, $values[$element_name]);
-        } else {
+        }
+        else {
           // unset value!
           $this->profile->setAttribute($element_name, '');
         }
       }
-        $this->profile->saveProfile();
+      $this->profile->saveProfile();
     }
     elseif ($this->_op == 'delete') {
       $this->profile->deleteProfile();
@@ -793,9 +797,9 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
    */
   public static function getXCMProfiles() {
     if (!isset(static::$_xcm_profiles)) {
-      static::$_xcm_profiles = array(
-        '' => E::ts("&lt;default profile&gt;"),
-      );
+      static::$_xcm_profiles = [
+        '' => E::ts('&lt;default profile&gt;'),
+      ];
       if (method_exists('CRM_Xcm_Configuration', 'getProfileList')) {
         $profiles = CRM_Xcm_Configuration::getProfileList();
         foreach ($profiles as $profile_key => $profile_name) {
@@ -820,7 +824,7 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
         ->execute()
         ->indexBy('id')
         ->getArrayCopy();
-        // Include "email" column as the option value label did.
+      // Include "email" column as the option value label did.
       $from_email_addresses = array_map(
         fn($address) => sprintf('"%s" <%s>', $address['display_name'], $address['email']),
         $from_email_addresses

@@ -49,7 +49,9 @@ function civicrm_api3_newsletter_profile_getsingle($params) {
       if (!empty($contact_fields[$field_name]['options'])) {
         $field['options'] = array_replace(
           $contact_fields[$field_name]['options'],
-          array_filter($field['options'] ?? [], function ($replacement) { return isset($replacement) && $replacement !== ''; })
+          array_filter($field['options'] ?? [], function ($replacement) {
+            return isset($replacement) && $replacement !== '';
+          })
         );
       }
     }
@@ -65,7 +67,7 @@ function civicrm_api3_newsletter_profile_getsingle($params) {
     $group_tree = CRM_Newsletter_Utils::buildGroupTree($profile_data['mailing_lists']);
     $profile_data['mailing_lists_tree'] = $group_tree;
 
-    $return = array($profile_name => $profile_data);
+    $return = [$profile_name => $profile_data];
 
     // Reset locale to original language.
     CRM_Core_Session::singleton()->set('lcMessages', $current_locale);
@@ -78,7 +80,7 @@ function civicrm_api3_newsletter_profile_getsingle($params) {
     CRM_Core_Session::singleton()->set('lcMessages', $current_locale);
     CRM_Core_I18n::singleton()->setLocale($current_locale);
 
-    return civicrm_api3_create_error($exception->getMessage(), array('error_code' => $exception->getCode()));
+    return civicrm_api3_create_error($exception->getMessage(), ['error_code' => $exception->getCode()]);
   }
 }
 
@@ -88,12 +90,12 @@ function civicrm_api3_newsletter_profile_getsingle($params) {
  * @param $params
  */
 function _civicrm_api3_newsletter_profile_getsingle_spec(&$params) {
-  $params['name'] = array(
+  $params['name'] = [
     'name' => 'name',
     'title' => 'Newsletter profile name',
     'type' => CRM_Utils_Type::T_STRING,
     'api.required' => 0,
     'api.default' => 'default',
     'description' => 'The Newsletter profile name. If omitted, the default profile will be returned.',
-  );
+  ];
 }

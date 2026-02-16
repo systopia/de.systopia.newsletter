@@ -42,10 +42,10 @@ function civicrm_api3_newsletter_subscription_request($params) {
       );
       if (NULL === $contact_id && !empty($params['contact_hash'])) {
         // @todo: Remove code used for backward compatibility.
-        $contact_id = civicrm_api3('Contact', 'getsingle', array(
+        $contact_id = civicrm_api3('Contact', 'getsingle', [
           'return' => ['id'],
           'hash' => $params['contact_hash'],
-        ))['id'] ?? NULL;
+        ])['id'] ?? NULL;
       }
       if (NULL === $contact_id || $contact_id != $params['contact_id']) {
         throw new CRM_Core_Exception(E::ts('Invalid contact checksum for given contact ID.'), 'api_error');
@@ -81,9 +81,9 @@ function civicrm_api3_newsletter_subscription_request($params) {
       $contact_id = $contact_result['contact_id'];
     }
 
-    $contact = civicrm_api3('Contact', 'getsingle', array(
+    $contact = civicrm_api3('Contact', 'getsingle', [
       'id' => $contact_id,
-    ));
+    ]);
     $contact_checksum = ContactChecksumService::getInstance()->generateChecksum($contact_id);
     $mailing_lists = CRM_Newsletter_Utils::getSubscriptionStatus($contact_id, $profile->getName());
 
@@ -111,7 +111,7 @@ function civicrm_api3_newsletter_subscription_request($params) {
       $profile->getName(),
       $preferences_url
     );
-    $mail_params = array(
+    $mail_params = [
       'from' => CRM_Newsletter_Utils::getFromEmailAddress($profile),
       'toName' => $contact['display_name'],
       'toEmail' => $contact['email'],
@@ -120,24 +120,25 @@ function civicrm_api3_newsletter_subscription_request($params) {
       'subject' => $profile->getAttribute('template_optin_subject'),
       'text' => CRM_Core_Smarty::singleton()->fetchWith(
         'string:' . $profile->getAttribute('template_optin'),
-        array(
+        [
           'contact' => $contact,
           'mailing_lists' => $mailing_lists,
           'optin_url' => $optin_url,
           'preferences_url' => $preferences_url,
-        )
+        ]
       ),
       'html' => CRM_Core_Smarty::singleton()->fetchWith(
         'string:' . $profile->getAttribute('template_optin_html'),
-        array(
+        [
           'contact' => $contact,
           'mailing_lists' => $mailing_lists,
           'optin_url' => $optin_url,
           'preferences_url' => $preferences_url,
-        )
+        ]
       ),
-      'replyTo' => '', // TODO: Make configurable?
-    );
+    // TODO: Make configurable?
+      'replyTo' => '',
+    ];
     if (!CRM_Utils_Mail::send($mail_params)) {
       // TODO: Mail not sent. Maybe do not cancel the whole API call?
     }
@@ -146,7 +147,7 @@ function civicrm_api3_newsletter_subscription_request($params) {
   }
   catch (Exception $exception) {
     $error_code = ($exception instanceof CRM_Core_Exception ? $exception->getErrorCode() : $exception->getCode());
-    return civicrm_api3_create_error($exception->getMessage(), array('error_code' => $error_code));
+    return civicrm_api3_create_error($exception->getMessage(), ['error_code' => $error_code]);
   }
 }
 
@@ -156,42 +157,42 @@ function civicrm_api3_newsletter_subscription_request($params) {
  * @param $params
  */
 function _civicrm_api3_newsletter_subscription_request_spec(&$params) {
-  $params['profile'] = array(
+  $params['profile'] = [
     'name' => 'profile',
     'title' => 'Newsletter profile name',
     'type' => CRM_Utils_Type::T_STRING,
     'api.required' => 0,
     'api.default' => 'default',
     'description' => 'The Newsletter profile name. If omitted, the default profile will be used.',
-  );
-  $params['contact_checksum'] = array(
+  ];
+  $params['contact_checksum'] = [
     'name' => 'contact_checksum',
     'title' => 'Contact checksum',
     'type' => CRM_Utils_Type::T_STRING,
     'api.required' => 0,
     'description' => 'Generated checksum of the contact to request a link for.',
-  );
-  $params['contact_hash'] = array(
+  ];
+  $params['contact_hash'] = [
     'name' => 'contact_hash',
     'title' => 'Contact hash',
     'type' => CRM_Utils_Type::T_STRING,
     'api.required' => 0,
     'description' => 'Generated checksum of the contact to request a link for. (Deprecated: Use contact_checksum instead.)',
-  );
-  $params['contact_id'] = array(
+  ];
+  $params['contact_id'] = [
     'name' => 'contact_id',
     'title' => 'Contact ID',
     'type' => CRM_Utils_Type::T_STRING,
     'api.required' => 0,
     'description' => 'The CiviCRM ID of the contact to request a link for.',
-  );
+  ];
 
   foreach (CRM_Newsletter_Profile::availableContactFields() as $field_name => $field_label) {
-    $params[$field_name] = array(
+    $params[$field_name] = [
       'name' => $field_name,
       'title' => $field_label,
       'type' => CRM_Utils_Type::T_STRING,
       'api.required' => 0,
-    );
+    ];
   }
 }

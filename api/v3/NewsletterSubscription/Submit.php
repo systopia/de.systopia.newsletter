@@ -44,9 +44,9 @@ function civicrm_api3_newsletter_subscription_submit($params) {
     );
     if (!empty($missing_contact_fields)) {
       throw new CRM_Core_Exception(
-        E::ts('Missing mandatory fields %1', array(
+        E::ts('Missing mandatory fields %1', [
           1 => implode(', ', array_keys($missing_contact_fields)),
-        )),
+        ]),
         'mandatory_missing'
       );
     }
@@ -60,9 +60,9 @@ function civicrm_api3_newsletter_subscription_submit($params) {
     }
     $contact_result = CRM_Newsletter_Utils::getContact($contact_data);
     $contact_id = $contact_result['contact_id'];
-    $contact = civicrm_api3('Contact', 'getsingle', array(
+    $contact = civicrm_api3('Contact', 'getsingle', [
       'id' => $contact_id,
-    ));
+    ]);
     $contact_checksum = ContactChecksumService::getInstance()->generateChecksum($contact_id);
 
     // Validate submitted group IDs.
@@ -74,26 +74,26 @@ function civicrm_api3_newsletter_subscription_submit($params) {
       array_keys($profile->getAttribute('mailing_lists'))
     );
     if (!empty($disallowed_groups)) {
-      throw new CRM_Core_Exception(E::ts('Disallowed group ID(s): %1', array(
-        1 => implode(', ', $disallowed_groups)
-      )), 'api_error');
+      throw new CRM_Core_Exception(E::ts('Disallowed group ID(s): %1', [
+        1 => implode(', ', $disallowed_groups),
+      ]), 'api_error');
     }
 
     // Get current group memberships for submitted group IDs.
-    $current_mailing_lists = array();
+    $current_mailing_lists = [];
     foreach (CRM_Newsletter_Utils::getSubscriptionStatus($contact_id, $profile->getName()) as $group_id => $group_info) {
       $current_mailing_lists[$group_id] = $group_info['status_raw'];
     }
 
     // Add "pending" group membership for all new groups.
     $new_groups = array_diff($params['mailing_lists'], array_keys($current_mailing_lists));
-    $group_contact_results = array();
+    $group_contact_results = [];
     foreach ($new_groups as $group_id) {
-      $group_contact_results[$group_id] = civicrm_api3('GroupContact', 'create', array(
+      $group_contact_results[$group_id] = civicrm_api3('GroupContact', 'create', [
         'group_id' => $group_id,
         'contact_id' => $contact_id,
         'status' => 'Pending',
-      ));
+      ]);
     }
 
     // Add GDPRX record for newly created contacts.
@@ -128,7 +128,7 @@ function civicrm_api3_newsletter_subscription_submit($params) {
   }
   catch (Exception $exception) {
     $error_code = ($exception instanceof CRM_Core_Exception ? $exception->getErrorCode() : $exception->getCode());
-    return civicrm_api3_create_error($exception->getMessage(), array('error_code' => $error_code));
+    return civicrm_api3_create_error($exception->getMessage(), ['error_code' => $error_code]);
   }
 }
 
@@ -138,29 +138,29 @@ function civicrm_api3_newsletter_subscription_submit($params) {
  * @param $params
  */
 function _civicrm_api3_newsletter_subscription_submit_spec(&$params) {
-  $params['profile'] = array(
+  $params['profile'] = [
     'name' => 'profile',
     'title' => 'Newsletter profile name',
     'type' => CRM_Utils_Type::T_STRING,
     'api.required' => 0,
     'api.default' => 'default',
     'description' => 'The Newsletter profile name. If omitted, the default profile will be used.',
-  );
+  ];
 
   foreach (CRM_Newsletter_Profile::availableContactFields() as $field_name => $field_label) {
-    $params[$field_name] = array(
+    $params[$field_name] = [
       'name' => $field_name,
       'title' => $field_label['label'],
       'type' => CRM_Utils_Type::T_STRING,
       'api.required' => 0,
-    );
+    ];
   }
 
-  $params['mailing_lists'] = array(
+  $params['mailing_lists'] = [
     'name' => 'mailing_lists',
     'title' => 'Mailing lists',
     'type' => 'CommaSeparatedIntegers',
     'api.required' => 1,
     'description' => E::ts('The IDs of the groups to add the contact to.'),
-  );
+  ];
 }
