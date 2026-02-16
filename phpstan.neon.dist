@@ -15,6 +15,7 @@ parameters:
 	scanDirectories:
 		- tools/phpunit/vendor/bin/.phpunit/phpunit/src/Framework
 		- mixin
+		- ../de.systopia.gdprx/CRM
 		- ../de.systopia.xcm/CRM
 	bootstrapFiles:
 		- tools/phpunit/vendor/bin/.phpunit/phpunit/vendor/autoload.php

@@ -5,6 +5,9 @@ parameters:
 	scanDirectories:
 		- vendor/civicrm/civicrm-core/api
 		- vendor/civicrm/civicrm-core/CRM
+		- vendor/civicrm/civicrm-core/ext/flexmailer/src
+		- vendor/civicrm/civicrm-packages/DB
+		- vendor/civicrm/civicrm-packages/HTML
 	bootstrapFiles:
 		- vendor/autoload.php
 	# Because we test with different versions in CI we may have unmatched errors.

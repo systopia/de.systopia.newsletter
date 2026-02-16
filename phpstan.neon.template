@@ -8,6 +8,9 @@ parameters:
 	scanDirectories:
 		- {VENDOR_DIR}/civicrm/civicrm-core/api
 		- {VENDOR_DIR}/civicrm/civicrm-core/CRM
+		- {VENDOR_DIR}/civicrm/civicrm-core/ext/flexmailer/src
+		- {VENDOR_DIR}/civicrm/civicrm-packages/DB
+		- {VENDOR_DIR}/civicrm/civicrm-packages/HTML
 	bootstrapFiles:
 		- {VENDOR_DIR}/autoload.php
 
@@ -18,5 +21,8 @@ parameters:
 #	scanDirectories:
 #       - {CIVICRM_DIR}/api
 #		- {CIVICRM_DIR}/CRM
+#		- {CIVICRM_DIR}/ext/flexmailer/src
+#		- {CIVICRM_DIR}/packages/DB
+#		- {CIVICRM_DIR}/packages/HTML
 #	bootstrapFiles:
 #		- {CIVICRM_DIR}/vendor/autoload.php

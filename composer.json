@@ -1,6 +1,6 @@
 {
     "name": "systopia/de.systopia.newsletter",
-    "description": " Provides an API and configuration for advanced newsletter management. ",
+    "description": "Provides an API and configuration for advanced newsletter management.",
     "type": "civicrm-ext",
     "license": "AGPL-3.0-or-later",
     "authors": [
