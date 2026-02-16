@@ -13,6 +13,8 @@
 | written permission from the original author(s).             |
 +-------------------------------------------------------------*/
 
+declare(strict_types = 1);
+
 use CRM_Newsletter_ExtensionUtil as E;
 use Civi\Api4\OptionValue;
 
@@ -24,30 +26,27 @@ use Civi\Api4\OptionValue;
 class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
 
   /**
-   * @var CRM_Newsletter_Profile
-   *
    * The profile object the form is acting on.
    */
-  protected $profile;
+  protected ?CRM_Newsletter_Profile $profile = NULL;
 
   /**
-   * @var string
-   *
    * The operation to perform within the form.
    */
-  protected $_op;
+  protected ?string $_op = NULL;
 
   /**
-   * @var array
+   * @var array|null
    *
    * A static cache of retrieved location types found within
    * static::getXCMProfiles().
    */
-  protected static $_xcm_profiles = NULL;
+  protected static ?array $_xcm_profiles = NULL;
 
   /**
    * Builds the form structure.
    */
+  // phpcs:ignore Generic.Metrics.CyclomaticComplexity.TooHigh
   public function buildQuickForm() {
     // "Create" is the default operation.
     if (!$this->_op = CRM_Utils_Request::retrieve('op', 'String', $this)) {
@@ -57,6 +56,7 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
     // Verify that a profile with the given name exists.
     // The parameter name must not be present as a POST value within the form,
     // because the URL query parameter would be overwritten with it.
+    /** @var string|null $profile_name */
     $profile_name = CRM_Utils_Request::retrieve('pname', 'String', $this);
     if (!$this->profile = CRM_Newsletter_Profile::getProfile($profile_name)) {
       $profile_name = NULL;
@@ -68,7 +68,9 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
     switch ($this->_op) {
       case 'delete':
         if ($profile_name) {
-          CRM_Utils_System::setTitle(E::ts('Delete Advanced Newsletter Management profile <em>%1</em>', [1 => $profile_name]));
+          CRM_Utils_System::setTitle(
+            E::ts('Delete Advanced Newsletter Management profile <em>%1</em>', [1 => $profile_name])
+          );
           $this->addButtons([
             [
               'type' => 'submit',
@@ -86,17 +88,19 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
           $profile_name = 'default';
           $this->profile = CRM_Newsletter_Profile::getProfile($profile_name);
         }
-        CRM_Utils_System::setTitle(E::ts('Edit Advanced Newsletter Management profile <em>%1</em>', [1 => $this->profile->getName()]));
+        CRM_Utils_System::setTitle(
+          E::ts('Edit Advanced Newsletter Management profile <em>%1</em>', [1 => $this->profile->getName()])
+        );
         break;
 
       case 'create':
         // Load factory default profile values.
-        $this->profile = CRM_Newsletter_Profile::createDefaultProfile($profile_name);
+        $this->profile = CRM_Newsletter_Profile::createDefaultProfile($profile_name ?? 'default');
         CRM_Utils_System::setTitle(E::ts('New Advanced Newsletter Management profile'));
         break;
 
       default:
-        CRM_Core_Error::fatal('Invalid operation.');
+        CRM_Core_Error::statusBounce('Invalid operation.');
         break;
     }
 
@@ -155,7 +159,9 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
     );
 
     $contact_form_description_names = [];
-    foreach (CRM_Newsletter_Profile::availableDescriptionFields() as $description_field_name => $description_field_data) {
+    foreach (
+      CRM_Newsletter_Profile::availableDescriptionFields() as $description_field_name => $description_field_data
+    ) {
       $full_name = 'contact_form_descriptions_' . $description_field_name . '_active';
       $this->add(
         'checkbox',
@@ -222,7 +228,8 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
         'contact_field_' . $contact_field_name . '_description',
         E::ts('Field description')
       );
-      $contact_field_names[$contact_field_name]['description'] = 'contact_field_' . $contact_field_name . '_description';
+      $contact_field_names[$contact_field_name]['description']
+        = 'contact_field_' . $contact_field_name . '_description';
 
       $this->add(
         'text',
@@ -246,7 +253,8 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
             'contact_field_' . $contact_field_name . '_option_' . $option_value,
             E::ts('Label for option %1', [1 => $option_label])
           );
-          $contact_field_names[$contact_field_name]['options'][$option_value] = 'contact_field_' . $contact_field_name . '_option_' . $option_value;
+          $contact_field_names[$contact_field_name]['options'][$option_value]
+            = 'contact_field_' . $contact_field_name . '_option_' . $option_value;
         }
       }
     }
@@ -564,11 +572,12 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
    *   TRUE when the form was successfully validated, or an array of error
    *   messages, keyed by form element name.
    */
+  // phpcs:ignore Generic.Metrics.CyclomaticComplexity.TooHigh
   public static function validateProfileForm($values) {
     $errors = [];
 
     // Restrict profile names to alphanumeric characters and the underscore.
-    if (isset($values['name']) && preg_match('/[^A-Za-z0-9\_]/', $values['name'])) {
+    if (isset($values['name']) && preg_match('/[^A-Za-z0-9_]/', $values['name'])) {
       $errors['name'] = E::ts('Only alphanumeric characters and the underscore (_) are allowed for profile names.');
     }
 
@@ -602,7 +611,7 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
       $field_name = 'contact_field_' . $available_name . '_weight';
       $fieldValue = $values[$field_name];
       if (isset($fieldValue)
-          && strlen($field_value) > 0
+          && strlen($fieldValue) > 0
           && filter_var($fieldValue, FILTER_VALIDATE_INT) === FALSE
       ) {
         $errors[$field_name] = E::ts(
@@ -615,7 +624,9 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
     }
 
     // if description fields are activated, a description text is necessary
-    foreach (CRM_Newsletter_Profile::availableDescriptionFields() as $description_field_name => $description_field_data) {
+    foreach (
+      CRM_Newsletter_Profile::availableDescriptionFields() as $description_field_name => $description_field_data
+    ) {
       $field_name = 'contact_form_descriptions_' . $description_field_name . '_active';
       $field_value_is_active = $values[$field_name];
 
@@ -646,7 +657,8 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
         !empty($values['conditions_' . $conditions_type])
         && empty($values['conditions_' . $conditions_type . '_label'])
       ) {
-        $errors['conditions_' . $conditions_type . '_label'] = E::ts('Please enter a label for the terms and conditions.');
+        $errors['conditions_' . $conditions_type . '_label']
+          = E::ts('Please enter a label for the terms and conditions.');
       }
     }
 
@@ -654,7 +666,8 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
     // otherwise this wont have any effect
     if (isset($values['mailing_lists_unsubscribe_all_profiles']) && $values['mailing_lists_unsubscribe_all_profiles'] &&
       (!isset($values['mailing_lists_unsubscribe_all']) || !$values['mailing_lists_unsubscribe_all'])) {
-      $errors['mailing_lists_unsubscribe_all'] = E::ts('Please activate this if you chose to unsubscribe from all profiles.');
+      $errors['mailing_lists_unsubscribe_all']
+        = E::ts('Please activate this if you chose to unsubscribe from all profiles.');
     }
 
     return empty($errors) ? TRUE : $errors;
@@ -663,6 +676,7 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
   /**
    * Set the default values (i.e. the profile's current data) in the form.
    */
+  // phpcs:ignore Generic.Metrics.CyclomaticComplexity.TooHigh, Generic.Metrics.NestingLevel.TooHigh
   public function setDefaultValues() {
     $defaults = parent::setDefaultValues();
     if (in_array($this->_op, ['create', 'edit'])) {
@@ -724,6 +738,7 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
   /**
    * Store the values submitted with the form in the profile.
    */
+  // phpcs:ignore Generic.Metrics.CyclomaticComplexity.TooHigh, Generic.Metrics.NestingLevel.TooHigh
   public function postProcess() {
     $values = $this->exportValues();
     if (in_array($this->_op, ['create', 'edit'])) {
@@ -739,12 +754,16 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
         if ($element_name == 'contact_fields') {
           foreach (CRM_Newsletter_Profile::availableContactFields() as $contact_field_name => $contact_field) {
             if (!empty($values['contact_field_' . $contact_field_name . '_active'])) {
-              $values['contact_fields'][$contact_field_name]['active'] = $values['contact_field_' . $contact_field_name . '_active'];
+              $values['contact_fields'][$contact_field_name]['active']
+                = $values['contact_field_' . $contact_field_name . '_active'];
               if (!empty($values['contact_field_' . $contact_field_name . '_required'])) {
-                $values['contact_fields'][$contact_field_name]['required'] = $values['contact_field_' . $contact_field_name . '_required'];
+                $values['contact_fields'][$contact_field_name]['required']
+                  = $values['contact_field_' . $contact_field_name . '_required'];
               }
-              $values['contact_fields'][$contact_field_name]['label'] = $values['contact_field_' . $contact_field_name . '_label'];
-              $values['contact_fields'][$contact_field_name]['description'] = $values['contact_field_' . $contact_field_name . '_description'];
+              $values['contact_fields'][$contact_field_name]['label']
+                = $values['contact_field_' . $contact_field_name . '_label'];
+              $values['contact_fields'][$contact_field_name]['description']
+                = $values['contact_field_' . $contact_field_name . '_description'];
               if (!empty($contact_field['options'])) {
                 foreach ($contact_field['options'] as $option_value => $option_label) {
                   $optionName = 'contact_field_' . $contact_field_name . '_option_' . $option_value;
@@ -755,29 +774,38 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
               }
             }
             // always save weight, otherwise field position would be lost when field is deactivated.
-            $values['contact_fields'][$contact_field_name]['weight'] = $values['contact_field_' . $contact_field_name . '_weight'];
+            $values['contact_fields'][$contact_field_name]['weight']
+              = $values['contact_field_' . $contact_field_name . '_weight'];
           }
         }
         elseif ($element_name == 'contact_form_descriptions') {
-          foreach (CRM_Newsletter_Profile::availableDescriptionFields() as $description_field_name => $description_field_data) {
+          foreach (
+            CRM_Newsletter_Profile::availableDescriptionFields() as $description_field_name => $description_field_data
+          ) {
             $field_name = 'contact_form_descriptions_' . $description_field_name;
             if (!empty($values[$field_name . '_active'])) {
-              $values['contact_form_descriptions'][$description_field_name]['active'] = $values[$field_name . '_active'];
+              $values['contact_form_descriptions'][$description_field_name]['active']
+                = $values[$field_name . '_active'];
             }
             // always save weight and description, otherwise field data would be lost when field is deactivated.
-            $values['contact_form_descriptions'][$description_field_name]['description'] = html_entity_decode($values[$field_name . '_description']);
+            $values['contact_form_descriptions'][$description_field_name]['description']
+              = html_entity_decode($values[$field_name . '_description']);
             $values['contact_form_descriptions'][$description_field_name]['weight'] = $values[$field_name . '_weight'];
           }
         }
         elseif ($element_name == 'mailing_lists') {
           // Store ID => Group name.
-          $values['mailing_lists'] = array_intersect_key(CRM_Newsletter_Profile::getGroups(), array_flip($values['mailing_lists']));
+          $values['mailing_lists'] = array_intersect_key(
+            CRM_Newsletter_Profile::getGroups(),
+            array_flip($values['mailing_lists'])
+          );
         }
 
         if (isset($values[$element_name])) {
           $this->profile->setAttribute($element_name, $values[$element_name]);
         }
         else {
+          // phpcs:ignore Squiz.PHP.CommentedOutCode.Found
           // unset value!
           $this->profile->setAttribute($element_name, '');
         }
@@ -816,6 +844,7 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
   protected function getSenderOptions() {
     // TODO: Remove check when minimum core version requirement is >= 6.0.0.
     if (class_exists('\Civi\Api4\SiteEmailAddress')) {
+      /** @var list<array{display_name: string, email: string, id: int}> $from_email_addresses */
       $from_email_addresses = \Civi\Api4\SiteEmailAddress::get(FALSE)
         ->addSelect('display_name', 'email', 'id')
         ->addWhere('domain_id', '=', 'current_domain')
@@ -845,7 +874,6 @@ class CRM_Newsletter_Form_Profile extends CRM_Core_Form {
     return array_map(function($value) {
       return htmlspecialchars($value);
     }, $from_email_addresses);
-    return $from_email_addresses;
   }
 
 }

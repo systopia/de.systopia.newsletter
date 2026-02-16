@@ -1,5 +1,5 @@
 <?php
-use CRM_Newsletter_ExtensionUtil as E;
+declare(strict_types = 1);
 
 /**
  * Collection of upgrade steps.
@@ -14,9 +14,10 @@ class CRM_Newsletter_Upgrader extends CRM_Extension_Upgrader_Base {
    *
    * @link https://civicrm.org/advisory/civi-sa-2019-21-poi-saved-search-and-report-instance-apis
    */
-  public function upgrade_5009() {
+  public function upgrade_5009(): bool {
     // Do not use CRM_Core_BAO::getItem() or Civi::settings()->get().
     // Extract and unserialize directly from the database.
+    /** @var \CRM_Core_DAO $newsletter_profiles_query */
     $newsletter_profiles_query = CRM_Core_DAO::executeQuery("
         SELECT `value`
           FROM `civicrm_setting`
@@ -32,7 +33,7 @@ class CRM_Newsletter_Upgrader extends CRM_Extension_Upgrader_Base {
   /**
    * Add default value for new opt-in URL profile property.
    */
-  public function upgrade_5100() {
+  public function upgrade_5100(): bool {
     foreach (CRM_Newsletter_Profile::getProfiles() as $profile_name => $profile) {
       if (empty($profile->getAttribute('optin_url'))) {
         $profile->setAttribute('optin_url', $profile->getAttribute('preferences_url'));

@@ -13,16 +13,18 @@
 | written permission from the original author(s).             |
 +-------------------------------------------------------------*/
 
+declare(strict_types = 1);
+
 use CRM_Newsletter_ExtensionUtil as E;
 
 /**
  * API callback for "getsingle" call on "NewsletterProfile" entity.
  *
- * @param $params
+ * @param array<string, mixed> $params
  *
- * @return array
+ * @return array<string, mixed>
  */
-function civicrm_api3_newsletter_profile_getsingle($params) {
+function civicrm_api3_newsletter_profile_getsingle(array $params): array {
   try {
     if (!$profile = CRM_Newsletter_Profile::getProfile($params['name'] ?: 'default')) {
       throw new Exception(E::ts('Advanced Newsletter Management profile not found.'), 404);
@@ -76,6 +78,7 @@ function civicrm_api3_newsletter_profile_getsingle($params) {
     return civicrm_api3_create_success($return);
   }
   catch (\Exception $exception) {
+    // @ignoreException
     // Reset locale to original language.
     CRM_Core_Session::singleton()->set('lcMessages', $current_locale);
     CRM_Core_I18n::singleton()->setLocale($current_locale);
@@ -87,9 +90,9 @@ function civicrm_api3_newsletter_profile_getsingle($params) {
 /**
  * API specification for "getsingle" call on "NewsletterProfile" entity.
  *
- * @param $params
+ * @param array<string, array<string, mixed>> $params
  */
-function _civicrm_api3_newsletter_profile_getsingle_spec(&$params) {
+function _civicrm_api3_newsletter_profile_getsingle_spec(array &$params): void {
   $params['name'] = [
     'name' => 'name',
     'title' => 'Newsletter profile name',

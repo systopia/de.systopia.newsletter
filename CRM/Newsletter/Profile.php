@@ -13,6 +13,8 @@
 | written permission from the original author(s).             |
 +-------------------------------------------------------------*/
 
+declare(strict_types = 1);
+
 use CRM_Newsletter_ExtensionUtil as E;
 
 /**
@@ -23,7 +25,7 @@ class CRM_Newsletter_Profile {
   /**
    * The name of the mailing list group type.
    */
-  const GROUP_TYPE_MAILING_LIST = 'Mailing List';
+  public const GROUP_TYPE_MAILING_LIST = 'Mailing List';
 
   /**
    * The maximum number of description fields that can be insterted into the contact form.
@@ -218,7 +220,7 @@ class CRM_Newsletter_Profile {
   /**
    * Retrieves available contact fields for a profile.
    *
-   * @return array
+   * @return array<string, array{type: string, label: string, options?: array<string, string>}>
    *   An array with contact field names as keys and their translated labels as
    *   values.
    *
@@ -318,6 +320,7 @@ class CRM_Newsletter_Profile {
           ->indexBy('name')
           ->getArrayCopy())
     );
+    /** @var array<string, array{type: string, label: string, options?: array<string, string>}> $static */
 
     $dynamic = [];
 
@@ -356,7 +359,9 @@ class CRM_Newsletter_Profile {
           }
         }
       }
+      /** @var array<string, array{type: string, label: string, options?: array<string, string>}> $dynamic */
     }
+
     return $static + $dynamic;
   }
 
@@ -499,7 +504,7 @@ class CRM_Newsletter_Profile {
     foreach (self::$_profiles as $profile_name => $profile) {
       $profile_data[$profile_name] = $profile->data;
     }
-    civi::settings()->set('newsletter_profiles', $profile_data);
+    Civi::settings()->set('newsletter_profiles', $profile_data);
   }
 
   /**
@@ -527,8 +532,7 @@ class CRM_Newsletter_Profile {
       }
     }
     catch (CRM_Core_Exception $exception) {
-      $error = CRM_Core_Error::createError($exception->getMessage(), 0);
-      CRM_Core_Error::displaySessionError($error);
+      CRM_Core_Session::setStatus($exception->getMessage());
     }
     return $groups;
   }

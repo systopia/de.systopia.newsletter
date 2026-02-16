@@ -275,6 +275,14 @@ msgid "Last name"
 msgstr ""
 
 #: CRM/Newsletter/Profile.php
+msgid "Nick name"
+msgstr ""
+
+#: CRM/Newsletter/Profile.php
+msgid "Job title"
+msgstr ""
+
+#: CRM/Newsletter/Profile.php
 msgid "E-mail address"
 msgstr ""
 
