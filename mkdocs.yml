@@ -1,10 +1,10 @@
 site_name: Advanced Newsletter Management
-repo_url: https://github.com/systopia/de.systopia.newsletter
 site_description: 'A guide for the Advanced Newsletter Management extension.'
-site_author: 'SYSTOPIA'
+site_author: SYSTOPIA
+repo_url: https://github.com/systopia/de.systopia.newsletter
+
 theme:
-    name:
-        material
+  name: material
 
 nav:
     - Home: index.md
@@ -12,19 +12,20 @@ nav:
     - Usage: usage.md
 
 markdown_extensions:
-    - attr_list
-    - admonition
-    - def_list
-    - pymdownx.highlight:
-          guess_lang: false
-    - toc:
-          permalink: true
-    - pymdownx.superfences
-    - pymdownx.inlinehilite
-    - pymdownx.tilde
-    - pymdownx.betterem
-    - pymdownx.mark
+  - attr_list
+  - admonition
+  - def_list
+  - codehilite
+  - toc:
+      permalink: true
+  - pymdownx.highlight:
+      guess_lang: false
+  - pymdownx.superfences
+  - pymdownx.inlinehilite
+  - pymdownx.tilde
+  - pymdownx.betterem
+  - pymdownx.mark
 
 plugins:
-    - search:
-          lang: en
+  - search:
+      lang: en
