@@ -13,17 +13,18 @@
 | written permission from the original author(s).             |
 +-------------------------------------------------------------*/
 
-use CRM_Newsletter_ExtensionUtil as E;
+declare(strict_types = 1);
 
 /**
  * API callback for "get" call on "NewsletterProfile" entity.
  *
- * @param $params
+ * @param array<string, mixed> $params
  *
- * @return array
+ * @return array<string, mixed>
  */
-function civicrm_api3_newsletter_profile_get($params) {
+function civicrm_api3_newsletter_profile_get(array $params): array {
   if (isset($params['name'])) {
+    /** @var array<string, mixed> */
     return civicrm_api3('NewsletterProfile', 'getsingle', $params);
   }
 
@@ -46,14 +47,14 @@ function civicrm_api3_newsletter_profile_get($params) {
 /**
  * API specification for "getsingle" call on "NewsletterProfile" entity.
  *
- * @param $params
+ * @param array<string, array<string, mixed>> $params
  */
-function _civicrm_api3_newsletter_profile_get_spec(&$params) {
-  $params['name'] = array(
+function _civicrm_api3_newsletter_profile_get_spec(array &$params): void {
+  $params['name'] = [
     'name' => 'name',
     'title' => 'Newsletter profile name',
     'type' => CRM_Utils_Type::T_STRING,
     'api.required' => 0,
     'description' => 'The Newsletter profile name. If omitted, the default profile will be returned.',
-  );
+  ];
 }

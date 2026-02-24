@@ -13,6 +13,8 @@
 | written permission from the original author(s).             |
 +-------------------------------------------------------------*/
 
+declare(strict_types = 1);
+
 use CRM_Newsletter_ExtensionUtil as E;
 use Civi\Api4\OptionValue;
 
@@ -30,10 +32,10 @@ class CRM_Newsletter_Utils {
    *   An associative array with contact data to find, create or update a
    *   contact with, according to the XCM configuration.
    *
-   * @return int
+   * @return array{contact_id: int, was_created: bool}
    *   The CiviCRM ID of the contact found, created or updated by XCM.
    *
-   * @throws Exception.
+   * @throws Exception
    *   When no contact could be found or created.
    */
   public static function getContact($contact_data) {
@@ -60,6 +62,7 @@ class CRM_Newsletter_Utils {
   public static function getFromEmailAddress(?CRM_Newsletter_Profile $profile = NULL): string {
     // TODO: Remove check when minimum core version requirement is >= 6.0.0.
     if (class_exists('\Civi\Api4\SiteEmailAddress')) {
+      /** @var list<array{display_name: string, email: string, id: int}> $from_addresses */
       $from_addresses = \Civi\Api4\SiteEmailAddress::get(FALSE)
         ->addSelect('display_name', 'email', 'id')
         ->addWhere('domain_id', '=', 'current_domain')
@@ -109,26 +112,26 @@ class CRM_Newsletter_Utils {
    * @throws CRM_Core_Exception When an API call failed.
    */
   public static function getSubscriptionStatus($contact_id, $profile_name = 'default') {
-    $subscription = civicrm_api3('NewsletterSubscription', 'get', array(
+    $subscription = civicrm_api3('NewsletterSubscription', 'get', [
       'contact_id' => $contact_id,
       'profile'    => $profile_name,
-    ));
-    $mailing_lists = array();
+    ]);
+    $mailing_lists = [];
     foreach (reset($subscription['values'])['subscription_status'] as $group_id => $group_status) {
-      $group = civicrm_api3('Group', 'getsingle', array(
+      $group = civicrm_api3('Group', 'getsingle', [
         'id' => $group_id,
-        'return' => ['id', 'title', 'frontend_title']
-      ));
+        'return' => ['id', 'title', 'frontend_title'],
+      ]);
       $translatedStatus = [
         'Added' => E::ts('Added'),
         'Pending' => E::ts('Pending'),
         'Removed' => E::ts('Removed'),
       ];
-      $mailing_lists[$group_id] = array(
+      $mailing_lists[$group_id] = [
         'title' => !empty($group['frontend_title']) ? $group['frontend_title'] : $group['title'],
         'status' => $translatedStatus[$group_status],
         'status_raw' => $group_status,
-      );
+      ];
     }
 
     return $mailing_lists;
@@ -143,23 +146,25 @@ class CRM_Newsletter_Utils {
    *
    * @throws \CRM_Core_Exception
    */
+  // phpcs:ignore Generic.Metrics.CyclomaticComplexity.TooHigh
   public static function buildGroupTree($groups) {
-    $group_tree = array();
-    $group_tree_items = array();
+    $group_tree = [];
+    $group_tree_items = [];
 
     foreach ($groups as $group_id => $group_title) {
       // Retrieve group information.
-      $group = civicrm_api3('Group', 'getsingle', array(
+      $group = civicrm_api3('Group', 'getsingle', [
         'id' => $group_id,
-        'return' => array('children', 'description', 'frontend_description', 'name', 'title', 'frontend_title', 'parents'),
-      ));
+        'return' => ['children', 'description', 'frontend_description', 'name', 'title', 'frontend_title', 'parents'],
+      ]);
 
       // Compose the group item.
-      $group_tree_item = array(
+      $group_tree_item = [
         'title' => !empty($group['frontend_title']) ? $group['frontend_title'] : $group['title'],
-        'description' => !empty($group['frontend_description']) ? $group['frontend_description'] : (!empty($group['description']) ? $group['description'] : ''),
+        'description' => !empty($group['frontend_description']) ? $group['frontend_description']
+        : (!empty($group['description']) ? $group['description'] : ''),
         'name' => !empty($group['name']) ? $group['name'] : '',
-      );
+      ];
       // Add children.
       if (!empty($group['children'])) {
         $group_tree_item['children_ids'] = $group['children'];
@@ -206,18 +211,18 @@ class CRM_Newsletter_Utils {
    *    Contact Id for unsubscription
    *
    * @return array
-   *    Returns array with unsubscribed_ids
+   *   Returns array with unsubscribed_ids
    *
    * @throws CRM_Core_Exception
    */
   public static function unsubscribe_all($groups, $contact_id) {
     $unsubscribe_results = [];
     foreach ($groups as $group_id) {
-      $unsubscribe_results[$group_id] = civicrm_api3('GroupContact', 'create', array(
+      $unsubscribe_results[$group_id] = civicrm_api3('GroupContact', 'create', [
         'group_id' => $group_id,
         'contact_id' => $contact_id,
         'status' => 'Removed',
-      ));
+      ]);
     }
     return $unsubscribe_results;
   }
@@ -242,11 +247,13 @@ class CRM_Newsletter_Utils {
         $text_content = $profile->getAttribute('template_unsubscribe_all');
         $html_content = $profile->getAttribute('template_unsubscribe_all_html');
         break;
+
       case 'info':
         $subject = $profile->getAttribute('template_info_subject');
         $text_content = $profile->getAttribute('template_info');
         $html_content = $profile->getAttribute('template_info_html');
         break;
+
       case 'optin':
       default:
         $subject = $profile->getAttribute('template_optin_subject');
@@ -285,7 +292,7 @@ class CRM_Newsletter_Utils {
     );
 
     // Construct e-mail parameters.
-    $mail_params = array(
+    $mail_params = [
       'from' => CRM_Newsletter_Utils::getFromEmailAddress($profile),
       'toName' => $contact['display_name'],
       'toEmail' => $contact['email'],
@@ -294,27 +301,26 @@ class CRM_Newsletter_Utils {
       'subject' => $subject,
       'text' => CRM_Core_Smarty::singleton()->fetchWith(
         'string:' . $text_content,
-        array(
+        [
           'contact' => $contact,
           'mailing_lists' => $mailing_lists,
           'optin_url' => $optin_url,
           'preferences_url' => $preferences_url,
-        )
+        ]
       ),
       'html' => CRM_Core_Smarty::singleton()->fetchWith(
         'string:' . $html_content,
-        array(
+        [
           'contact' => $contact,
           'mailing_lists' => $mailing_lists,
           'optin_url' => $optin_url,
           'preferences_url' => $preferences_url,
-        )
+        ]
       ),
-      'replyTo' => '', // TODO: Make configurable?
-    );
+      'replyTo' => '',
+    ];
     // Send the e-mail.
     if (!CRM_Utils_Mail::send($mail_params)) {
-      // TODO: Mail not sent. Maybe do not cancel the whole API call?
       Civi::log()->error(E::LONG_NAME . ': Error sending configured e-mail.');
     }
   }
@@ -331,19 +337,20 @@ class CRM_Newsletter_Utils {
    *    If true, all groups from all profiles are checked and unsubscribed for this contact
    *
    * @return array
-   *    results from unsubscribe keyed by group_id
+   *   results from unsubscribe keyed by group_id
    *
    * @throws CRM_Core_Exception
    */
   public static function update_group_subscription($mailinglists, $contact_id, $unsubscribe_from_all_profiles) {
 
     // check if unsubscribe shall be done for **all** groups in all profiles
-    if($unsubscribe_from_all_profiles) {
+    if ($unsubscribe_from_all_profiles) {
       // get all groups from all profiles and set group status to removed for that id
       $profiles = CRM_Newsletter_Profile::getProfiles();
       foreach ($profiles as $profile) {
         $current_profile_groups = CRM_Newsletter_Utils::getSubscriptionStatus($contact_id, $profile->getName());
-        foreach (CRM_Newsletter_Utils::getSubscriptionStatus($contact_id, $profile->getName()) as $group_id => $group_info) {
+        $subscriptionStatuses = CRM_Newsletter_Utils::getSubscriptionStatus($contact_id, $profile->getName());
+        foreach ($subscriptionStatuses as $group_id => $group_info) {
           $current_profile_groups[$group_id] = 'Removed';
         }
         $mailinglists = $mailinglists + $current_profile_groups;
@@ -351,13 +358,13 @@ class CRM_Newsletter_Utils {
     }
 
     // Add/remove group membership.
-    $group_contact_results = array();
+    $group_contact_results = [];
     foreach ($mailinglists as $group_id => $group_status) {
-      $group_contact_results[$group_id] = civicrm_api3('GroupContact', 'create', array(
+      $group_contact_results[$group_id] = civicrm_api3('GroupContact', 'create', [
         'group_id' => $group_id,
         'contact_id' => $contact_id,
         'status' => $group_status,
-      ));
+      ]);
     }
     return $group_contact_results;
   }

@@ -13,15 +13,17 @@
 | written permission from the original author(s).             |
 +-------------------------------------------------------------*/
 
+declare(strict_types = 1);
+
 use CRM_Newsletter_ExtensionUtil as E;
 
 class CRM_Newsletter_Page_Profiles extends CRM_Core_Page {
 
-  public function run() {
+  public function run(): void {
     // Example: Set the page-title dynamically; alternatively, declare a static title in xml/Menu/*.xml
     CRM_Utils_System::setTitle(E::ts('Advanced Newsletter Management profiles'));
 
-    $profiles = array();
+    $profiles = [];
     foreach (CRM_Newsletter_Profile::getProfiles() as $profile_name => $profile) {
       $profiles[$profile_name]['name'] = $profile_name;
       foreach (CRM_Newsletter_Profile::allowedAttributes() as $attribute) {

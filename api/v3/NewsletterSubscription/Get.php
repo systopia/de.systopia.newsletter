@@ -13,20 +13,25 @@
 | written permission from the original author(s).             |
 +-------------------------------------------------------------*/
 
+declare(strict_types = 1);
+
 use Civi\Newsletter\ContactChecksumService;
 use CRM_Newsletter_ExtensionUtil as E;
 
 /**
  * API callback for "get" call on "NewsletterSubscription" entity.
  *
- * @param $params
+ * @param array<string, mixed> $params
  *
- * @return array
+ * @return array<string, mixed>
  */
-function civicrm_api3_newsletter_subscription_get($params) {
+// phpcs:ignore Generic.Metrics.CyclomaticComplexity.MaxExceeded
+function civicrm_api3_newsletter_subscription_get(array $params): array {
   try {
     if (empty($params['contact_id']) && !isset($params['contact_checksum']) && empty($params['contact_hash'])) {
-      throw new CRM_Core_Exception(E::ts('Either the contact ID or the contact checksum is required.'), 'mandatory_missing');
+      throw new CRM_Core_Exception(
+        E::ts('Either the contact ID or the contact checksum is required.'), 'mandatory_missing'
+      );
     }
 
     if (!$profile = CRM_Newsletter_Profile::getProfile($params['profile'])) {
@@ -37,23 +42,26 @@ function civicrm_api3_newsletter_subscription_get($params) {
     }
 
     // Retrieve contact data.
-    $contact_params = array(
-      'return' => array('id'),
-    );
+    $contact_params = [
+      'return' => ['id'],
+    ];
     if (!empty($params['contact_id'])) {
       $contact_params['id'] = $params['contact_id'];
     }
     else {
+      /** @var string|null $contact_checksum */
       $contact_checksum = $params['contact_checksum'] ?? $params['contact_hash'];
-      $contact_params['id'] = ContactChecksumService::getInstance()->resolveChecksum($contact_checksum);
-      if (NULL === $contact_params['id'] && !empty($contact_params['contact_hash'])) {
+      if (NULL !== $contact_checksum) {
+        $contact_params['id'] = ContactChecksumService::getInstance()->resolveChecksum($contact_checksum);
+      }
+      if (!isset($contact_params['id']) && !empty($params['contact_hash'])) {
         // @todo: Remove code used for backward compatibility.
-        $contact_params['id'] = civicrm_api3('Contact', 'getsingle', array(
+        $contact_params['id'] = civicrm_api3('Contact', 'getsingle', [
           'return' => ['id'],
           'hash' => $params['contact_hash'],
-        ))['id'] ?? NULL;
+        ])['id'] ?? NULL;
       }
-      if (NULL === $contact_params['id']) {
+      if (!isset($contact_params['id'])) {
         throw new CRM_Core_Exception(E::ts('Invalid contact checksum.'), 'unauthorized');
       }
     }
@@ -71,10 +79,11 @@ function civicrm_api3_newsletter_subscription_get($params) {
     }
     // Add secondary phone number if used.
     if (in_array('phone2', $contact_params['return'])) {
-      $secondary_phone_type = CRM_Xcm_Configuration::getConfigProfile($profile->getAttribute('xcm_profile'))
-        ->secondaryPhoneType();
+      $secondary_phone_type = CRM_Xcm_Configuration::getConfigProfile(
+        $profile->getAttribute('xcm_profile')
+      )->secondaryPhoneType();
       if (!empty($secondary_phone_type)) {
-        $secondary_phone = \Civi\Api4\Phone::get(false)
+        $secondary_phone = \Civi\Api4\Phone::get(FALSE)
           ->addSelect('phone')
           ->addWhere('contact_id', '=', $contact['id'])
           ->addWhere('phone_type_id', '=', $secondary_phone_type)
@@ -93,10 +102,10 @@ function civicrm_api3_newsletter_subscription_get($params) {
       $tertiary_phone_type = CRM_Xcm_Configuration::getConfigProfile($profile->getAttribute('xcm_profile'))
         ->tertiaryPhoneType();
       if (!empty($tertiary_phone_type)) {
-        $tertiary_phone = \Civi\Api4\Phone::get(false)
+        $tertiary_phone = \Civi\Api4\Phone::get(FALSE)
           ->addSelect('phone')
           ->addWhere('contact_id', '=', $contact['id'])
-          ->addWhere('phone_type_id', '=', $tertiary_phone)
+          ->addWhere('phone_type_id', '=', $tertiary_phone_type)
           ->execute()
           ->first();
         if ($tertiary_phone) {
@@ -108,25 +117,25 @@ function civicrm_api3_newsletter_subscription_get($params) {
     $contact_id = $contact['id'];
 
     // Get current group memberships for submitted group IDs.
-    $current_groups = array();
-    $added_group_contacts = civicrm_api3('GroupContact', 'get', array(
+    $current_groups = [];
+    $added_group_contacts = civicrm_api3('GroupContact', 'get', [
       'contact_id' => $contact_id,
       'status' => 'Added',
       'options.limit' => 0,
-      'return' => array('group_id'),
-    ));
+      'return' => ['group_id'],
+    ]);
     if (!empty($added_group_contacts['is_error'])) {
       throw new CRM_Core_Exception(E::ts('Error retrieving current group membership.'), 'api_error');
     }
     foreach ($added_group_contacts['values'] as $group) {
       $current_groups[$group['group_id']] = 'Added';
     }
-    $pending_group_contacts = civicrm_api3('GroupContact', 'get', array(
+    $pending_group_contacts = civicrm_api3('GroupContact', 'get', [
       'contact_id' => $contact_id,
       'status' => 'Pending',
       'options.limit' => 0,
-      'return' => array('group_id'),
-    ));
+      'return' => ['group_id'],
+    ]);
     if (!empty($pending_group_contacts['is_error'])) {
       throw new CRM_Core_Exception(E::ts('Error retrieving current group membership.'), 'api_error');
     }
@@ -141,55 +150,57 @@ function civicrm_api3_newsletter_subscription_get($params) {
     // @todo: Remove code used for backward compatibility.
     $contact['hash'] = $contact_checksum;
 
-    $return = array(
-      array(
+    $return = [
+      [
         'contact' => $contact,
         'subscription_status' => $current_groups,
-        ),
-    );
+      ],
+    ];
 
     return civicrm_api3_create_success($return);
   }
   catch (Exception $exception) {
+    // @ignoreException
     $error_code = ($exception instanceof CRM_Core_Exception ? $exception->getErrorCode() : $exception->getCode());
-    return civicrm_api3_create_error($exception->getMessage(), array('error_code' => $error_code));
+    return civicrm_api3_create_error($exception->getMessage(), ['error_code' => $error_code]);
   }
 }
 
 /**
  * API specification for "get" call on "NewsletterSubscription" entity.
  *
- * @param $params
+ * @param array<string, array<string, mixed>> $params
  */
-function _civicrm_api3_newsletter_subscription_get_spec(&$params) {
-  $params['profile'] = array(
+function _civicrm_api3_newsletter_subscription_get_spec(array &$params): void {
+  $params['profile'] = [
     'name' => 'profile',
     'title' => 'Newsletter profile name',
     'type' => CRM_Utils_Type::T_STRING,
     'api.required' => 0,
     'api.default' => 'default',
     'description' => 'The Newsletter profile name. If omitted, the default profile will be used.',
-  );
-  $params['contact_id'] = array(
+  ];
+  $params['contact_id'] = [
     'name' => 'contact_id',
     'title' => 'CiviCRM contact ID',
     'type' => CRM_Utils_Type::T_INT,
     'api.required' => 0,
     'description' => 'The CiviCRM ID of the contact which to receive subscriptions for.',
-  );
-  $params['contact_checksum'] = array(
+  ];
+  $params['contact_checksum'] = [
     'name' => 'contact_checksum',
     'title' => 'Contact checksum',
     'type' => CRM_Utils_Type::T_STRING,
     'api.required' => 0,
     'description' => 'Generated checksum of the contact to receive subscriptions for.',
-  );
-  $params['contact_hash'] = array(
+  ];
+  $params['contact_hash'] = [
     'name' => 'contact_hash',
     'title' => 'Contact hash',
     'type' => CRM_Utils_Type::T_STRING,
     'api.required' => 0,
     'deprecated' => TRUE,
+    // phpcs:ignore Generic.Files.LineLength.TooLong
     'description' => 'Generated checksum of the contact to receive subscriptions for. (Deprecated: Use contact_checksum instead.)',
-  );
+  ];
 }

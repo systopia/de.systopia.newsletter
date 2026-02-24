@@ -13,6 +13,8 @@
 | written permission from the original author(s).             |
 +-------------------------------------------------------------*/
 
+declare(strict_types = 1);
+
 use CRM_Newsletter_ExtensionUtil as E;
 
 /**
@@ -23,27 +25,27 @@ class CRM_Newsletter_Profile {
   /**
    * The name of the mailing list group type.
    */
-  const GROUP_TYPE_MAILING_LIST = 'Mailing List';
-  
+  public const GROUP_TYPE_MAILING_LIST = 'Mailing List';
+
   /**
    * The maximum number of description fields that can be insterted into the contact form.
    */
   private const NUM_DESCRIPTION_FIELDS_MAX = 3;
 
   /**
-   * @var CRM_Newsletter_Profile[] $_profiles
+   * @var CRM_Newsletter_Profile[]
    *   Caches the profile objects.
    */
   protected static $_profiles = NULL;
 
   /**
-   * @var string $name
+   * @var string
    *   The name of the profile.
    */
   protected $name = NULL;
 
   /**
-   * @var array $data
+   * @var array
    *   The attributes of the profile.
    */
   protected $data = NULL;
@@ -167,7 +169,7 @@ class CRM_Newsletter_Profile {
    *   A list of names of allowed attributes.
    */
   public static function allowedAttributes() {
-    return array(
+    return [
       'xcm_profile',
       'form_title',
       'unsubscribe_submit_label',
@@ -212,13 +214,13 @@ class CRM_Newsletter_Profile {
       'gdprx_unsubscribe_all_type',
       'gdprx_unsubscribe_all_note',
       'contact_form_descriptions',
-    );
+    ];
   }
 
   /**
    * Retrieves available contact fields for a profile.
    *
-   * @return array
+   * @return array<string, array{type: string, label: string, options?: array<string, string>}>
    *   An array with contact field names as keys and their translated labels as
    *   values.
    *
@@ -226,65 +228,65 @@ class CRM_Newsletter_Profile {
    *   When retrieving field data failed.
    */
   public static function availableContactFields() {
-    $individual_prefix_values = civicrm_api3('OptionValue', 'get', array(
-      'return' => array("value", "label"),
-      'option_group_id' => "individual_prefix",
+    $individual_prefix_values = civicrm_api3('OptionValue', 'get', [
+      'return' => ['value', 'label'],
+      'option_group_id' => 'individual_prefix',
       'is_active' => 1,
-    ));
-    $individual_prefix_options = array();
+    ]);
+    $individual_prefix_options = [];
     foreach ($individual_prefix_values['values'] as $individual_prefix_value) {
       $individual_prefix_options[$individual_prefix_value['value']] = $individual_prefix_value['label'];
     }
 
-    $static = array(
-      'prefix_id' => array(
+    $static = [
+      'prefix_id' => [
         'label' => E::ts('Prefix'),
         'type' => 'Select',
         'options' => $individual_prefix_options,
-      ),
-      'formal_title' => array(
+      ],
+      'formal_title' => [
         'label' => E::ts('Formal title'),
         'type' => 'Text',
-      ),
-      'first_name' => array(
+      ],
+      'first_name' => [
         'label' => E::ts('First name'),
         'type' => 'Text',
-      ),
-      'last_name' => array(
+      ],
+      'last_name' => [
         'label' => E::ts('Last name'),
         'type' => 'Text',
-      ),
-      'nick_name' => array(
+      ],
+      'nick_name' => [
         'label' => E::ts('Nick name'),
         'type' => 'Text',
-      ),
-      'job_title' => array(
+      ],
+      'job_title' => [
         'label' => E::ts('Job title'),
         'type' => 'Text',
-      ),
-      'email' => array(
+      ],
+      'email' => [
         'label' => E::ts('E-mail address'),
         'type' => 'Text',
-      ),
-      'url' => array(
+      ],
+      'url' => [
         'label' => E::ts('Website'),
         'type' => 'Text',
-      ),
-      'phone' => array(
+      ],
+      'phone' => [
         'label' => E::ts('Phone number'),
         'type' => 'Text',
-      ),
+      ],
       // TODO: phone2 is only available when it is activated in the XCM profile.
-      'phone2' => array(
+      'phone2' => [
         'label' => E::ts('Phone number 2'),
         'type' => 'Text',
-      ),
+      ],
       // TODO: phone3 is only available when it is activated in the XCM profile.
-      'phone3' => array(
+      'phone3' => [
         'label' => E::ts('Phone number 3'),
         'type' => 'Text',
-      ),
-    );
+      ],
+    ];
 
     $static += array_map(
       function ($addressField) {
@@ -318,49 +320,52 @@ class CRM_Newsletter_Profile {
           ->indexBy('name')
           ->getArrayCopy())
     );
+    /** @var array<string, array{type: string, label: string, options?: array<string, string>}> $static */
 
-    $dynamic = array();
+    $dynamic = [];
 
     // Add custom fields on contacts.
     // Note: This adds all available custom fields for contact entities, however
     // not all field types will work correctly, especially when they are special
     // select widgets or non-text field types.
-    $contact_field_groups = civicrm_api3('CustomGroup', 'get', array(
-      'extends' => "contact",
-    ));
+    $contact_field_groups = civicrm_api3('CustomGroup', 'get', [
+      'extends' => 'contact',
+    ]);
     if (!empty($contact_field_groups['values'])) {
-      $contact_fields = civicrm_api3('CustomField', 'get', array(
-        'custom_group_id' => array(
-          'IN' => array_keys($contact_field_groups['values'])
-        ),
-      ));
+      $contact_fields = civicrm_api3('CustomField', 'get', [
+        'custom_group_id' => [
+          'IN' => array_keys($contact_field_groups['values']),
+        ],
+      ]);
       foreach ($contact_fields['values'] as $contact_field) {
-        $dynamic['custom_' . $contact_field['id']] = array(
+        $dynamic['custom_' . $contact_field['id']] = [
           'label' => $contact_field['label'],
           'type' => $contact_field['html_type'],
-        );
-        if (in_array($contact_field['html_type'], array(
+        ];
+        if (in_array($contact_field['html_type'], [
           'Multi-Select',
           'CheckBox',
           'Radio',
-          'Select'
-        ))) {
+          'Select',
+        ])) {
           if (!empty($contact_field['option_group_id'])) {
-            $option_values = civicrm_api3('OptionValue', 'get', array(
+            $option_values = civicrm_api3('OptionValue', 'get', [
               'option_group_id' => $contact_field['option_group_id'],
-            ));
-            $dynamic['custom_' . $contact_field['id']]['options'] = array();
+            ]);
+            $dynamic['custom_' . $contact_field['id']]['options'] = [];
             foreach ($option_values['values'] as $option_value) {
               $dynamic['custom_' . $contact_field['id']]['options'][$option_value['value']] = $option_value['label'];
             }
           }
         }
       }
+      /** @var array<string, array{type: string, label: string, options?: array<string, string>}> $dynamic */
     }
+
     return $static + $dynamic;
   }
 
- /**
+  /**
    * Retrieves possible description fields for a profile.
    *
    * @return array
@@ -389,12 +394,12 @@ class CRM_Newsletter_Profile {
    *   A profile with the given name and default attribute values.
    */
   public static function createDefaultProfile($name = 'default') {
-    $default_data = array(
+    $default_data = [
       'xcm_profile' => '',
       'form_title' => '',
       'unsubscribe_submit_label' => E::ts('Unsubscribe'),
       'language' => Civi::settings()->get('lcMessages'),
-      'contact_fields' => array(),
+      'contact_fields' => [],
       'mailing_lists' => self::getGroups(),
       'mailing_lists_label' => E::ts('Mailing lists'),
       'mailing_lists_description' => '',
@@ -411,9 +416,11 @@ class CRM_Newsletter_Profile {
       'conditions_preferences_description' => '',
       'sender_email' => CRM_Newsletter_Utils::getFromEmailAddress(),
       'template_optin_subject' => E::ts('Your newsletter subscription'),
-      'template_optin' => '', // TODO: A default opt-in e-mail template with a token for the link to the preferences page.
+    // TODO: A default opt-in e-mail template with a token for the link to the preferences page.
+      'template_optin' => '',
       'template_info_subject' => E::ts('Your newsletter subscription preferences'),
-      'template_info' => '', // TODO: A default info e-mail template.
+    // TODO: A default info e-mail template.
+      'template_info' => '',
       'template_unsubscribe_all_subject' => E::ts('Your unsubscription'),
       'template_unsubscribe_all' => '',
       'template_unsubscribe_all_html' => '',
@@ -422,14 +429,14 @@ class CRM_Newsletter_Profile {
       'request_link_url' => CRM_Core_Config::singleton()->userFrameworkBaseURL,
       'submit_label' => '',
       'contact_form_descriptions' => [],
-    );
+    ];
     foreach (self::availableContactFields() as $field_name => $field) {
-      $default_data['contact_fields'][$field_name] = array(
+      $default_data['contact_fields'][$field_name] = [
         'active' => ($field_name == 'email' ? 1 : 0),
         'required' => ($field_name == 'email' ? 1 : 0),
         'label' => $field['label'],
         'description' => '',
-      );
+      ];
     }
 
     foreach (self::availableDescriptionFields() as $field_name => $field) {
@@ -472,7 +479,7 @@ class CRM_Newsletter_Profile {
    */
   public static function getProfiles() {
     if (self::$_profiles === NULL) {
-      self::$_profiles = array();
+      self::$_profiles = [];
       if ($profiles_data = Civi::settings()->get('newsletter_profiles')) {
         foreach ($profiles_data as $profile_name => $profile_data) {
           self::$_profiles[$profile_name] = new CRM_Newsletter_Profile($profile_name, $profile_data);
@@ -489,16 +496,15 @@ class CRM_Newsletter_Profile {
     return self::$_profiles;
   }
 
-
   /**
    * Persists the list of profiles into the CiviCRM settings.
    */
   public static function storeProfiles() {
-    $profile_data = array();
+    $profile_data = [];
     foreach (self::$_profiles as $profile_name => $profile) {
       $profile_data[$profile_name] = $profile->data;
     }
-    civi::settings()->set('newsletter_profiles', $profile_data);
+    Civi::settings()->set('newsletter_profiles', $profile_data);
   }
 
   /**
@@ -506,29 +512,29 @@ class CRM_Newsletter_Profile {
    * for select form elements.
    */
   public static function getGroups() {
-    $groups = array();
+    $groups = [];
     try {
-      $group_types = civicrm_api3('OptionValue', 'get', array(
+      $group_types = civicrm_api3('OptionValue', 'get', [
         'option_group_id' => 'group_type',
         'name' => CRM_Newsletter_Profile::GROUP_TYPE_MAILING_LIST,
-      ));
+      ]);
       if ($group_types['count'] > 0) {
         $group_type = reset($group_types['values']);
-        $query = civicrm_api3('Group', 'get', array(
+        $query = civicrm_api3('Group', 'get', [
           'is_active' => 1,
-          'group_type' => array('LIKE' => '%' . CRM_Utils_Array::implodePadded($group_type['value']) . '%'),
+          'group_type' => ['LIKE' => '%' . CRM_Utils_Array::implodePadded($group_type['value']) . '%'],
           'option.limit'   => 0,
-          'return'         => 'id,title,frontend_title'
-        ));
+          'return'         => 'id,title,frontend_title',
+        ]);
         foreach ($query['values'] as $group) {
           $groups[$group['id']] = !empty($group['frontend_title']) ? $group['frontend_title'] : $group['title'];
         }
       }
     }
     catch (CRM_Core_Exception $exception) {
-      $error = CRM_Core_Error::createError($exception->getMessage(), 0);
-      CRM_Core_Error::displaySessionError($error);
+      CRM_Core_Session::setStatus($exception->getMessage());
     }
     return $groups;
   }
+
 }
