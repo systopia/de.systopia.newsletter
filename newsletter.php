@@ -90,6 +90,16 @@ function newsletter_civicrm_alterAPIPermissions($entity, $action, &$params, arra
 }
 
 /**
+ * Implements hook_civicrm_idsException().
+ *
+ * @param list<string> $skip
+ */
+function newsletter_civicrm_idsException(array &$skip): void {
+  // The form contains fields with HTML so it has to be excluded from IDS.
+  $skip[] = 'civicrm/admin/settings/newsletter/profile';
+}
+
+/**
  * Implements hook_civicrm_navigationMenu().
  *
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_navigationMenu
