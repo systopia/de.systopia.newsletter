@@ -1,0 +1,1018 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Call to function in_array\(\) requires parameter \#3 to be set\.$#'
+			identifier: function.strict
+			count: 4
+			path: CRM/Newsletter/Form/Profile.php
+
+		-
+			message: '#^Call to function method_exists\(\) with ''CRM_Xcm…'' and ''getProfileList'' will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: CRM/Newsletter/Form/Profile.php
+
+		-
+			message: '#^Cannot call method deleteProfile\(\) on CRM_Newsletter_Profile\|null\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: CRM/Newsletter/Form/Profile.php
+
+		-
+			message: '#^Cannot call method getData\(\) on CRM_Newsletter_Profile\|null\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: CRM/Newsletter/Form/Profile.php
+
+		-
+			message: '#^Cannot call method getName\(\) on CRM_Newsletter_Profile\|null\.$#'
+			identifier: method.nonObject
+			count: 3
+			path: CRM/Newsletter/Form/Profile.php
+
+		-
+			message: '#^Cannot call method saveProfile\(\) on CRM_Newsletter_Profile\|null\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: CRM/Newsletter/Form/Profile.php
+
+		-
+			message: '#^Cannot call method setAttribute\(\) on CRM_Newsletter_Profile\|null\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: CRM/Newsletter/Form/Profile.php
+
+		-
+			message: '#^Cannot call method setName\(\) on CRM_Newsletter_Profile\|null\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: CRM/Newsletter/Form/Profile.php
+
+		-
+			message: '#^Construct empty\(\) is not allowed\. Use more strict comparison\.$#'
+			identifier: empty.notAllowed
+			count: 21
+			path: CRM/Newsletter/Form/Profile.php
+
+		-
+			message: '#^Loose comparison via "\!\=" is not allowed\.$#'
+			identifier: notEqual.notAllowed
+			count: 1
+			path: CRM/Newsletter/Form/Profile.php
+
+		-
+			message: '#^Loose comparison via "\=\=" is not allowed\.$#'
+			identifier: equal.notAllowed
+			count: 10
+			path: CRM/Newsletter/Form/Profile.php
+
+		-
+			message: '#^Method CRM_Newsletter_Form_Profile\:\:addRules\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Newsletter/Form/Profile.php
+
+		-
+			message: '#^Method CRM_Newsletter_Form_Profile\:\:buildQuickForm\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Newsletter/Form/Profile.php
+
+		-
+			message: '#^Method CRM_Newsletter_Form_Profile\:\:getSenderOptions\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Newsletter/Form/Profile.php
+
+		-
+			message: '#^Method CRM_Newsletter_Form_Profile\:\:getXCMProfiles\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Newsletter/Form/Profile.php
+
+		-
+			message: '#^Method CRM_Newsletter_Form_Profile\:\:postProcess\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Newsletter/Form/Profile.php
+
+		-
+			message: '#^Method CRM_Newsletter_Form_Profile\:\:setDefaultValues\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Newsletter/Form/Profile.php
+
+		-
+			message: '#^Method CRM_Newsletter_Form_Profile\:\:validateProfileForm\(\) has parameter \$values with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Newsletter/Form/Profile.php
+
+		-
+			message: '#^Method CRM_Newsletter_Form_Profile\:\:validateProfileForm\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Newsletter/Form/Profile.php
+
+		-
+			message: '#^Only booleans are allowed in &&, int\|false given on the right side\.$#'
+			identifier: booleanAnd.rightNotBoolean
+			count: 1
+			path: CRM/Newsletter/Form/Profile.php
+
+		-
+			message: '#^Only booleans are allowed in a negated boolean, CRM_Newsletter_Profile\|null given\.$#'
+			identifier: booleanNot.exprNotBoolean
+			count: 1
+			path: CRM/Newsletter/Form/Profile.php
+
+		-
+			message: '#^Only booleans are allowed in a negated boolean, mixed given\.$#'
+			identifier: booleanNot.exprNotBoolean
+			count: 1
+			path: CRM/Newsletter/Form/Profile.php
+
+		-
+			message: '#^Only booleans are allowed in a negated boolean, string\|null given\.$#'
+			identifier: booleanNot.exprNotBoolean
+			count: 1
+			path: CRM/Newsletter/Form/Profile.php
+
+		-
+			message: '#^Only booleans are allowed in an if condition, string\|null given\.$#'
+			identifier: if.condNotBoolean
+			count: 1
+			path: CRM/Newsletter/Form/Profile.php
+
+		-
+			message: '#^Property CRM_Newsletter_Form_Profile\:\:\$_op \(string\|null\) does not accept mixed\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: CRM/Newsletter/Form/Profile.php
+
+		-
+			message: '#^Property CRM_Newsletter_Form_Profile\:\:\$_xcm_profiles type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Newsletter/Form/Profile.php
+
+		-
+			message: '#^Variable \$mandatory_missing might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: CRM/Newsletter/Form/Profile.php
+
+		-
+			message: '#^Cannot access offset ''values'' on array\|int\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: CRM/Newsletter/Form/Settings.php
+
+		-
+			message: '#^Construct empty\(\) is not allowed\. Use more strict comparison\.$#'
+			identifier: empty.notAllowed
+			count: 6
+			path: CRM/Newsletter/Form/Settings.php
+
+		-
+			message: '#^Implicit array creation is not allowed \- variable \$form_elements might not exist\.$#'
+			identifier: variable.implicitArray
+			count: 1
+			path: CRM/Newsletter/Form/Settings.php
+
+		-
+			message: '#^Loose comparison via "\=\=" is not allowed\.$#'
+			identifier: equal.notAllowed
+			count: 2
+			path: CRM/Newsletter/Form/Settings.php
+
+		-
+			message: '#^Method CRM_Newsletter_Form_Settings\:\:addRules\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Newsletter/Form/Settings.php
+
+		-
+			message: '#^Method CRM_Newsletter_Form_Settings\:\:buildQuickForm\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Newsletter/Form/Settings.php
+
+		-
+			message: '#^Method CRM_Newsletter_Form_Settings\:\:getFormSettings\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Newsletter/Form/Settings.php
+
+		-
+			message: '#^Method CRM_Newsletter_Form_Settings\:\:getRenderableElementNames\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Newsletter/Form/Settings.php
+
+		-
+			message: '#^Method CRM_Newsletter_Form_Settings\:\:postProcess\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Newsletter/Form/Settings.php
+
+		-
+			message: '#^Method CRM_Newsletter_Form_Settings\:\:setDefaultValues\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Newsletter/Form/Settings.php
+
+		-
+			message: '#^Method CRM_Newsletter_Form_Settings\:\:validateSettingsForm\(\) has parameter \$values with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Newsletter/Form/Settings.php
+
+		-
+			message: '#^Method CRM_Newsletter_Form_Settings\:\:validateSettingsForm\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Newsletter/Form/Settings.php
+
+		-
+			message: '#^Property CRM_Newsletter_Form_Settings\:\:\$_settingFilter type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Newsletter/Form/Settings.php
+
+		-
+			message: '#^Property CRM_Newsletter_Form_Settings\:\:\$_settings \(array\) does not accept array\|int\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: CRM/Newsletter/Form/Settings.php
+
+		-
+			message: '#^Property CRM_Newsletter_Form_Settings\:\:\$_settings type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Newsletter/Form/Settings.php
+
+		-
+			message: '#^Property CRM_Newsletter_Form_Settings\:\:\$_submittedValues type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Newsletter/Form/Settings.php
+
+		-
+			message: '#^Variable \$errors in empty\(\) always exists and is always falsy\.$#'
+			identifier: empty.variable
+			count: 1
+			path: CRM/Newsletter/Form/Settings.php
+
+		-
+			message: '#^Variable \$form_elements might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: CRM/Newsletter/Form/Settings.php
+
+		-
+			message: '#^Variable method call on \$this\(CRM_Newsletter_Form_Settings\)\.$#'
+			identifier: method.dynamicName
+			count: 2
+			path: CRM/Newsletter/Form/Settings.php
+
+		-
+			message: '#^Construct empty\(\) is not allowed\. Use more strict comparison\.$#'
+			identifier: empty.notAllowed
+			count: 1
+			path: CRM/Newsletter/Page/Configuration.php
+
+		-
+			message: '#^Argument of an invalid type mixed supplied for foreach, only iterables are supported\.$#'
+			identifier: foreach.nonIterable
+			count: 1
+			path: CRM/Newsletter/Profile.php
+
+		-
+			message: '#^Call to function in_array\(\) requires parameter \#3 to be set\.$#'
+			identifier: function.strict
+			count: 2
+			path: CRM/Newsletter/Profile.php
+
+		-
+			message: '#^Cannot access offset ''count'' on array\|int\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: CRM/Newsletter/Profile.php
+
+		-
+			message: '#^Cannot access offset ''input_type'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: CRM/Newsletter/Profile.php
+
+		-
+			message: '#^Cannot access offset ''label'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: CRM/Newsletter/Profile.php
+
+		-
+			message: '#^Cannot access offset ''options'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: CRM/Newsletter/Profile.php
+
+		-
+			message: '#^Cannot access offset ''values'' on array\|int\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 4
+			path: CRM/Newsletter/Profile.php
+
+		-
+			message: '#^Construct empty\(\) is not allowed\. Use more strict comparison\.$#'
+			identifier: empty.notAllowed
+			count: 4
+			path: CRM/Newsletter/Profile.php
+
+		-
+			message: '#^Do not throw the \\Exception base class\.$#'
+			count: 1
+			path: CRM/Newsletter/Profile.php
+
+		-
+			message: '#^Identical\: Possible insane comparison between null and array\<CRM_Newsletter_Profile\>\.$#'
+			identifier: voku.Identical
+			count: 1
+			path: CRM/Newsletter/Profile.php
+
+		-
+			message: '#^Loose comparison via "\=\=" is not allowed\.$#'
+			identifier: equal.notAllowed
+			count: 2
+			path: CRM/Newsletter/Profile.php
+
+		-
+			message: '#^Method CRM_Newsletter_Profile\:\:__construct\(\) has parameter \$data with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Newsletter/Profile.php
+
+		-
+			message: '#^Method CRM_Newsletter_Profile\:\:allowedAttributes\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Newsletter/Profile.php
+
+		-
+			message: '#^Method CRM_Newsletter_Profile\:\:availableDescriptionFields\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Newsletter/Profile.php
+
+		-
+			message: '#^Method CRM_Newsletter_Profile\:\:deleteProfile\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Newsletter/Profile.php
+
+		-
+			message: '#^Method CRM_Newsletter_Profile\:\:getData\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Newsletter/Profile.php
+
+		-
+			message: '#^Method CRM_Newsletter_Profile\:\:getGroups\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Newsletter/Profile.php
+
+		-
+			message: '#^Method CRM_Newsletter_Profile\:\:getProfile\(\) has parameter \$name with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Newsletter/Profile.php
+
+		-
+			message: '#^Method CRM_Newsletter_Profile\:\:saveProfile\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Newsletter/Profile.php
+
+		-
+			message: '#^Method CRM_Newsletter_Profile\:\:setAttribute\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Newsletter/Profile.php
+
+		-
+			message: '#^Method CRM_Newsletter_Profile\:\:setName\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Newsletter/Profile.php
+
+		-
+			message: '#^Method CRM_Newsletter_Profile\:\:setName\(\) has parameter \$name with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Newsletter/Profile.php
+
+		-
+			message: '#^Method CRM_Newsletter_Profile\:\:storeProfiles\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Newsletter/Profile.php
+
+		-
+			message: '#^Method CRM_Newsletter_Profile\:\:verifyProfile\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Newsletter/Profile.php
+
+		-
+			message: '#^Only booleans are allowed in an if condition, mixed given\.$#'
+			identifier: if.condNotBoolean
+			count: 1
+			path: CRM/Newsletter/Profile.php
+
+		-
+			message: '#^Parameter \#1 \$name of class CRM_Newsletter_Profile constructor expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: CRM/Newsletter/Profile.php
+
+		-
+			message: '#^Parameter \#2 \$data of class CRM_Newsletter_Profile constructor expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: CRM/Newsletter/Profile.php
+
+		-
+			message: '#^Possibly invalid array key type mixed\.$#'
+			identifier: offsetAccess.invalidOffset
+			count: 1
+			path: CRM/Newsletter/Profile.php
+
+		-
+			message: '#^Property CRM_Newsletter_Profile\:\:\$data type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Newsletter/Profile.php
+
+		-
+			message: '#^Cannot call method getRequiredTokens\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: CRM/Newsletter/RegisterTokenFlexmailer.php
+
+		-
+			message: '#^Cannot call method setRequiredTokens\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: CRM/Newsletter/RegisterTokenFlexmailer.php
+
+		-
+			message: '#^Only booleans are allowed in an if condition, string\|false given\.$#'
+			identifier: if.condNotBoolean
+			count: 1
+			path: CRM/Newsletter/RegisterTokenFlexmailer.php
+
+		-
+			message: '#^Construct empty\(\) is not allowed\. Use more strict comparison\.$#'
+			identifier: empty.notAllowed
+			count: 1
+			path: CRM/Newsletter/Upgrader.php
+
+		-
+			message: '#^Parameter \#3 \$subject of function str_replace expects array\<string\>\|string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: CRM/Newsletter/Upgrader.php
+
+		-
+			message: '#^Cannot access offset ''count'' on array\|int\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: CRM/Newsletter/Utils.php
+
+		-
+			message: '#^Cannot access offset ''title'' on array\|int\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: CRM/Newsletter/Utils.php
+
+		-
+			message: '#^Cannot access offset ''values'' on array\|int\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: CRM/Newsletter/Utils.php
+
+		-
+			message: '#^Construct empty\(\) is not allowed\. Use more strict comparison\.$#'
+			identifier: empty.notAllowed
+			count: 9
+			path: CRM/Newsletter/Utils.php
+
+		-
+			message: '#^Do not throw the \\Exception base class\.$#'
+			count: 1
+			path: CRM/Newsletter/Utils.php
+
+		-
+			message: '#^Loose comparison via "\=\=" is not allowed\.$#'
+			identifier: equal.notAllowed
+			count: 1
+			path: CRM/Newsletter/Utils.php
+
+		-
+			message: '#^Method CRM_Newsletter_Utils\:\:buildGroupTree\(\) has parameter \$groups with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Newsletter/Utils.php
+
+		-
+			message: '#^Method CRM_Newsletter_Utils\:\:buildGroupTree\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Newsletter/Utils.php
+
+		-
+			message: '#^Method CRM_Newsletter_Utils\:\:gdprx_installed\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Newsletter/Utils.php
+
+		-
+			message: '#^Method CRM_Newsletter_Utils\:\:getContact\(\) has parameter \$contact_data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Newsletter/Utils.php
+
+		-
+			message: '#^Method CRM_Newsletter_Utils\:\:getSubscriptionStatus\(\) has parameter \$contact_id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Newsletter/Utils.php
+
+		-
+			message: '#^Method CRM_Newsletter_Utils\:\:getSubscriptionStatus\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Newsletter/Utils.php
+
+		-
+			message: '#^Method CRM_Newsletter_Utils\:\:send_configured_mail\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Newsletter/Utils.php
+
+		-
+			message: '#^Method CRM_Newsletter_Utils\:\:send_configured_mail\(\) has parameter \$contact with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Newsletter/Utils.php
+
+		-
+			message: '#^Method CRM_Newsletter_Utils\:\:send_configured_mail\(\) has parameter \$profile with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Newsletter/Utils.php
+
+		-
+			message: '#^Method CRM_Newsletter_Utils\:\:send_configured_mail\(\) has parameter \$type with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Newsletter/Utils.php
+
+		-
+			message: '#^Method CRM_Newsletter_Utils\:\:unsubscribe_all\(\) has parameter \$contact_id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Newsletter/Utils.php
+
+		-
+			message: '#^Method CRM_Newsletter_Utils\:\:unsubscribe_all\(\) has parameter \$groups with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Newsletter/Utils.php
+
+		-
+			message: '#^Method CRM_Newsletter_Utils\:\:unsubscribe_all\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Newsletter/Utils.php
+
+		-
+			message: '#^Method CRM_Newsletter_Utils\:\:update_group_subscription\(\) has parameter \$contact_id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Newsletter/Utils.php
+
+		-
+			message: '#^Method CRM_Newsletter_Utils\:\:update_group_subscription\(\) has parameter \$mailinglists with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Newsletter/Utils.php
+
+		-
+			message: '#^Method CRM_Newsletter_Utils\:\:update_group_subscription\(\) has parameter \$unsubscribe_from_all_profiles with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Newsletter/Utils.php
+
+		-
+			message: '#^Method CRM_Newsletter_Utils\:\:update_group_subscription\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Newsletter/Utils.php
+
+		-
+			message: '#^Possibly invalid array key type mixed\.$#'
+			identifier: offsetAccess.invalidOffset
+			count: 1
+			path: CRM/Newsletter/Utils.php
+
+		-
+			message: '#^Only booleans are allowed in an if condition, int\|false given\.$#'
+			identifier: if.condNotBoolean
+			count: 1
+			path: Civi/Newsletter/ContactChecksumService.php
+
+		-
+			message: '#^Cannot access offset ''is_error'' on array\|int\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: api/v3/NewsletterProfile/Get.php
+
+		-
+			message: '#^Construct empty\(\) is not allowed\. Use more strict comparison\.$#'
+			identifier: empty.notAllowed
+			count: 1
+			path: api/v3/NewsletterProfile/Getsingle.php
+
+		-
+			message: '#^Do not throw the \\Exception base class\.$#'
+			count: 1
+			path: api/v3/NewsletterProfile/Getsingle.php
+
+		-
+			message: '#^Empty array passed to foreach\.$#'
+			identifier: foreach.emptyArray
+			count: 1
+			path: api/v3/NewsletterProfile/Getsingle.php
+
+		-
+			message: '#^Only booleans are allowed in a negated boolean, CRM_Newsletter_Profile\|null given\.$#'
+			identifier: booleanNot.exprNotBoolean
+			count: 1
+			path: api/v3/NewsletterProfile/Getsingle.php
+
+		-
+			message: '#^Short ternary operator is not allowed\. Use null coalesce operator if applicable or consider using long ternary\.$#'
+			identifier: ternary.shortNotAllowed
+			count: 2
+			path: api/v3/NewsletterProfile/Getsingle.php
+
+		-
+			message: '#^Variable \$current_locale might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: api/v3/NewsletterProfile/Getsingle.php
+
+		-
+			message: '#^Construct empty\(\) is not allowed\. Use more strict comparison\.$#'
+			identifier: empty.notAllowed
+			count: 5
+			path: api/v3/NewsletterSubscription/Confirm.php
+
+		-
+			message: '#^Loose comparison via "\!\=" is not allowed\.$#'
+			identifier: notEqual.notAllowed
+			count: 1
+			path: api/v3/NewsletterSubscription/Confirm.php
+
+		-
+			message: '#^Loose comparison via "\=\=" is not allowed\.$#'
+			identifier: equal.notAllowed
+			count: 1
+			path: api/v3/NewsletterSubscription/Confirm.php
+
+		-
+			message: '#^Only booleans are allowed in &&, mixed given on the right side\.$#'
+			identifier: booleanAnd.rightNotBoolean
+			count: 1
+			path: api/v3/NewsletterSubscription/Confirm.php
+
+		-
+			message: '#^Only booleans are allowed in a negated boolean, CRM_Newsletter_Profile\|null given\.$#'
+			identifier: booleanNot.exprNotBoolean
+			count: 1
+			path: api/v3/NewsletterSubscription/Confirm.php
+
+		-
+			message: '#^Only booleans are allowed in an elseif condition, mixed given\.$#'
+			identifier: elseif.condNotBoolean
+			count: 1
+			path: api/v3/NewsletterSubscription/Confirm.php
+
+		-
+			message: '#^Only booleans are allowed in an if condition, mixed given\.$#'
+			identifier: if.condNotBoolean
+			count: 1
+			path: api/v3/NewsletterSubscription/Confirm.php
+
+		-
+			message: '#^Parameter \#1 \$array of function array_keys expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: api/v3/NewsletterSubscription/Confirm.php
+
+		-
+			message: '#^Call to function in_array\(\) requires parameter \#3 to be set\.$#'
+			identifier: function.strict
+			count: 2
+			path: api/v3/NewsletterSubscription/Get.php
+
+		-
+			message: '#^Call to function method_exists\(\) with ''CRM_Xcm_Configuration'' and ''tertiaryPhoneType'' will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: api/v3/NewsletterSubscription/Get.php
+
+		-
+			message: '#^Cannot access offset ''checksum'' on array\|int\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: api/v3/NewsletterSubscription/Get.php
+
+		-
+			message: '#^Cannot access offset ''id'' on array\|int\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 3
+			path: api/v3/NewsletterSubscription/Get.php
+
+		-
+			message: '#^Cannot access offset ''phone2'' on array\|int\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: api/v3/NewsletterSubscription/Get.php
+
+		-
+			message: '#^Cannot access offset ''phone3'' on array\|int\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: api/v3/NewsletterSubscription/Get.php
+
+		-
+			message: '#^Cannot access offset ''values'' on array\|int\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: api/v3/NewsletterSubscription/Get.php
+
+		-
+			message: '#^Construct empty\(\) is not allowed\. Use more strict comparison\.$#'
+			identifier: empty.notAllowed
+			count: 9
+			path: api/v3/NewsletterSubscription/Get.php
+
+		-
+			message: '#^Loose comparison via "\=\=" is not allowed\.$#'
+			identifier: equal.notAllowed
+			count: 1
+			path: api/v3/NewsletterSubscription/Get.php
+
+		-
+			message: '#^Only booleans are allowed in a negated boolean, CRM_Newsletter_Profile\|null given\.$#'
+			identifier: booleanNot.exprNotBoolean
+			count: 1
+			path: api/v3/NewsletterSubscription/Get.php
+
+		-
+			message: '#^Only booleans are allowed in an if condition, array\|null given\.$#'
+			identifier: if.condNotBoolean
+			count: 2
+			path: api/v3/NewsletterSubscription/Get.php
+
+		-
+			message: '#^Parameter \#1 \$array of function array_keys expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: api/v3/NewsletterSubscription/Get.php
+
+		-
+			message: '#^Parameter \#1 \$profile_name of static method CRM_Xcm_Configuration\:\:getConfigProfile\(\) expects string\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: api/v3/NewsletterSubscription/Get.php
+
+		-
+			message: '#^Parameter \#2 \.\.\.\$arrays of function array_intersect_key expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: api/v3/NewsletterSubscription/Get.php
+
+		-
+			message: '#^Binary operation "\." between ''string\:'' and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 2
+			path: api/v3/NewsletterSubscription/Request.php
+
+		-
+			message: '#^Cannot access offset ''display_name'' on array\|int\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: api/v3/NewsletterSubscription/Request.php
+
+		-
+			message: '#^Cannot access offset ''email'' on array\|int\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: api/v3/NewsletterSubscription/Request.php
+
+		-
+			message: '#^Cannot access offset ''required'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: api/v3/NewsletterSubscription/Request.php
+
+		-
+			message: '#^Construct empty\(\) is not allowed\. Use more strict comparison\.$#'
+			identifier: empty.notAllowed
+			count: 4
+			path: api/v3/NewsletterSubscription/Request.php
+
+		-
+			message: '#^Loose comparison via "\!\=" is not allowed\.$#'
+			identifier: notEqual.notAllowed
+			count: 1
+			path: api/v3/NewsletterSubscription/Request.php
+
+		-
+			message: '#^Only booleans are allowed in a negated boolean, CRM_Newsletter_Profile\|null given\.$#'
+			identifier: booleanNot.exprNotBoolean
+			count: 1
+			path: api/v3/NewsletterSubscription/Request.php
+
+		-
+			message: '#^Only booleans are allowed in a negated boolean, mixed given\.$#'
+			identifier: booleanNot.exprNotBoolean
+			count: 1
+			path: api/v3/NewsletterSubscription/Request.php
+
+		-
+			message: '#^Parameter \#1 \$array of function array_filter expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: api/v3/NewsletterSubscription/Request.php
+
+		-
+			message: '#^Parameter \#1 \$contact_checksum of method Civi\\Newsletter\\ContactChecksumService\:\:resolveChecksum\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: api/v3/NewsletterSubscription/Request.php
+
+		-
+			message: '#^Parameter \#2 \.\.\.\$arrays of function array_intersect_key expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: api/v3/NewsletterSubscription/Request.php
+
+		-
+			message: '#^Cannot access offset ''required'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: api/v3/NewsletterSubscription/Submit.php
+
+		-
+			message: '#^Construct empty\(\) is not allowed\. Use more strict comparison\.$#'
+			identifier: empty.notAllowed
+			count: 4
+			path: api/v3/NewsletterSubscription/Submit.php
+
+		-
+			message: '#^Only booleans are allowed in &&, mixed given on the right side\.$#'
+			identifier: booleanAnd.rightNotBoolean
+			count: 1
+			path: api/v3/NewsletterSubscription/Submit.php
+
+		-
+			message: '#^Only booleans are allowed in a negated boolean, CRM_Newsletter_Profile\|null given\.$#'
+			identifier: booleanNot.exprNotBoolean
+			count: 1
+			path: api/v3/NewsletterSubscription/Submit.php
+
+		-
+			message: '#^Parameter \#1 \$array of function array_filter expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: api/v3/NewsletterSubscription/Submit.php
+
+		-
+			message: '#^Parameter \#1 \$array of function array_keys expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: api/v3/NewsletterSubscription/Submit.php
+
+		-
+			message: '#^Parameter \#2 \$string of function explode expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: api/v3/NewsletterSubscription/Submit.php
+
+		-
+			message: '#^Parameter \#2 \.\.\.\$arrays of function array_intersect_key expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: api/v3/NewsletterSubscription/Submit.php
+
+		-
+			message: '#^Possibly invalid array key type mixed\.$#'
+			identifier: offsetAccess.invalidOffset
+			count: 1
+			path: api/v3/NewsletterSubscription/Submit.php
+
+		-
+			message: '#^Cannot cast mixed to int\.$#'
+			identifier: cast.int
+			count: 1
+			path: newsletter.php
+
+		-
+			message: '#^Function newsletter_civicrm_alterAPIPermissions\(\) has parameter \$action with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: newsletter.php
+
+		-
+			message: '#^Function newsletter_civicrm_alterAPIPermissions\(\) has parameter \$entity with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: newsletter.php
+
+		-
+			message: '#^Function newsletter_civicrm_alterAPIPermissions\(\) has parameter \$params with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: newsletter.php
+
+		-
+			message: '#^Function newsletter_civicrm_alterAPIPermissions\(\) has parameter \$permissions with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: newsletter.php
+
+		-
+			message: '#^Function newsletter_civicrm_navigationMenu\(\) has parameter \$menu with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: newsletter.php
+
+		-
+			message: '#^Function newsletter_civicrm_permission\(\) has parameter \$permissions with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: newsletter.php
+
+		-
+			message: '#^Function newsletter_civicrm_tokenValues\(\) has parameter \$cids with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: newsletter.php
+
+		-
+			message: '#^Function newsletter_civicrm_tokenValues\(\) has parameter \$context with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: newsletter.php
+
+		-
+			message: '#^Function newsletter_civicrm_tokenValues\(\) has parameter \$job with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: newsletter.php
+
+		-
+			message: '#^Function newsletter_civicrm_tokenValues\(\) has parameter \$tokens with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: newsletter.php
+
+		-
+			message: '#^Function newsletter_civicrm_tokenValues\(\) has parameter \$values with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: newsletter.php
+
+		-
+			message: '#^Function newsletter_civicrm_tokens\(\) has parameter \$tokens with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: newsletter.php
+
+		-
+			message: '#^Parameter \#3 \$subject of function str_replace expects array\<string\>\|string, mixed given\.$#'
+			identifier: argument.type
+			count: 3
+			path: newsletter.php
+
+		-
+			message: '#^Possibly invalid array key type mixed\.$#'
+			identifier: offsetAccess.invalidOffset
+			count: 3
+			path: newsletter.php

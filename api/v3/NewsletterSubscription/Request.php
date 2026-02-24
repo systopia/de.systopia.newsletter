@@ -13,17 +13,20 @@
 | written permission from the original author(s).             |
 +-------------------------------------------------------------*/
 
+declare(strict_types = 1);
+
 use Civi\Newsletter\ContactChecksumService;
 use CRM_Newsletter_ExtensionUtil as E;
 
 /**
  * API callback for "request" call on "NewsletterSubscription" entity.
  *
- * @param $params
+ * @param array<string, mixed> $params
  *
- * @return array
+ * @return array<string, mixed>
  */
-function civicrm_api3_newsletter_subscription_request($params) {
+// phpcs:ignore Generic.Metrics.CyclomaticComplexity.TooHigh
+function civicrm_api3_newsletter_subscription_request(array $params): array {
   try {
     if (!$profile = CRM_Newsletter_Profile::getProfile($params['profile'])) {
       throw new CRM_Core_Exception(
@@ -89,6 +92,7 @@ function civicrm_api3_newsletter_subscription_request($params) {
 
     // Send an e-mail with the opt-in template.
     // TODO: Shouldn't this be the "info" template?
+    /** @var string $optin_url */
     $optin_url = $profile->getAttribute('optin_url');
     $optin_url = str_replace(
       '[CONTACT_CHECKSUM]',
@@ -100,6 +104,7 @@ function civicrm_api3_newsletter_subscription_request($params) {
       $profile->getName(),
       $optin_url
     );
+    /** @var string $preferences_url */
     $preferences_url = $profile->getAttribute('preferences_url');
     $preferences_url = str_replace(
       '[CONTACT_CHECKSUM]',
@@ -139,6 +144,7 @@ function civicrm_api3_newsletter_subscription_request($params) {
     // TODO: Make configurable?
       'replyTo' => '',
     ];
+    // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedIf
     if (!CRM_Utils_Mail::send($mail_params)) {
       // TODO: Mail not sent. Maybe do not cancel the whole API call?
     }
@@ -146,6 +152,7 @@ function civicrm_api3_newsletter_subscription_request($params) {
     return civicrm_api3_create_success();
   }
   catch (Exception $exception) {
+    // @ignoreException
     $error_code = ($exception instanceof CRM_Core_Exception ? $exception->getErrorCode() : $exception->getCode());
     return civicrm_api3_create_error($exception->getMessage(), ['error_code' => $error_code]);
   }
@@ -154,9 +161,9 @@ function civicrm_api3_newsletter_subscription_request($params) {
 /**
  * API specification for "request" call on "NewsletterSubscription" entity.
  *
- * @param $params
+ * @param array<string, array<string, mixed>> $params
  */
-function _civicrm_api3_newsletter_subscription_request_spec(&$params) {
+function _civicrm_api3_newsletter_subscription_request_spec(array &$params): void {
   $params['profile'] = [
     'name' => 'profile',
     'title' => 'Newsletter profile name',
@@ -177,6 +184,7 @@ function _civicrm_api3_newsletter_subscription_request_spec(&$params) {
     'title' => 'Contact hash',
     'type' => CRM_Utils_Type::T_STRING,
     'api.required' => 0,
+    // phpcs:ignore Generic.Files.LineLength.TooLong
     'description' => 'Generated checksum of the contact to request a link for. (Deprecated: Use contact_checksum instead.)',
   ];
   $params['contact_id'] = [

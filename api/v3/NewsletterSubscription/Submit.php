@@ -13,17 +13,20 @@
 | written permission from the original author(s).             |
 +-------------------------------------------------------------*/
 
+declare(strict_types = 1);
+
 use Civi\Newsletter\ContactChecksumService;
 use CRM_Newsletter_ExtensionUtil as E;
 
 /**
  * API callback for "submit" call on "NewsletterSubscription" entity.
  *
- * @param $params
+ * @param array<string, mixed> $params
  *
- * @return array
+ * @return array<string, mixed>
  */
-function civicrm_api3_newsletter_subscription_submit($params) {
+// phpcs:ignore Generic.Metrics.CyclomaticComplexity.TooHigh
+function civicrm_api3_newsletter_subscription_submit(array $params): array {
   try {
     if (!$profile = CRM_Newsletter_Profile::getProfile($params['profile'])) {
       throw new CRM_Core_Exception(
@@ -81,7 +84,8 @@ function civicrm_api3_newsletter_subscription_submit($params) {
 
     // Get current group memberships for submitted group IDs.
     $current_mailing_lists = [];
-    foreach (CRM_Newsletter_Utils::getSubscriptionStatus($contact_id, $profile->getName()) as $group_id => $group_info) {
+    $subscriptionStatuses = CRM_Newsletter_Utils::getSubscriptionStatus($contact_id, $profile->getName());
+    foreach ($subscriptionStatuses as $group_id => $group_info) {
       $current_mailing_lists[$group_id] = $group_info['status_raw'];
     }
 
@@ -127,6 +131,7 @@ function civicrm_api3_newsletter_subscription_submit($params) {
     return $group_contact_results;
   }
   catch (Exception $exception) {
+    // @ignoreException
     $error_code = ($exception instanceof CRM_Core_Exception ? $exception->getErrorCode() : $exception->getCode());
     return civicrm_api3_create_error($exception->getMessage(), ['error_code' => $error_code]);
   }
@@ -135,9 +140,9 @@ function civicrm_api3_newsletter_subscription_submit($params) {
 /**
  * API specification for "submit" call on "NewsletterSubscription" entity.
  *
- * @param $params
+ * @param array<string, array<string, mixed>> $params
  */
-function _civicrm_api3_newsletter_subscription_submit_spec(&$params) {
+function _civicrm_api3_newsletter_subscription_submit_spec(array &$params): void {
   $params['profile'] = [
     'name' => 'profile',
     'title' => 'Newsletter profile name',

@@ -13,7 +13,7 @@
 | written permission from the original author(s).             |
 +-------------------------------------------------------------*/
 
-use CRM_Newsletter_ExtensionUtil as E;
+declare(strict_types = 1);
 
 /**
  * Form controller class
@@ -22,12 +22,11 @@ use CRM_Newsletter_ExtensionUtil as E;
  */
 class CRM_Newsletter_Form_Settings extends CRM_Core_Form {
 
-  private $_settingFilter = ['group' => 'de.systopia.newsletter'];
+  private array $_settingFilter = ['group' => 'de.systopia.newsletter'];
 
-  //everything from this line down is generic & can be re-used for a setting form in another extension
-  //actually - I lied - I added a specific call in getFormSettings
-  private $_submittedValues = [];
-  private $_settings = [];
+  private array $_submittedValues = [];
+
+  private array $_settings = [];
 
   /**
    * @inheritdoc
@@ -43,14 +42,24 @@ class CRM_Newsletter_Form_Settings extends CRM_Core_Form {
         if (isset($setting['quick_form_type'])) {
           $add = 'add' . $setting['quick_form_type'];
           if ($add == 'addElement') {
-            $this->$add($setting['html_type'], $name, $setting['title'], CRM_Utils_Array::value('html_attributes', $setting, []));
+            $this->$add($setting['html_type'], $name, $setting['title'], $setting['html_attributes'] ?? []);
           }
           elseif ($setting['html_type'] == 'Select') {
             $optionValues = [];
             if (!empty($setting['pseudoconstant']) && !empty($setting['pseudoconstant']['optionGroupName'])) {
-              $optionValues = CRM_Core_OptionGroup::values($setting['pseudoconstant']['optionGroupName'], FALSE, FALSE, FALSE, NULL, 'name');
+              $optionValues = CRM_Core_OptionGroup::values(
+                $setting['pseudoconstant']['optionGroupName'],
+                labelColumnName: 'name'
+              );
             }
-            $this->add('select', $setting['name'], $setting['title'], $optionValues, FALSE, $setting['html_attributes']);
+            $this->add(
+              'select',
+              $setting['name'],
+              $setting['title'],
+              $optionValues,
+              FALSE,
+              $setting['html_attributes']
+            );
           }
           else {
             $this->$add($name, $setting['title']);
@@ -114,17 +123,15 @@ class CRM_Newsletter_Form_Settings extends CRM_Core_Form {
    */
   public function getFormSettings() {
     if (empty($this->_settings)) {
-      $settings = civicrm_api3('setting', 'getfields', ['filters' => $this->_settingFilter]);
+      $this->_settings = civicrm_api3('setting', 'getfields', ['filters' => $this->_settingFilter]);
     }
-    return $settings['values'];
+    return $this->_settings['values'];
   }
 
   /**
    * Get the settings we are going to allow to be set on this form.
-   *
-   * @return array
    */
-  public function saveSettings() {
+  public function saveSettings(): void {
     $settings = $this->getFormSettings();
     $values = array_intersect_key($this->_submittedValues, $settings);
     civicrm_api3('setting', 'create', $values);

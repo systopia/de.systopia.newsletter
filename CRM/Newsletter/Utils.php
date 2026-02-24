@@ -13,6 +13,8 @@
 | written permission from the original author(s).             |
 +-------------------------------------------------------------*/
 
+declare(strict_types = 1);
+
 use CRM_Newsletter_ExtensionUtil as E;
 use Civi\Api4\OptionValue;
 
@@ -30,10 +32,10 @@ class CRM_Newsletter_Utils {
    *   An associative array with contact data to find, create or update a
    *   contact with, according to the XCM configuration.
    *
-   * @return int
+   * @return array{contact_id: int, was_created: bool}
    *   The CiviCRM ID of the contact found, created or updated by XCM.
    *
-   * @throws Exception.
+   * @throws Exception
    *   When no contact could be found or created.
    */
   public static function getContact($contact_data) {
@@ -60,6 +62,7 @@ class CRM_Newsletter_Utils {
   public static function getFromEmailAddress(?CRM_Newsletter_Profile $profile = NULL): string {
     // TODO: Remove check when minimum core version requirement is >= 6.0.0.
     if (class_exists('\Civi\Api4\SiteEmailAddress')) {
+      /** @var list<array{display_name: string, email: string, id: int}> $from_addresses */
       $from_addresses = \Civi\Api4\SiteEmailAddress::get(FALSE)
         ->addSelect('display_name', 'email', 'id')
         ->addWhere('domain_id', '=', 'current_domain')
@@ -143,6 +146,7 @@ class CRM_Newsletter_Utils {
    *
    * @throws \CRM_Core_Exception
    */
+  // phpcs:ignore Generic.Metrics.CyclomaticComplexity.TooHigh
   public static function buildGroupTree($groups) {
     $group_tree = [];
     $group_tree_items = [];
@@ -157,7 +161,8 @@ class CRM_Newsletter_Utils {
       // Compose the group item.
       $group_tree_item = [
         'title' => !empty($group['frontend_title']) ? $group['frontend_title'] : $group['title'],
-        'description' => !empty($group['frontend_description']) ? $group['frontend_description'] : (!empty($group['description']) ? $group['description'] : ''),
+        'description' => !empty($group['frontend_description']) ? $group['frontend_description']
+        : (!empty($group['description']) ? $group['description'] : ''),
         'name' => !empty($group['name']) ? $group['name'] : '',
       ];
       // Add children.
@@ -312,12 +317,10 @@ class CRM_Newsletter_Utils {
           'preferences_url' => $preferences_url,
         ]
       ),
-    // TODO: Make configurable?
       'replyTo' => '',
     ];
     // Send the e-mail.
     if (!CRM_Utils_Mail::send($mail_params)) {
-      // TODO: Mail not sent. Maybe do not cancel the whole API call?
       Civi::log()->error(E::LONG_NAME . ': Error sending configured e-mail.');
     }
   }
@@ -346,7 +349,8 @@ class CRM_Newsletter_Utils {
       $profiles = CRM_Newsletter_Profile::getProfiles();
       foreach ($profiles as $profile) {
         $current_profile_groups = CRM_Newsletter_Utils::getSubscriptionStatus($contact_id, $profile->getName());
-        foreach (CRM_Newsletter_Utils::getSubscriptionStatus($contact_id, $profile->getName()) as $group_id => $group_info) {
+        $subscriptionStatuses = CRM_Newsletter_Utils::getSubscriptionStatus($contact_id, $profile->getName());
+        foreach ($subscriptionStatuses as $group_id => $group_info) {
           $current_profile_groups[$group_id] = 'Removed';
         }
         $mailinglists = $mailinglists + $current_profile_groups;

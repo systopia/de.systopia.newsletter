@@ -13,17 +13,20 @@
 | written permission from the original author(s).             |
 +-------------------------------------------------------------*/
 
+declare(strict_types = 1);
+
 use Civi\Newsletter\ContactChecksumService;
 use CRM_Newsletter_ExtensionUtil as E;
 
 /**
  * API callback for "confirm" call on "NewsletterSubscription" entity.
  *
- * @param $params
+ * @param array<string, mixed> $params
  *
- * @return array
+ * @return array<string, mixed>
  */
-function civicrm_api3_newsletter_subscription_confirm($params) {
+// phpcs:ignore Generic.Metrics.CyclomaticComplexity.TooHigh
+function civicrm_api3_newsletter_subscription_confirm(array $params): array {
   try {
     if (!$profile = CRM_Newsletter_Profile::getProfile($params['profile'])) {
       throw new CRM_Core_Exception(
@@ -32,6 +35,7 @@ function civicrm_api3_newsletter_subscription_confirm($params) {
       );
     }
 
+    /** @var string|null $contact_checksum */
     $contact_checksum = $params['contact_checksum'] ?? $params['contact_hash'] ?? NULL;
     if (NULL === $contact_checksum) {
       throw new CRM_Core_Exception(E::ts('Contact checksum is missing.'), 'api_error');
@@ -58,7 +62,8 @@ function civicrm_api3_newsletter_subscription_confirm($params) {
 
     $allowed_mailing_lists = array_keys($profile->getAttribute('mailing_lists'));
     $current_mailing_lists = [];
-    foreach (CRM_Newsletter_Utils::getSubscriptionStatus($contact_id, $profile->getName()) as $group_id => $group_info) {
+    $subscriptionStatuses = CRM_Newsletter_Utils::getSubscriptionStatus($contact_id, $profile->getName());
+    foreach ($subscriptionStatuses as $group_id => $group_info) {
       $current_mailing_lists[$group_id] = $group_info['status_raw'];
     }
 
@@ -129,7 +134,11 @@ function civicrm_api3_newsletter_subscription_confirm($params) {
       $email_template = 'info';
     }
 
-    $group_contact_results = CRM_Newsletter_Utils::update_group_subscription($params['mailing_lists'], $contact_id, $unsubscribe_from_all_profiles);
+    $group_contact_results = CRM_Newsletter_Utils::update_group_subscription(
+      $params['mailing_lists'],
+      $contact_id,
+      $unsubscribe_from_all_profiles
+    );
 
     // Send an e-mail with the info template.
     if (!empty($email_template)) {
@@ -144,6 +153,7 @@ function civicrm_api3_newsletter_subscription_confirm($params) {
     return civicrm_api3_create_success($group_contact_results);
   }
   catch (Exception $exception) {
+    // @ignoreException
     $error_code = ($exception instanceof CRM_Core_Exception ? $exception->getErrorCode() : $exception->getCode());
     return civicrm_api3_create_error($exception->getMessage(), ['error_code' => $error_code]);
   }
@@ -152,9 +162,9 @@ function civicrm_api3_newsletter_subscription_confirm($params) {
 /**
  * API specification for "confirm" call on "NewsletterSubscription" entity.
  *
- * @param $params
+ * @param array<string, array<string, mixed>> $params
  */
-function _civicrm_api3_newsletter_subscription_confirm_spec(&$params) {
+function _civicrm_api3_newsletter_subscription_confirm_spec(array &$params): void {
   $params['profile'] = [
     'name' => 'profile',
     'title' => 'Newsletter profile name',
@@ -187,14 +197,16 @@ function _civicrm_api3_newsletter_subscription_confirm_spec(&$params) {
     'type' => CRM_Utils_Type::T_STRING,
     'api.required' => 0,
     'deprecated' => TRUE,
+    // phpcs:ignore Generic.Files.LineLength.TooLong
     'description' => 'Generated checksum of the contact to confirm subscriptions for. (Deprecated: Use contact_checksum instead.)',
   ];
 
   $params['mailing_lists'] = [
     'name' => 'mailing_lists',
     'title' => 'Mailing lists',
-    'type' => CRM_utils_Type::T_ENUM,
+    'type' => CRM_Utils_Type::T_ENUM,
     'api.required' => 0,
+    // phpcs:ignore Generic.Files.LineLength.TooLong
     'description' => E::ts('An array of group IDs as keys and the corresponding group status for the given contact as values.'),
   ];
 
