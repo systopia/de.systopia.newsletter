@@ -317,12 +317,10 @@ class CRM_Newsletter_Utils {
           'preferences_url' => $preferences_url,
         ]
       ),
-    // TODO: Make configurable?
       'replyTo' => '',
     ];
     // Send the e-mail.
     if (!CRM_Utils_Mail::send($mail_params)) {
-      // TODO: Mail not sent. Maybe do not cancel the whole API call?
       Civi::log()->error(E::LONG_NAME . ': Error sending configured e-mail.');
     }
   }
