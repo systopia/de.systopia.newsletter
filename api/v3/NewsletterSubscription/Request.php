@@ -87,7 +87,7 @@ function civicrm_api3_newsletter_subscription_request(array $params): array {
     $contact = civicrm_api3('Contact', 'getsingle', [
       'id' => $contact_id,
     ]);
-    $contact_checksum = ContactChecksumService::getInstance()->generateChecksum($contact_id);
+    $contact_checksum = ContactChecksumService::getInstance()->generateChecksum((int) $contact_id);
     $mailing_lists = CRM_Newsletter_Utils::getSubscriptionStatus($contact_id, $profile->getName());
 
     // Send an e-mail with the opt-in template.

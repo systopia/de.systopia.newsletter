@@ -114,7 +114,7 @@ function civicrm_api3_newsletter_subscription_get(array $params): array {
       }
     }
 
-    $contact_id = $contact['id'];
+    $contact_id = (int) $contact['id'];
 
     // Get current group memberships for submitted group IDs.
     $current_groups = [];
