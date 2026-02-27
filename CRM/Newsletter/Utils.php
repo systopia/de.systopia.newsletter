@@ -41,7 +41,10 @@ class CRM_Newsletter_Utils {
   public static function getContact($contact_data) {
     $result = civicrm_api3('Contact', 'createifnotexists', $contact_data);
     if ($result['count'] == 1) {
-      return reset($result['values']);
+      $rv = reset($result['values']);
+      $rv['contact_id'] = (int) $rv['contact_id'];
+
+      return $rv;
     }
     else {
       throw new Exception(E::ts('Could not get or create a contact for the given contact data.'));
